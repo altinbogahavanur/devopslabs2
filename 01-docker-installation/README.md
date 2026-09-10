@@ -2,7 +2,7 @@
 
 | Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
 |:---:|:---:|:---:|:---:|
-| Başlangıç | 30 dakika | `docker-ce`, `docker-compose-plugin`, `systemd` | `-` |
+| Başlangıç | 30 dakika | `docker-ce`, `docker-compose-plugin`, `portainer` | `9000, 9443` |
 
 ---
 
@@ -103,6 +103,27 @@ docker compose version
 # Test konteyneri çalıştırma
 docker run --rm hello-world
 ```
+
+---
+
+### Adım 7: Portainer CE ile Görsel Yönetim Paneli Kurulumu (Opsiyonel)
+
+Konteynerları, imajları, volume ve ağları web arayüzünden izlemek için Portainer CE başlatılır:
+
+```bash
+# 1. Kalıcı volume oluşturma
+docker volume create portainer_data
+
+# 2. Portainer CE konteynerini başlatma
+docker run -d -p 8000:8000 -p 9443:9443 -p 9000:9000 \
+  --name portainer \
+  --restart=always \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  portainer/portainer-ce:latest
+```
+
+*Tarayıcınızdan `http://localhost:9000` veya `https://localhost:9443` adresine giderek ilk admin şifrenizi belirleyin.*
 
 ---
 
