@@ -1,0 +1,15 @@
+# Operating System & IDEs
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Node & Python caches
+node_modules/
+__pycache__/
+*.pyc

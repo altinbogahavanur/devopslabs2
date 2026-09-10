@@ -1,0 +1,47 @@
+# ==============================================================================
+# Docker Compose V2 Temelleri ve Saglik Kontrolu Zinciri (Healthcheck)
+# ==============================================================================
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: compose-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-appdb}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret123}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-appdb}"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - app-net
+
+  web-api:
+    image: python:3.12-alpine
+    container_name: compose-api
+    restart: unless-stopped
+    ports:
+      - "${API_PORT:-8000}:8000"
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+    depends_on:
+      database:
+        condition: service_healthy
+    command: >
+      sh -c "echo 'API baslatildi, veritabani saglikli!' &&
+             python -m http.server 8000"
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
+
+volumes:
+  db-data:

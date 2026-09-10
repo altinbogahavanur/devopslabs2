@@ -1,0 +1,52 @@
+# ==============================================================================
+# WordPress + MySQL Üretim Seviyesi Docker Compose Mimarisi
+# Lab 06'daki saf CLI adımlarının tek bir YAML dosyası ile otomasyonu.
+# ==============================================================================
+services:
+  db:
+    image: mysql:8.0
+    container_name: compose-wp-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-supersecret}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wordpress}
+      MYSQL_USER: ${MYSQL_USER:-wpuser}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wppassword}
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-supersecret}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - wp-net
+
+  wordpress:
+    image: wordpress:6-apache
+    container_name: compose-wp-app
+    restart: always
+    ports:
+      - "${WP_PORT:-8080}:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-wordpress}
+      WORDPRESS_DB_USER: ${MYSQL_USER:-wpuser}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wppassword}
+    volumes:
+      - wp_data:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - wp-net
+
+networks:
+  wp-net:
+    name: compose-wp-net
+
+volumes:
+  db_data:
+    name: compose-wp-db-data
+  wp_data:
+    name: compose-wp-site-data

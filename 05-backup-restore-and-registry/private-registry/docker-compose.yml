@@ -1,0 +1,32 @@
+# ==============================================================================
+# Hafif OCI Private Registry ve Web Arayuzu (50 MB RAM Tuketimi)
+# 16 GB RAM'li ortamlarda kaynaklari yormadan tam kurumsal OCI API sunar.
+# ==============================================================================
+services:
+  registry:
+    image: registry:2.8
+    container_name: private-registry
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
+    volumes:
+      - registry-data:/var/lib/registry
+
+  registry-ui:
+    image: joxit/docker-registry-ui:latest
+    container_name: private-registry-ui
+    restart: always
+    ports:
+      - "8085:80"
+    environment:
+      - SINGLE_REGISTRY=true
+      - REGISTRY_TITLE=DevOps Atolyesi Container Registry
+      - REGISTRY_URL=http://registry:5000
+    depends_on:
+      - registry
+
+volumes:
+  registry-data:
+    name: local-registry-data

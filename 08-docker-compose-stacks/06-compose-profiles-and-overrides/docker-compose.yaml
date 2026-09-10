@@ -1,0 +1,43 @@
+services:
+  # ==============================================================================
+  # 🌟 TEMEL SERVİSLER (Her ortamda mutlaka çalışır)
+  # ==============================================================================
+  web:
+    build: ./app
+    container_name: profile-web-app
+    ports:
+      - "8080:8080"
+    environment:
+      APP_ENV: development
+      DEBUG: "true"
+
+  db:
+    image: postgres:16-alpine
+    container_name: profile-db
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpassword
+      POSTGRES_DB: devdb
+
+  # ==============================================================================
+  # 📊 İSTEĞE BAĞLI PROFİL 1: MONITORING
+  # Sadece 'docker compose --profile monitoring up' dendiğinde başlar!
+  # ==============================================================================
+  monitoring-agent:
+    image: alpine:3.20
+    container_name: profile-metrics-collector
+    profiles:
+      - monitoring
+    command: ["sh", "-c", "echo '📈 Sistem metrikleri toplanıyor...' && sleep 3600"]
+
+  # ==============================================================================
+  # 🛠️ İSTEĞE BAĞLI PROFİL 2: ADMIN TOOLS
+  # Sadece 'docker compose --profile tools up' dendiğinde başlar!
+  # ==============================================================================
+  db-admin:
+    image: adminer:4-fastcgi
+    container_name: profile-db-adminer
+    profiles:
+      - tools
+    ports:
+      - "8081:9000"

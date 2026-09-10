@@ -1,0 +1,3 @@
+# Standart kutuphaneler kullanilmaktadir.
+# Eger harici paketler (FastAPI / requests / gunicorn) eklenirse buraya yazilir:
+# requests>=2.31.0

@@ -1,0 +1,9 @@
+FROM alpine:3.20
+
+# ❌ TEHLİKELİ ANTİ-PATTERN: ARG ile parola aktarımı
+ARG SECRET_TOKEN=default_token
+
+# Parola katman metaverisine ve geçmişine (docker history) yazılır!
+RUN echo "Ozel depodan paket indiriliyor... Token: ${SECRET_TOKEN}" > /app.log
+
+CMD ["cat", "/app.log"]

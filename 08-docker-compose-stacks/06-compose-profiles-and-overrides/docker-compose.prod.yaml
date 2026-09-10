@@ -1,0 +1,16 @@
+# ==============================================================================
+# 🚀 ÜRETİM (PRODUCTION) EZME DOSYASI (OVERRIDE)
+# ==============================================================================
+services:
+  web:
+    restart: always
+    environment:
+      APP_ENV: production
+      DEBUG: "false"
+
+  db:
+    restart: always
+    environment:
+      POSTGRES_USER: prod_master_user
+      POSTGRES_PASSWORD: SecretProductionPassword999
+      POSTGRES_DB: prod_database

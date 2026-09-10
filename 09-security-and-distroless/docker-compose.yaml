@@ -1,0 +1,39 @@
+# ==============================================================================
+# Kurumsal Konteyner Sertleştirme ve Güvenlik Profili
+# ==============================================================================
+services:
+  hardened-app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile.hardened
+    container_name: hardened-app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    
+    # 1. Salt-Okunur Dosya Sistemi
+    read_only: true
+    
+    # 2. Gecici yazilabilir RAM disk
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    
+    # 3. Linux Yetkilerini Dusurme (Capabilities)
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    
+    # 4. Yetki Yukseltme Engeli
+    security_opt:
+      - no-new-privileges:true
+    
+    # 5. Non-Root Calisma Kullanicisi
+    user: "10001:10001"
+    
+    # 6. Kaynak Limitleri
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
