@@ -6,20 +6,7 @@
 
 ---
 
-## 1. Amaç
-
-Bu laboratuvarın amacı (Sunum Slayt 17 & 35, Lab 1 & 2); Docker konteynerlarının yaşam döngüsünü baştan sona yönetmek, çalışan bir konteyner ile ana makine arasında çift yönlü dosya transferi yapmak (`docker cp`), canlı değişiklikleri imaja dönüştürmek (`docker commit`), süreç çıkış kodlarını (ExitCode) incelemek ve üretim seviyesinde hata ayıklama araçlarını (`stats`, `top`, `inspect`, `logs`) etkin kullanmaktır.
-
----
-
-## 2. Ön Koşullar
-
-* Docker Engine çalışır durumda olmalıdır (`docker info`).
-* Host üzerinde `8080` ve `8081` portları boşta olmalıdır.
-
----
-
-## 3. Mimari ve Çalışma Modeli
+## Mimari ve Çalışma Modeli
 
 ```text
                HOST MAKİNE (Ubuntu)                          KONTEYNER (Nginx)
@@ -41,57 +28,103 @@ Bu laboratuvarın amacı (Sunum Slayt 17 & 35, Lab 1 & 2); Docker konteynerları
 
 ---
 
-## 4. Görevler (Tasks)
+## Adım Adım Uygulama
 
-1. **İlk Konteyner (Lab 1):** `nginx:alpine` imajını kullanarak arka planda çalışan, hostun `8080` portuna bağlı ve adı `my-web` olan bir konteyner başlatın. Tarayıcıdan veya `curl` ile erişimi doğrulayın.
-2. **Çift Yönlü Dosya Kopyalama:** `app/index.html` dosyasını `docker cp` ile konteynerin `/usr/share/nginx/html/index.html` yoluna kopyalayın; konteyner içindeki `/etc/nginx/nginx.conf` dosyasını ise hostun `/tmp/` dizinine çekin.
-3. **İmaj Üretme (docker commit):** Değiştirilmiş `my-web` konteynerini `custom-nginx:v1.0` adında yeni bir imaja dönüştürün. Orijinal konteyneri silip yeni imajdan yeni bir konteyner başlatın ve HTML değişikliğinin korunduğunu test edin.
-4. **Yaşam Döngüsü ve ExitCode Teşhisi (Lab 2):** Kasten hata ile kapanan (`sh -c 'echo start; exit 1'`) bir `exit-demo` konteyneri başlatın. `docker inspect` kullanarak `ExitCode` değerini okuyun.
-5. **Canlı Kaynak İzleme:** `docker stats --no-stream` ve `docker top` ile çalışan süreçleri ve kaynak tüketimini denetleyin.
-
----
-
-## 5. İpuçları
-
-<details>
-<summary>💡 İpucu 1: -p (Publish) Formatı</summary>
-
-`-p [HOST_PORT]:[CONTAINER_PORT]` şeklinde çalışır. Örneğin `-p 8080:80` dendiğinde sunucunun 8080 portuna gelen istek konteynerın 80 portuna iletilir.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Neden docker commit Üretimde Anti-Pattern Kabul Edilir?</summary>
-
-`docker commit` ile üretilen imajların içinde tam olarak hangi adımların yapıldığı bir kod dosyası olarak izlenemez (Kara kutu - Black box). Bu yüzden profesyonel dünyada imajlar **her zaman `Dockerfile` ile şeffaf, sürümlenebilir ve tekrarlanabilir (reproducible)** olarak derlenir.
-</details>
-
-<details>
-<summary>💡 İpucu 3: ExitCode Format Filtreleme</summary>
-
-`docker inspect` tüm JSON çıktısını döker. Yalnızca durum ve çıkış kodunu filtrelemek için Go şablonu kullanılır: `docker inspect -f '{{.State.Status}} {{.State.ExitCode}}' <container-adi>`.
-</details>
-
----
-
-## 6. Doğal Doğrulama ve Beklenen Sonuç
+### Adım 1: İlk Konteyneri Başlatma ve İnceleme
 
 ```bash
-# 1. Web sunucusu erişimi
-curl -s http://localhost:8080 | grep -i "html"
+# 1. Konteyneri arka planda çalıştırma
+docker run -d --name my-web -p 8080:80 nginx:alpine
 
-# 2. Hata kodu teşhisi
-docker inspect -f '{{.State.ExitCode}}' exit-demo
+# 2. Çalışan konteynerları listeleme
+docker ps
+
+# 3. Web sunucusuna erişimi test etme
+curl -i http://localhost:8080
+
+# 4. Konteyner loglarını inceleme
+docker logs my-web
+
+# 5. Konteyner içinde kabuk komutu işletme
+docker exec -it my-web sh -c "cat /etc/os-release"
 ```
-
-* **Beklenen Çıktılar:**
-  * `curl` çıktısında özel HTML içeriği dönmelidir.
-  * `exit-demo` için `1` çıkış kodu görülmelidir.
 
 ---
 
-## 7. Temizlik
+### Adım 2: Çift Yönlü Dosya Transferi (docker cp)
 
-Laboratuvar tamamlandığında bir sonraki modülle çakışmaması için konteynerları ve geçici imajı temizleyin:
+```bash
+# Host üzerinde özel bir HTML dosyası hazırlama
+mkdir -p app
+cat <<'HTML_EOF' > app/index.html
+<!DOCTYPE html>
+<html>
+<head><title>DevOps Labs</title></head>
+<body><h1>Konteyner İçi Canlı Güncellendi!</h1></body>
+</html>
+HTML_EOF
+
+# 1. Host makineden çalışan konteyner içine dosya kopyalama
+docker cp app/index.html my-web:/usr/share/nginx/html/index.html
+
+# 2. Güncellenen içeriği tarayıcıdan veya curl ile doğrulama
+curl -s http://localhost:8080
+
+# 3. Konteyner içindeki yapılandırma dosyasını host makineye çekme
+docker cp my-web:/etc/nginx/nginx.conf /tmp/nginx_extracted.conf
+head -n 10 /tmp/nginx_extracted.conf
+```
+
+---
+
+### Adım 3: Canlı Konteynerden Yeni İmaj Üretme (docker commit)
+
+```bash
+# 1. Değiştirilmiş konteynerdan yeni bir imaj oluşturma
+docker commit -m "custom html added" -a "DevOps Student" my-web custom-nginx:v1.0
+
+# 2. Üretilen imajı listeleme
+docker images custom-nginx:v1.0
+
+# 3. Orijinal konteyneri silme
+docker rm -f my-web
+
+# 4. Yeni üretilen imajdan yeni bir konteyner başlatma
+docker run -d --name my-custom-web -p 8080:80 custom-nginx:v1.0
+
+# 5. Özel HTML sayfasının korunduğunu test etme
+curl -s http://localhost:8080
+```
+
+---
+
+### Adım 4: Hata Kodu (ExitCode) ve Teşhis
+
+```bash
+# Hata ile kapanan bir test konteyneri çalıştırma
+docker run --name exit-demo alpine sh -c "echo 'Süreç başladı...'; exit 1"
+
+# Durum ve çıkış kodunu filtreleme
+docker inspect -f '{{.State.Status}} ExitCode: {{.State.ExitCode}}' exit-demo
+```
+
+---
+
+### Adım 5: Canlı Kaynak İzleme ve Süreç İnceleme
+
+```bash
+# Anlık CPU/Bellek tüketimini okuma
+docker stats --no-stream
+
+# Konteyner içi süreçleri listeleme
+docker top my-custom-web
+```
+
+---
+
+## Temizlik
+
+Laboratuvar kaynaklarını temizleyin:
 
 ```bash
 docker rm -f my-custom-web exit-demo 2>/dev/null || true

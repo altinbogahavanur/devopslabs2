@@ -1,55 +1,39 @@
-# 🐳 Docker Hands-on Lab Serisi: Sıfırdan Üretim Seviyesine Konteyner Mimarisi (Öğrenci Sürümü)
+# 🐳 Docker Hands-on Lab Serisi
 
-Bu müfredat; modern bulut-yerel mimarilerde ve kurumsal DevOps süreçlerinde konteyner teknolojilerini en temel Linux seviyesinden başlayarak üretim standartlarına kadar derinlemesine kavramak amacıyla hazırlanmış, **Docker Foundations Sunumu ile %100 senkronize ve aşamalı** bir eğitim serisidir.
-
-Her bir laboratuvar modülü; eksiksiz çalışan kaynak kodlar, üretim seviyesi konfigürasyon dosyaları, doğrulama betikleri ve detaylı `README.md` kılavuzları içerir. Kodlarda hiçbir yer tutucu (`placeholder`) bulunmaz.
+Bu çalışma serisi; Linux temellerinden başlayarak Docker konteyner motorunu, çok dilli uygulama paketlemeyi, ağ ve depolama yönetimini, çoklu konteyner mimarilerini (Compose), konteyner güvenliğini ve CI/CD süreçlerini uygulamalı olarak deneyimlemek için hazırlanmış uçtan uca pratik rehberidir.
 
 ---
 
-## 🎓 Pedagojik Metodoloji
+## 📚 Laboratuvar Listesi
 
-Her bir uygulama ve teknoloji modülünde standart bir öğrenme akışı uygulanır:
-1. **Senaryo ve Problem:** Gerçek dünya ihtiyacı ve mimari gerekçeler.
-2. **Klasik Linux (Ubuntu) Manuel Kurulumu:** Öğrencinin zihninde Docker komutlarını otomatikleştirebilmesi için aynı uygulamanın terminalde çıplak Linux üzerine nasıl kurulup çalıştırıldığı gösterilir.
-3. **Zihinsel Eşleştirme Tablosu:** Her bir Linux komutunun (`apt install`, `cd`, `pip/npm install`, `export`, `run`) Dockerfile'daki tam karşılığı ve best practice gerekçesi eşleştirilir.
-4. **Görevler ve İpuçları:** Öğrenciye adım adım hedefler ve yol gösterici ipuçları verilir.
-5. **Challenge Odaklı Öğrenme:** Her laboratuvarda görevler ve ipuçları verilir; öğrenciler komutları ve yapılandırmaları bizzat kendileri uygulayarak kalıcı pratik kazanır.
-6. **Doğal Doğrulama ve Otomasyon:** `curl`, `docker ps`, `docker logs` ve otomatik doğrulama betikleri ile başarı somut olarak kanıtlanır.
-
----
-
-## 📚 Müfredat İçerik Haritası (Sunum ile Birebir Eşleşme)
-
-| No | Modül Klasörü | Sunum Eşleşmesi | Seviye | Odak Konusu ve Kapsam | Öne Çıkan Araçlar |
-|:---:|:---|:---:|:---:|:---|:---|
-| **00** | [`00-linux-essentials`](00-linux-essentials/README.md) | Ön Koşul | Başlangıç | Temel Linux, Süreç Yönetimi, SSH, **16 GB Swap & 100 GB Disk Preflight** | `bash`, `ss`, `top`, `fallocate` |
-| **01** | [`01-docker-installation`](01-docker-installation/README.md) | Bölüm 01 | Başlangıç | Resmi Docker Dokümanına Göre Ubuntu Kurulumu, Non-root `docker` Grubu | `docker-ce`, `docker-compose-plugin` |
-| **02** | [`02-container-fundamentals`](02-container-fundamentals/README.md) | **Lab 1 & 2** | Başlangıç | Konteyner Yaşam Döngüsü, Port Eşleme, **docker cp**, **docker commit**, Exit Code 1 Teşhisi | `docker run`, `docker cp`, `stats`, `inspect` |
-| **03** | [`03-dockerfile-and-caching`](03-dockerfile-and-caching/README.md) | **Lab 3** | Temel - Orta | Build Cache Optimizasyonu, `Dockerfile.baseline`, `Dockerfile.optimized`, Multi-Arch Buildx | BuildKit, `.dockerignore`, `benchmark.sh` |
-| **04** | [`04-polyglot-app-dockerization`](04-polyglot-app-dockerization/README.md) | **Lab 3B** | Orta - İleri | **7 Dilin Paketlenmesi:** Node.js, Python, Go Scratch (~8MB), Java Spring Boot PetClinic, .NET 8, PHP 8.3, React SPA | Express, FastAPI, Go Scratch, Spring Boot, Vite |
-| **05** | [`05-backup-restore-and-registry`](05-backup-restore-and-registry/README.md) | **Lab 3C** | Orta | **save/load vs export/import**, Helper Container ile Volume Felaket Kurtarma, OCI Registry + **Harbor** | `tar.gz`, `postgres:17`, `registry:2.8`, Harbor |
-| **06** | [`06-docker-networking`](06-docker-networking/README.md) | **Lab 4** | Orta | Custom Bridge Ağları, **Dahili DNS (nslookup db)**, Port Publishing, `none` Ağ İzolasyonu | `app-net`, `busybox nslookup`, `none` network |
-| **07** | [`07-docker-storage`](07-docker-storage/README.md) | **Lab 5** | Orta | **Named Volume (pgdata)**, Host Bind Mount (`$PWD:/work`), Bellek İçi `tmpfs` RAM Diski | Named Volume, Bind Mount, `tmpfs`, `--mount` |
-| **08** | [`08-docker-compose-stacks`](08-docker-compose-stacks/README.md) | **Lab 6** | İleri | Compose V2, Healthcheck Zinciri, **WordPress Stack**, **3-Tier Stack**, **Voting App (5 Servis)** | `docker compose`, Nginx, Redis, PostgreSQL |
-| **09** | [`09-security-and-distroless`](09-security-and-distroless/README.md) | **Lab 7 & 7B** | Uzman | **Google Distroless**, Hardening (Non-root, Read-only), **Trivy/Scout**, **OOMKilled 137**, **Tini Graceful** | `distroless`, `trivy`, `cgroups v2`, `tini` |
-| **10** | [`10-cicd-container-pipelines`](10-cicd-container-pipelines/README.md) | **Lab 8** | İleri | **GitHub Actions**, **GitLab CI (dind)** ve **Jenkins** ile Lint (Hadolint), Scan (Trivy), Push | GitHub Actions, `.gitlab-ci.yml`, `Jenkinsfile` |
-| **11** | [`11-final-capstone-project`](11-final-capstone-project/README.md) | **Final Project** | Uzman | **Bitirme Projesi:** Nginx Reverse Proxy + App API + PostgreSQL + Custom Bridge + Secrets + Healthcheck | Uçtan Uca Kurumsal Mikroservis Mimarisi |
+| No | Modül Klasörü | Seviye | Odak Konusu ve Kapsam | Öne Çıkan Araçlar |
+|:---:|:---|:---:|:---|:---|
+| **00** | [`00-linux-essentials`](00-linux-essentials/README.md) | Başlangıç | Temel Linux Komutları, Süreç ve Disk Yönetimi, SSH, 16 GB Swap Yapılandırması | `bash`, `ss`, `top`, `fallocate` |
+| **01** | [`01-docker-installation`](01-docker-installation/README.md) | Başlangıç | Resmi Docker Engine, Buildx ve Compose V2 Kurulumu, Non-root Kullanıcı İzni | `docker-ce`, `docker-compose-plugin` |
+| **02** | [`02-container-fundamentals`](02-container-fundamentals/README.md) | Başlangıç | Konteyner Yaşam Döngüsü, Port Eşleme, Dosya Kopyalama (`docker cp`), İmaj Üretme (`commit`) | `docker run`, `docker cp`, `stats`, `inspect` |
+| **03** | [`03-dockerfile-and-caching`](03-dockerfile-and-caching/README.md) | Temel - Orta | Dockerfile Direktifleri, Katman Önbellekleme (Layer Caching) Optimizasyonu, .dockerignore | BuildKit, `.dockerignore` |
+| **04** | [`04-polyglot-app-dockerization`](04-polyglot-app-dockerization/README.md) | Orta - İleri | 7 Farklı Dilin Paketlenmesi: Node.js, Python, Go Scratch (~8MB), Java Spring Boot, .NET 8, PHP, React | Express, FastAPI, Go Scratch, Spring Boot, Vite |
+| **05** | [`05-backup-restore-and-registry`](05-backup-restore-and-registry/README.md) | Orta | İmaj ve Volume Yedekleme/Geri Yükleme (`save`/`load`), Yerel OCI Registry | `docker save`, `docker load`, `registry:2` |
+| **06** | [`06-docker-networking`](06-docker-networking/README.md) | Orta | Özel Bridge Ağları, Dahili DNS Çözümleme (`nslookup`), Port Publishing, `none` Ağ İzolasyonu | `app-net`, `busybox nslookup` |
+| **07** | [`07-docker-storage`](07-docker-storage/README.md) | Orta | Named Volume Kalıcılığı, Host Bind Mount Dizin Paylaşımı, Bellek İçi `tmpfs` RAM Diski | Named Volume, Bind Mount, `tmpfs`, `--mount` |
+| **08** | [`08-docker-compose-stacks`](08-docker-compose-stacks/README.md) | İleri | Compose V2 Bildirimsel Tanımlama, Sağlık Kontrolleri (`service_healthy`), 3-Tier Web-API-DB Stack | `docker compose`, Nginx, Redis, PostgreSQL |
+| **09** | [`09-security-and-distroless`](09-security-and-distroless/README.md) | Uzman | Google Distroless, Non-root Kullanıcı, Salt-Okunur Dosya Sistemi, Cgroups OOMKilled, Tini | `distroless`, `trivy`, `cgroups v2`, `tini` |
+| **10** | [`10-cicd-container-pipelines`](10-cicd-container-pipelines/README.md) | İleri | GitHub Actions, GitLab CI (dind) ve Jenkins ile Otomatik Konteyner Derleme ve Güvenlik Taraması | GitHub Actions, `.gitlab-ci.yml`, `Jenkinsfile` |
+| **11** | [`11-final-capstone-project`](11-final-capstone-project/README.md) | Uzman | Bitirme Projesi: Nginx Gateway + Backend API + PostgreSQL + Docker Secrets + Kaynak Sınırları | Uçtan Uca Kurumsal Mikroservis Platformu |
 
 ---
 
-## 🛠️ Sunucu ve Donanım Hedefi
+## 🛠️ Sunucu ve Ortam Gereksinimleri
 
-* **Hedef Donanım:** 1 Sunucu (Ubuntu 24.04 / 22.04 LTS)
-* **İşlemci & Bellek:** 4 vCPU, 16 GB Fiziksel RAM
-* **Depolama:** 100 GB SSD Disk
-* **Swap Güvencesi:** Modül 00'da oluşturulan **16 GB Swap** ile toplam sanal bellek alanı **32 GB** seviyesine esnetilmiş olup, ağır iş yüklerinde kilitlenme riski sıfırlanmıştır.
-* **Hafifletilmiş İmajlar:** Alpine, Slim ve Google Distroless tercih edilerek bellek tüketimi minimumda tutulmuştur.
+* **İşletim Sistemi:** Ubuntu 24.04 veya 22.04 LTS
+* **Önerilen Donanım:** 4 vCPU, 16 GB RAM, 50+ GB Disk
+* **Swap Alanı:** Modül 00'da oluşturulan 16 GB Swap alanı ile ağır iş yüklerinde sistem kilitlenmesi önlenir.
 
 ---
 
-## 🚀 Başlangıç Adımları
+## 🚀 Başlangıç
 
-Eğitime sunum akışıyla eşzamanlı olarak ilk modülden başlayarak ilerleyin:
+Uygulamalara ilk modülden başlayarak sırayla ilerleyin:
 
 ```bash
 cd 00-linux-essentials

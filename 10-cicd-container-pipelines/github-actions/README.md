@@ -6,26 +6,7 @@
 
 ---
 
-## 1. Amaç
-
-Bu laboratuvarda (Sunum Slayt 103-104, Lab 8), eldeki bir Dockerfile'ın manuel olarak derlenip yüklenmesi yerine, koda her `git push` yapıldığında çalışan kurumsal bir **GitHub Actions CI/CD Pipeline**'ı yapılandırılır:
-
-1. **Docker Buildx Kurulumu:** Çok platformlu ve önbellek (GitHub Actions Cache - `type=gha`) destekli derleyiciyi devreye alma.
-2. **Semantik Etiketleme (`metadata-action`):** Git commit hash'i (`commit-abc1234`), branch adı (`latest`) ve git tag'lerine (`v1.0.0`) göre otomatik imaj etiketleri üretme.
-3. **Güvenlik Kapısı (Trivy Scan):** İmaj registry'ye gönderilmeden önce içinde `CRITICAL` seviyede güvenlik açığı (CVE) olup olmadığını tarama.
-4. **Registry'ye Gönderme:** Güvenlik testinden geçen imajı Docker Hub veya GHCR üzerine otomatik yükleme.
-
----
-
-## 2. Ön Koşullar
-
-* GitHub hesabı ve fork edilmiş repository.
-* Docker Hub hesabı ve Personal Access Token (PAT).
-* Dockerfile ve mikroservis kaynak kodları.
-
----
-
-## 3. CI/CD Boru Hattı Mimarisi
+## CI/CD Boru Hattı Mimarisi
 
 ```text
 [ GIT PUSH (main / tag) ]
@@ -45,44 +26,47 @@ Bu laboratuvarda (Sunum Slayt 103-104, Lab 8), eldeki bir Dockerfile'ın manuel 
 
 ---
 
-## 4. Görevler (Tasks)
+## Adım Adım Uygulama
 
-1. **GitHub Secrets Yapılandırması:** GitHub deponuzun **Settings ➔ Secrets and variables ➔ Actions** sekmesinde `DOCKERHUB_USERNAME` ve `DOCKERHUB_TOKEN` sırlarını tanımlayın.
-2. **Workflow İncelemesi:** `.github/workflows/docker-build-push.yml` dosyasındaki aşamaları, tetikleyicileri (triggers) ve Buildx yapılandırmasını inceleyin.
-3. **Önbellek Mekanizması:** `type=gha` önbellekleme direktifinin sonraki build sürelerini nasıl kısalttığını analiz edin.
-4. **Güvenlik Kapısı (Trivy Gate):** Trivy adımında kritik güvenlik açıklarının registry push öncesinde nasıl engellendiğini inceleyin.
-5. **Canlı Çalıştırma:** Repository'ye commit atarak veya bir tag (`v1.0.0`) pushlayarak Actions sekmesinde iş akışının yeşil yandığını teyit edin.
+### Adım 1: GitHub Secrets Tanımlama
 
----
-
-## 5. İpuçları
-
-<details>
-<summary>💡 İpucu 1: type=gha Cache Avantajı</summary>
-
-GitHub Actions üzerinde standart `docker build` çalıştırıldığında her seferinde temiz sanal makine açıldığı için katman önbellekleri (layer cache) kaybolur. `type=gha` kullanıldığında katmanlar GitHub'ın hızlı cache depolama alanına yüklenir ve sonraki build'ler saniyeler içinde tamamlanır.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Docker Hub Personal Access Token (PAT)</summary>
-
-GitHub Secrets içine doğrudan Docker Hub şifrenizi yazmak yerine Docker Hub hesabınızdan **Security ➔ Access Tokens** bölümüne gidip sadece `Read & Write` yetkisine sahip bir PAT üretip kullanmak kurumsal güvenlik standardıdır.
-</details>
+GitHub deponuzun **Settings ➔ Secrets and variables ➔ Actions** sekmesine şu değişkenleri ekleyin:
+* `DOCKERHUB_USERNAME`: Docker Hub kullanıcı adınız
+* `DOCKERHUB_TOKEN`: Docker Hub Personal Access Token (PAT)
 
 ---
 
-## 6. Doğal Doğrulama ve Beklenen Sonuç
+### Adım 2: Workflow Dosyasını Konumlandırma
 
-1. GitHub tarayıcısında **Actions** sekmesine gidin.
-2. `Docker Build, Scan and Push Pipeline` iş akışının yeşil tik (success) aldığını görün.
-3. Docker Hub web arayüzünde imajınızın `latest`, `v1.0.0` ve `commit-<sha>` etiketleriyle yüklendiğini doğrulayın.
-
----
-
-## 7. Temizlik
-
-Test amaçlı oluşturulan imajları Docker Hub arayüzünden silebilir veya yerel Docker ortamınızdaki test imajını kaldırabilirsiniz:
+`.github/workflows/docker-build-push.yml` dosyasını inceleyin:
 
 ```bash
-docker rmi devopsatolyesi/microservice-api:test-scan 2>/dev/null || true
+cat .github/workflows/docker-build-push.yml
 ```
+
+---
+
+### Adım 3: Kodu Commit ve Push Etme
+
+```bash
+git add .github/workflows/docker-build-push.yml
+git commit -m "ci: add docker build and push workflow"
+git push origin main
+```
+
+---
+
+### Adım 4: Sürüm Etiketi (Tag) ile Tetikleme
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+GitHub web arayüzünde **Actions** sekmesine giderek derleme ve Trivy güvenlik tarama adımlarını izleyin.
+
+---
+
+## Temizlik
+
+Test amaçlı yüklenen etiketleri Docker Hub arayüzünden silebilirsiniz.

@@ -6,110 +6,102 @@
 
 ---
 
-## 1. Amaç
+## Adım Adım Uygulama
 
-Bu laboratuvarın amacı; Docker ve konteyner platformlarını çalıştırmadan önce **Ubuntu Linux sunucusunu kurumsal üretime hazırlamak**, temel Linux sistem yönetimi becerilerini kazanmak ve donanım kaynaklarını optimize etmektir:
-
-1. **Sunucu Donanım Kısıtı:** 16 GB RAM, 4 vCPU ve 100 GB diskli tek bir sunucuda çalışılacaktır. İlerleyen aşamalarda GitLab, Jenkins, Harbor veya Spring Boot gibi ağır iş yükleri açıldığında bellek kilitlenmesi (OOM - Out Of Memory) yaşamamak için **16 GB Swap Alanı** yapılandırmak.
-2. **Temel Linux İşlemleri:** Dosya/klasör yönetimi, `apt` paket yönetimi, süreç yönetimi (`ps`, `top`, `htop`), arşivleme (`tar`, `gzip`, `unzip`).
-3. **Güvenlik ve Yetki:** `sudo` yetkili kullanıcı oluşturma, root yerine standart kullanıcı ile çalışma, SSH anahtar (`ssh-keygen`, `authorized_keys`) güvenliği.
-4. **Preflight Denetimi:** Ağ portlarının (`ss -tulpn`) ve disk durumunun (`df -hT`) denetlenmesi.
-
----
-
-## 2. Ön Koşullar
-
-* Ubuntu 22.04 veya 24.04 LTS kurulu sunucu erişimi.
-* `sudo` yetkisine sahip kullanıcı oturumu.
-* En az 25 GB boş disk alanı (`df -h /`).
-
----
-
-## 3. Mimari ve Çalışma Modeli
-
-```text
-+─────────────────────────────────────────────────────────────────────────────+
-|                         UBUNTU SUNUCU DONANIMI                              |
-|   - 4 vCPU (x86_64 / ARM64)                                                 |
-|   - 16 GB Fiziksel Bellek (RAM)                                             |
-|   - 100 GB SSD Disk                                                         |
-+─────────────────────────────────────────────────────────────────────────────+
-                                      │
-            KAYNAK ESNETME (SWAP) & GÜVENLİK YAPILANDIRMASI
-                                      ▼
-+───────────────────────────────────+   +─────────────────────────────────────+
-| BELLEK ESNETME: 16 GB SWAP ALANI  |   | GÜVENLİ KULLANICI & SSH             |
-| - /swapfile (16 GB - chmod 600)   |   | - devops kullanıcısı (sudo grubu)   |
-| - vm.swappiness = 10              |   | - ~/.ssh/authorized_keys (700/600)  |
-| - /etc/fstab (Yeniden Başlatmada) |   | - Root oturumu yerine anahtar ile   |
-| - Efektif Bellek: 16+16 = 32 GB!  |   |   şifresiz güvenli bağlantı         |
-+───────────────────────────────────+   +─────────────────────────────────────+
-```
-
----
-
-## 4. Görevler (Tasks)
-
-1. **Paket Listesi ve Temel Araçlar:** Sunucu paket listesini güncelleyin (`sudo apt update`) ve temel DevOps araçlarını (`curl`, `wget`, `git`, `htop`, `procps`, `iproute2`, `net-tools`, `unzip`, `tar`) kurun.
-2. **Dosya ve Dizin Operasyonları:** `/tmp/devops-test` altında `logs`, `data` ve `config` dizinleri oluşturup içine örnek yapılandırma dosyaları ekleyin; ardından bu yapıyı `tar.gz` formatında sıkıştırın ve başka bir test dizinine açın.
-3. **16 GB Swap Alanı Tahsisi:** `fallocate` ile 16 GB `/swapfile` tahsis edin, dosya yetkisini `600` yapın, Linux Swap formatına biçimlendirip (`mkswap`) aktif edin (`swapon`).
-4. **Kalıcılık ve Performans:** Swap alanının yeniden başlatmalarda korunması için `/etc/fstab` dosyasına ekleyin; `vm.swappiness` değerini `10` yaparak diske gereksiz yazmayı sınırlandırın.
-5. **Güvenli DevOps Kullanıcısı:** Root oturumu yerine `devops` adında sudo yetkili bir kullanıcı oluşturun ve SSH anahtar dizini (`~/.ssh`) izinlerini yapılandırın (`700`/`600`).
-6. **Preflight Doğrulama:** `free -h`, `swapon --show`, `ss -tulpn` ve `df -hT` ile sistem kaynaklarını denetleyin.
-
----
-
-## 5. İpuçları
-
-<details>
-<summary>💡 İpucu 1: Fallocate vs dd</summary>
-
-Bazı dosya sistemlerinde (örneğin XFS veya eski ext4) `fallocate` komutu swap için blok tahsisinde hata verebilir. Bu durumda `sudo dd if=/dev/zero of=/swapfile bs=1G count=16 status=progress` komutu kesin ve güvenli alternatiftir.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Port Çakışmalarını Tespit Etme</summary>
-
-Docker kurmadan önce 80 veya 443 gibi portların başka bir yerel servis (Apache, eski Nginx vb.) tarafından dinlenip dinlenmediğini kontrol etmek için `sudo ss -tulpn | grep -E ':80|:443'` komutu kullanılır.
-</details>
-
-<details>
-<summary>💡 İpucu 3: Swappiness Mantığı</summary>
-
-`vm.swappiness` değeri Linux çekirdeğinin RAM ne kadar dolduğunda swap diskine yazmaya başlayacağını belirler (0-100 arası). Varsayılan 60 sunucu için erkendir; `10` değeri yalnızca fiziksel RAM %90 dolduğunda swap'e geçilmesini sağlayarak disk I/O darboğazını önler.
-</details>
-
----
-
-## 6. Doğal Doğrulama ve Beklenen Sonuç
-
-Aşağıdaki komutlarla sistemin Docker kurulumuna hazır olduğunu teyit edin:
+### Adım 1: Paket Listelerini Güncelleme ve Temel Araçları Kurma
 
 ```bash
-# 1. Swap alanının doğrulanması
-swapon --show
+# 1. Paket listelerini güncelleme
+sudo apt update
 
-# 2. Toplam bellek ve swap kontrolü
-free -h
-
-# 3. Swappiness ayarı
-sysctl vm.swappiness
-
-# 4. Dinleyen kritik servislerin kontrolü
-ss -tulpn
+# 2. Temel araçları kurma
+sudo apt install -y curl wget git htop procps iproute2 net-tools unzip tar ca-certificates
 ```
-
-* **Beklenen Başarı Çıktısı:**
-  * `swapon --show` çıktısında `/swapfile` 16G görünmelidir.
-  * `free -h` çıktısında `Swap: 16Gi` görünmelidir.
-  * `sysctl vm.swappiness` sonucu `vm.swappiness = 10` olmalıdır.
-  * Kök dizinde (`/`) en az **25+ GB** boş alan bulunmalıdır.
 
 ---
 
-## 7. Temizlik
+### Adım 2: Dosya, Dizin ve Arşivleme İşlemleri
 
-Laboratuvarda oluşturulan geçici arşiv ve test dizinlerini temizleyin (Kurulan Swap alanı ve `devops` kullanıcısı sonraki tüm laboratuvarlar için korunmalıdır):
+```bash
+# Klasör yapısı oluşturma
+mkdir -p /tmp/devops-test/{logs,data,config}
+cd /tmp/devops-test
+
+# Dosya oluşturma ve listeleme
+touch config/app.conf data/users.db
+ls -lah
+
+# Süreçleri ve bellek/disk durumunu inceleme
+ps aux | head -n 10
+free -h
+df -hT /
+
+# Klasörü tar.gz olarak arşivleme ve test dizinine açma
+cd /tmp
+tar -czvf devops-yedek.tar.gz devops-test/
+mkdir -p /tmp/restore-test
+tar -xzvf devops-yedek.tar.gz -C /tmp/restore-test/
+ls -la /tmp/restore-test/devops-test
+```
+
+---
+
+### Adım 3: 16 GB Swap Alanı Yapılandırması
+
+Sunucuda ağır iş yükleri (GitLab, Jenkins, veritabanları) çalıştığında fiziksel RAM tükendiğinde sistemin kilitlenmemesi için 16 GB Swap alanı yapılandırılır:
+
+```bash
+# 1. 16 GB boyutunda swap dosyası tahsis etme
+sudo fallocate -l 16G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1G count=16 status=progress
+
+# 2. Dosya izinlerini yalnızca root erişimine sınırlandırma
+sudo chmod 600 /swapfile
+
+# 3. Dosyayı Linux Swap formatına dönüştürme ve aktif etme
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+# 4. Sunucu yeniden başladığında kaybolmaması için /etc/fstab içine ekleme
+if ! grep -q "/swapfile" /etc/fstab; then
+    echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+fi
+
+# 5. vm.swappiness değerini 10 olarak ayarlama
+# Linux varsayılan değeri 60'tır ve RAM doluluğu henüz %50-%60 seviyelerindeyken bile sayfaları diske yazmaya başlar.
+# vm.swappiness = 10 ayarı, çekirdeğe fiziksel RAM %90 dolmadıkça diske dokunmama talimatı verir ve I/O darboğazını önler.
+sudo sysctl vm.swappiness=10
+if ! grep -q "vm.swappiness" /etc/sysctl.conf; then
+    echo "vm.swappiness=10" | sudo tee -a /etc/sysctl.conf
+fi
+
+# 6. Swap durumunu denetleme
+swapon --show
+free -h
+```
+
+---
+
+### Adım 4: Standart Kullanıcı ve Sudo Yetkilendirmesi
+
+```bash
+# 1. devops kullanıcısını oluşturma ve sudo grubuna ekleme
+sudo useradd -m -s /bin/bash devops
+echo "devops:DevopsLab2026!" | sudo chpasswd
+sudo usermod -aG sudo devops
+
+# 2. SSH anahtar dizin izinlerini yapılandırma
+sudo mkdir -p /home/devops/.ssh
+sudo chmod 700 /home/devops/.ssh
+sudo touch /home/devops/.ssh/authorized_keys
+sudo chmod 600 /home/devops/.ssh/authorized_keys
+sudo chown -R devops:devops /home/devops/.ssh
+```
+
+---
+
+## Temizlik
+
+Oluşturulan geçici arşiv ve test dizinlerini temizleyin:
 
 ```bash
 rm -rf /tmp/devops-test /tmp/restore-test /tmp/devops-yedek.tar.gz

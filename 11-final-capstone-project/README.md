@@ -6,28 +6,7 @@
 
 ---
 
-## 1. Amaç
-
-Bu bitirme projesinde (Capstone - Sunum Slayt 107-108), Docker eğitim serisi boyunca öğrenilen tüm mimari ve operasyonel yetkinlikler tek bir kurumsal mimaride birleştirilir:
-
-1. **Nginx Reverse Proxy Gateway:** Dış dünyaya tek giriş kapısı (Port 80) ve mikroservislere yönlendirme.
-2. **Hardened Backend REST API:** Non-root kullanıcı (UID 10001), layer cache optimizasyonu, CPU ve RAM sınırları (`cpus: 0.5`, `memory: 256M`).
-3. **Docker Secrets Entegrasyonu:** Veritabanı şifresini ortam değişkeni olarak açıkta bırakmak yerine `/run/secrets/db_password` dosyasından okuma.
-4. **PostgreSQL 16 & Otomatik Tablo Başlatma:** `init.sql` ile konteyner ilk açıldığında otomatik veritabanı şemasını kurma.
-5. **Redis 7 Önbellekleme:** Hızlı sorgular için bellek içi önbellek.
-6. **Çift Ağ İzolasyonu (DMZ Mimarisi):** Veritabanı ve Redis dış ağdan tamamen yalıtılmış `internal-net` üzerindedir.
-
----
-
-## 2. Ön Koşullar
-
-* Docker Engine ve Docker Compose V2 çalışır durumda olmalıdır.
-* Host üzerinde `80` portu boşta olmalıdır.
-* Önceki tüm modüllerin (Dockerfile, Ağ, Depolama, Compose, Güvenlik) tamamlanmış olması.
-
----
-
-## 3. Mimari ve Çalışma Modeli
+## Mimari ve Çalışma Modeli
 
 ```text
                            KULLANICI (Web Tarayıcı)
@@ -60,65 +39,47 @@ Bu bitirme projesinde (Capstone - Sunum Slayt 107-108), Docker eğitim serisi bo
 
 ---
 
-## 4. Görevler (Tasks)
+## Adım Adım Uygulama
 
-1. **Mimari Dosyaları İnceleme:** `docker-compose.yaml`, `secrets/db_password.txt`, `gateway/nginx.conf` ve `init.sql` dosyalarını inceleyin.
-2. **Platformu Derleme ve Başlatma:** `docker compose up -d --build` komutuyla platformu ayağa kaldırın.
-3. **Servis Durumu ve Sağlık Denetimi:** `docker compose ps` komutunu çalıştırarak tüm servislerin (`postgres`, `redis`, `backend`, `gateway`) durumlarının `healthy` olduğunu doğrulayın.
-4. **API ve Veritabanı Testi:** `curl http://localhost/api/products` adresine istek atarak veritabanındaki 3 ürünün JSON olarak döndüğünü teyit edin.
-5. **Kaynak Sınırları ve Güvenlik:** `docker inspect capstone-backend` ile CPU (`0.5`) ve RAM (`256MB`) sınırlarının devrede olduğunu, non-root kullanıcının çalıştığını kontrol edin.
-6. **Ağ İzolasyonunu Kanıtlama:** Veritabanının (`capstone-postgres`) host üzerinde dışa açılmış hiçbir portu olmadığını teyit edin.
-
----
-
-## 5. İpuçları
-
-<details>
-<summary>💡 İpucu 1: Docker Secrets Neden Ortam Değişkeninden Üstündür?</summary>
-
-`environment: [POSTGRES_PASSWORD=123]` şeklinde tanımlanan şifreler, `docker inspect` komutu çalıştırıldığında veya `docker exec env` dendiğinde düz metin (plain text) olarak görünür. `secrets` kullanıldığında ise şifre RAM üzerinde geçici bir dosyaya (`/run/secrets/`) mount edilir; `inspect` çıktısında asla görünmez.
-</details>
-
-<details>
-<summary>💡 İpucu 2: deploy.resources.limits Mantığı</summary>
-
-Compose V2'de `deploy.resources.limits` blokları `docker compose up` çalıştırıldığında doğrudan uygulanır. Bu sayede bir konteyner bellek sızıntısı yaşasa bile sunucudaki diğer konteynerları etkilemez.
-</details>
-
-<details>
-<summary>💡 İpucu 3: depends_on condition: service_healthy</summary>
-
-Compose içinde backend servisinin veritabanına bağlanabilmesi için PostgreSQL'in yalnızca portunun açılması yetmez; SQL sorgularını kabul edebilecek durumda (`pg_isready`) olması gerekir. `condition: service_healthy` direktifi yarış durumlarını (race condition) sıfırlar.
-</details>
-
----
-
-## 6. Doğal Doğrulama ve Beklenen Sonuç
-
-Aşağıdaki komutla mikroservis API'sinden dönen ürün listesini denetleyin:
+### Adım 1: Projeyi Derleme ve Başlatma
 
 ```bash
-curl -s http://localhost/api/products
-```
+# 1. Platformu derleme ve arka planda başlatma
+docker compose up -d --build
 
-* **Beklenen JSON Çıktısı:**
-```json
-{
-  "success": true,
-  "count": 3,
-  "data": [
-    {"id": 1, "name": "Kubernetes & Docker El Kitabi", "price": "350.00", "stock": 100},
-    {"id": 2, "name": "DevOps Pipeline Mimarisi", "price": "450.00", "stock": 50},
-    {"id": 3, "name": "Linux Sistem Yonetimi", "price": "280.00", "stock": 75}
-  ]
-}
+# 2. Tüm servislerin sağlıklı (healthy) olduğunu denetleme
+docker compose ps
 ```
 
 ---
 
-## 7. Temizlik
+### Adım 2: Gateway ve REST API Doğrulama
 
-Laboratuvar tamamlandığında tüm servisleri ve oluşturulan Named Volume veritabanını temizleyin:
+```bash
+# Gateway üzerinden sistem sağlık kontrolü
+curl -i http://localhost/api/health
+
+# Veritabanından gelen ürün listesini çekme
+curl -i http://localhost/api/products
+```
+
+---
+
+### Adım 3: Güvenlik, Secrets ve Kaynak Sınırlarını İnceleme
+
+```bash
+# Backend kaynak sınırlarının devrede olduğunu kontrol etme
+docker inspect capstone-backend | grep -E '"Memory"|"NanoCpus"'
+
+# PostgreSQL port durumu (Host portu açık olmamalıdır)
+docker port capstone-postgres
+```
+
+---
+
+## Temizlik
+
+Platformu ve oluşturulan Named Volume diskini temizleyin:
 
 ```bash
 docker compose down -v

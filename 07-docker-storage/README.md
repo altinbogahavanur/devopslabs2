@@ -6,91 +6,66 @@
 
 ---
 
-## 1. Amaç
+## Adım Adım Uygulama
 
-Bu laboratuvarın amacı (Sunum Slayt 65-73, Lab 5); Docker konteynerlarının katmanlı dosya sisteminde yazılabilir alanın (writable layer) neden geçici (ephemeral) olduğunu kavramak ve kalıcı ya da paylaşılan veriler için 3 temel depolama modelini uygulamalı olarak test etmektir:
-
-1. **Named Volume (Kalıcı Depolama):** Docker tarafından yönetilen (`/var/lib/docker/volumes`), konteyner silinse bile silinmeyen bağımsız disk alanı.
-2. **Host Bind Mount (Geliştirme & Dosya Paylaşımı):** Ana makinedeki (host) herhangi bir dizini (`$PWD:/work`) konteyner içine canlı bağlama.
-3. **tmpfs Mount (Bellek İçi Geçici Depolama):** Hassas veya yüksek hızlı geçici verileri ana makinenin RAM'inde tutma, konteyner durduğu anda sıfırlama.
-4. **`--mount` Sözdizimi:** Üretim ortamlarında `-v` yerine açık ve hatasız `--mount type=volume,source=...,target=...` kullanımını öğrenmek.
-
----
-
-## 2. Ön Koşullar
-
-* Docker Engine çalışır durumda olmalıdır (`docker info`).
-* Temel SQL ve komut satırı bilgisi.
-
----
-
-## 3. Depolama Tipleri Karşılaştırma Modeli
-
-| Özellik | Named Volume | Bind Mount | tmpfs Mount |
-|:---|:---|:---|:---|
-| **Kalıcılık** | Evet (Container silinse de kalır) | Evet (Host diskinde kalır) | Hayır (RAM'dedir, silinir) |
-| **Yönetici** | Docker Engine | Host İşletim Sistemi | Host RAM / Çekirdek |
-| **Host Bağımlılığı** | Hayır (Taşınabilir) | Evet (Dizin yoluna bağımlı) | Hayır |
-| **Tipik Kullanım** | Veritabanları (PostgreSQL, MySQL) | Kod geliştirme (Hot reload), konfigürasyon | Token, hassas geçici dosya, cache |
-
----
-
-## 4. Görevler (Tasks)
-
-1. **Named Volume Oluşturma:** `pgdata` isimli bir Docker Named Volume oluşturun ve `docker volume inspect` ile depolama yolunu inceleyin.
-2. **Kalıcı Veritabanı:** `postgres:17-alpine` konteynerını `pgdata` volume'una bağlayarak başlatın ve içine `orders` tablosu açıp test verisi ekleyin.
-3. **Kalıcılığı Kanıtlama (Disaster Simulation):** Veritabanı konteynerını `docker rm -f` ile tamamen silin. Aynı `pgdata` volume'unu bağlayarak `db-new` adıyla yeni bir konteyner başlatın ve verilerin korunduğunu kanıtlayın.
-4. **Host Bind Mount:** Bulunduğunuz dizini (`$PWD`) `busybox` konteyneri içerisine `/work` olarak bind mount edin ve dosya listesini okuyun.
-5. **Bellek İçi tmpfs Mount:** 64 MB boyutunda bir `tmpfs` RAM disk tahsis ederek içine dosya yazın ve test edin.
-6. **Otomasyon Doğrulaması:** `scripts/verify-storage.sh` betiği ile tüm depolama tiplerini otomatik doğrulayın.
-
----
-
-## 5. İpuçları
-
-<details>
-<summary>💡 İpucu 1: Neden -v yerine --mount Önerilir?</summary>
-
-`-v pgdata:/data` sözdiziminde eğer `pgdata` yanlış yazılırsa Docker hata vermek yerine sessizce hostta yeni bir dizin açabilir. `--mount type=volume,source=pgdata,target=/data` sözdizimi ise açıkça tipi (`volume`, `bind`, `tmpfs`) belirtir ve production ortamlarında yazım hatalarını anında engeller.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Volume'lar Fiziksel Olarak Nerede Saklanır?</summary>
-
-Linux üzerinde Docker volume'ları doğrudan `/var/lib/docker/volumes/<volume-adi>/_data` yolunda saklanır. Host işletim sisteminde root yetkisiyle doğrudan bu dizine erişilebilir.
-</details>
-
-<details>
-<summary>💡 İpucu 3: Docker'da Yetkisiz Veri Kaybı (Volume Prune Tehlikesi)</summary>
-
-`docker volume rm` veya `docker volume prune` komutları çalışan bir konteynere bağlı olmayan tüm Named Volume'ları kalıcı olarak siler. Üretim ortamlarında bu komutlar kesinlikle çok dikkatli çalıştırılmalıdır.
-</details>
-
----
-
-## 6. Doğal Doğrulama ve Beklenen Sonuç
-
-Aşağıdaki komutlarla verinin kurtarıldığını ve volume durumunu teyit edin:
+### Adım 1: Named Volume ile Veritabanı Başlatma ve Veri Ekleme
 
 ```bash
-# 1. Veri sorgulama
-docker exec db-new psql -U postgres -t -c "SELECT item FROM orders WHERE id=1;"
+# 1. Volume oluşturma ve inceleme
+docker volume create pgdata
+docker volume inspect pgdata
 
-# 2. Volume listeleme
-docker volume ls | grep pgdata
+# 2. PostgreSQL'i volume'a bağlayarak çalıştırma
+docker run -d --name db -e POSTGRES_PASSWORD=secret -v pgdata:/var/lib/postgresql/data postgres:17-alpine
+
+# 3. Tablo oluşturup veri ekleme
+sleep 4
+docker exec db psql -U postgres -c "CREATE TABLE orders (id int, item text); INSERT INTO orders VALUES (1, 'Server');"
 ```
 
-* **Beklenen Başarı Çıktısı:**
-  * SQL sorgusu `Server` çıktısını dönmelidir.
-  * `docker volume ls` listesinde `pgdata` görünmelidir.
+---
+
+### Adım 2: Konteyneri Silip Kalıcılığı Doğrulama
+
+```bash
+# 1. Çalışan veritabanı konteynerını tamamen silin
+docker rm -f db
+
+# 2. Aynı pgdata volume'unu bağlayarak yeni bir konteyner başlatın
+docker run -d --name db-new -e POSTGRES_PASSWORD=secret -v pgdata:/var/lib/postgresql/data postgres:17-alpine
+
+# 3. Verinin korunduğunu sorgulayın
+sleep 4
+docker exec db-new psql -U postgres -c "SELECT * FROM orders;"
+```
 
 ---
 
-## 7. Temizlik
-
-Laboratuvar tamamlandığında oluşturulan test veritabanını ve volume'u silin:
+### Adım 3: Host Bind Mount ile Canlı Dizin Paylaşımı
 
 ```bash
-docker rm -f db db-new 2>/dev/null || true
+# Mevcut çalışma dizinini konteyner içine bağlayarak listeleme
+docker run --rm -v "$PWD:/work" busybox ls -la /work
+```
+
+---
+
+### Adım 4: Bellek İçi (tmpfs) RAM Depolama
+
+Geçici veya hassas verileri ana makinenin fiziksel belleğinde (RAM) tutmak için `tmpfs` kullanılır:
+
+```bash
+# 64 MB RAM disk tahsis ederek dosya yazma ve okuma testi
+docker run --rm --tmpfs /cache:rw,size=64m busybox sh -c "echo 'ram disk verisi' > /cache/token && cat /cache/token"
+```
+
+---
+
+## Temizlik
+
+Laboratuvar kaynaklarını temizleyin:
+
+```bash
+docker rm -f db-new 2>/dev/null || true
 docker volume rm pgdata 2>/dev/null || true
 ```

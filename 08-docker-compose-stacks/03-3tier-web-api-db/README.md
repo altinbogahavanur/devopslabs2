@@ -10,7 +10,7 @@
 
 Bu laboratuvarın amacı; kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katmanlı) Güvenli Mikroservis Mimarisini** Docker Compose ile ayağa kaldırmaktır:
 
-1. **Katman 1 (Sunum / Gateway):** Nginx Reverse Proxy (Dış dünyaya tek açık nokta: Port 80).
+1. **Katman 1 (Web Gateway / Reverse Proxy):** Nginx Reverse Proxy (Dış dünyaya tek açık nokta: Port 80).
 2. **Katman 2 (Uygulama Mantığı):** Python FastAPI mikroservisi (İş mantığı ve API endpoint'leri).
 3. **Katman 3 (Veri & Önbellek):** PostgreSQL 16 ve Redis 7.
 4. **Çift Ağ İzolasyonu (DMZ Modeli):**

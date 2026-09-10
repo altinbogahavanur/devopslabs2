@@ -6,29 +6,11 @@
 
 ---
 
-## 1. Amaç
-
-Bu laboratuvarın amacı (Sunum Slayt 55 & 56, Lab 3B); modern yazılım dünyasında en çok kullanılan **7 farklı programlama dili ve çalışma zamanının (runtime)** kaynak kod seviyesinden başlayarak üretime hazır, optimize ve güvenli şekilde nasıl Dockerize edildiğini kavramaktır:
-
-1. **Derlenen Diller (Compiled):** Go ve .NET için `scratch` veya Alpine tabanlı ultra hafif multi-stage imajlar üretmek.
-2. **Yorumlanan Diller (Interpreted):** Python, Node.js ve PHP için katman önbelleği ve root olmayan kullanıcı (`non-root`) yapılandırması.
-3. **Kurumsal / JVM Mimarisi:** Java Spring Boot PetClinic uygulamasında `layertools` ile katmanlı JAR (Layered JAR) ve JVM bellek optimizasyonu (`-XX:MaxRAMPercentage=75.0`).
-4. **Tek Sayfa Uygulamaları (SPA):** React + Vite uygulamasını derleyip hafif Nginx imajına paketlemek.
-
----
-
-## 2. Ön Koşullar
-
-* Docker Engine ve BuildKit aktif olmalıdır (`docker info`).
-* Host üzerinde `3000`, `8000` ve `8080` portları boşta olmalıdır.
-
----
-
-## 3. Diller ve Mimari Kapsam
+## Diller ve Mimari Kapsam
 
 | No | Klasör | Dil / Çatı | Temel Odak ve Dockerization Pratiği |
 |:---:|:---|:---|:---|
-| **01** | [`01-nodejs`](01-nodejs/README.md) | **Node.js (Express)** | Basitleştirilmiş `npm install`, non-root `USER node`, slim base imaj |
+| **01** | [`01-nodejs`](01-nodejs/README.md) | **Node.js (Express)** | Katman önbelleği, non-root `USER node`, slim base imaj |
 | **02** | [`02-python`](02-python/README.md) | **Python (FastAPI)** | `PYTHONDONTWRITEBYTECODE=1`, `PYTHONUNBUFFERED=1`, non-root `appuser`, no-cache pip |
 | **03** | [`03-golang`](03-golang/README.md) | **Go (Golang)** | Multi-stage build (`golang:alpine` ➔ `scratch`), `CGO_ENABLED=0`, **~8 MB imaj boyutu** |
 | **04** | [`04-java-petclinic`](04-java-petclinic/README.md) | **Java (Spring Boot PetClinic)** | Maven multi-stage, **Layered JAR (`layertools`)**, JVM Container Tuning |
@@ -38,55 +20,60 @@ Bu laboratuvarın amacı (Sunum Slayt 55 & 56, Lab 3B); modern yazılım dünyas
 
 ---
 
-## 4. Görevler (Tasks)
+## Adım Adım Uygulama
 
-1. **Go Scratch Derlemesi:** `03-golang` dizinindeki Go uygulamasını inceleyin; `Dockerfile` ile derleyip imaj boyutunun 10 MB altında olduğunu doğrulayın.
-2. **Python FastAPI ve Non-Root:** `02-python` dizinindeki FastAPI uygulamasını derleyin; non-root çalıştığını ve `/health` ucunun yanıt verdiğini test edin.
-3. **Node.js Express ve Caching:** `01-nodejs` dizinindeki uygulamayı derleyip `3000` portundan test edin.
-4. **Spring Boot Layered JAR:** `04-java-petclinic` dizinindeki Spring Boot uygulamasını derleyip `layertools` katman yapısını gözlemleyin.
-5. **Konteyner Temizliği:** Çalıştırılan test konteynerlarını temizleyin.
-
----
-
-## 5. İpuçları
-
-<details>
-<summary>💡 İpucu 1: Go Neden scratch İmajında Çalışabilir?</summary>
-
-Go dili kaynak kodu doğrudan makine koduna (statically linked binary) derler. `CGO_ENABLED=0` verildiğinde C standart kütüphanelerine (libc/glibc) bağımlılık sıfırlanır. Bu sayede hiçbir işletim sistemi dosyası barındırmayan tamamen boş `scratch` imajında 5-8 MB boyutunda çalışabilir.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Java Spring Boot Layered JAR Avantajı</summary>
-
-Geleneksel fat-JAR yönteminde 50 MB'lık uygulamanın 45 MB'ı kütüphane (dependencies), 5 MB'ı uygulama kodudur. `layertools` ile kütüphaneler ayrı katmana, uygulama kodu ayrı katmana konur. Koddaki küçük bir değişiklikte sadece 5 MB'lık katman yeniden derlenir ve transfer edilir.
-</details>
-
----
-
-## 6. Doğal Doğrulama ve Beklenen Sonuç
-
-Aşağıdaki komutlarla çok dilli imaj boyutlarını ve yanıtları doğrulayın:
+### 1. Go (Golang) Scratch Uygulaması
 
 ```bash
-# 1. İmaj boyutlarını karşılaştırma
-docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}" | grep -E "go-app|py-app|node-app"
-
-# 2. Servis sağlık yanıtları
-curl -s http://localhost:8080/health
-curl -s http://localhost:8000/health
-curl -s http://localhost:3000/health
+cd 03-golang
+docker build -t go-app:v1 .
+docker images go-app:v1
+docker run -d --name go-demo -p 8080:8080 go-app:v1
+curl http://localhost:8080/health
+cd ..
 ```
-
-* **Beklenen Başarı Çıktısı:**
-  * `go-app:v1` boyutu **~10 MB veya daha küçük** görünmelidir.
-  * Tüm `/health` uçları `{"status": "ok"}` veya `200 OK` dönmelidir.
 
 ---
 
-## 7. Temizlik
+### 2. Python (FastAPI) Uygulaması
 
-Laboratuvar tamamlandığında çalışan konteynerları ve test imajlarını temizleyin:
+```bash
+cd 02-python
+docker build -t py-app:v1 .
+docker run -d --name py-demo -p 8000:8000 py-app:v1
+docker exec py-demo whoami
+curl http://localhost:8000/health
+cd ..
+```
+
+---
+
+### 3. Node.js (Express) Uygulaması
+
+```bash
+cd 01-nodejs
+docker build -t node-app:v1 .
+docker run -d --name node-demo -p 3000:3000 node-app:v1
+curl http://localhost:3000/health
+cd ..
+```
+
+---
+
+### 4. Java Spring Boot (Layered JAR)
+
+```bash
+cd 04-java-petclinic
+cat Dockerfile
+# Multi-stage layertools katmanlarını inceleyin
+cd ..
+```
+
+---
+
+## Temizlik
+
+Çalıştırılan test konteynerlarını temizleyin:
 
 ```bash
 docker rm -f go-demo py-demo node-demo 2>/dev/null || true
