@@ -45,26 +45,7 @@ docker compose up -d
 
 ---
 
-## 4. İpuçları
-
-<details>
-<summary>💡 İpucu 1: WORDPRESS_DB_HOST Değeri</summary>
-
-Compose içinde servis adı `db` olarak tanımlandığı için, WordPress ortam değişkeni doğrudan `WORDPRESS_DB_HOST: db:3306` olur. Docker Compose otomatik olarak servis adını dahili DNS'e kaydeder.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Tek Bir Servisi Yeniden Başlatma</summary>
-
-Tüm stack'i durdurup açmak yerine sadece WordPress servisini yeniden başlatmak için `docker compose restart wordpress` komutu yeterlidir.
-</details>
-
----
-
-## 5. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Komutlar ve Doğrulama</summary>
+## Adım Adım Uygulama ve Doğrulama
 
 ```bash
 # 1. Stack'i başlatma
@@ -86,11 +67,10 @@ NAME             IMAGE               STATUS
 compose-wp-app   wordpress:6-apache  running
 compose-wp-db    mysql:8.0           running (healthy)
 ```
-</details>
 
 ---
 
-## 6. Doğrulama ve Beklenen Sonuç
+## Beklenen Sonuç ve Doğrulama
 
 ```bash
 curl -s http://localhost:8080/wp-admin/install.php | grep -i "WordPress"

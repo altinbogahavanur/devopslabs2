@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY_URL = 'registry.gitlab.com/devopsatolyesi/docker-labs'
+        REGISTRY_URL = 'registry.gitlab.com/devops-practitioner-labs/docker-labs'
         IMAGE_NAME   = 'microservice-app'
         IMAGE_TAG    = "${env.BUILD_NUMBER}"
         // Jenkins Credentials ID: 'docker-hub-credentials'

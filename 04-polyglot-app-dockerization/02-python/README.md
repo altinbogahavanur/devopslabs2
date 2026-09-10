@@ -20,7 +20,7 @@ Python uygulamalarını Dockerize ederken en sık yapılan hatalar:
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Kurulum ve Çalıştırma
 
-Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
+Dockerfile direktiflerini kurgulamak için referans Linux çalıştırma adımları:
 
 ```bash
 # 1. Python 3 ve pip ortamının kurulması
@@ -59,36 +59,7 @@ python3 app/main.py
 
 ---
 
-## 4. Görevler (Tasks)
-
-1. `app/main.py` ve `requirements.txt` dosyalarını inceleyin.
-2. `PYTHONDONTWRITEBYTECODE=1` ve `PYTHONUNBUFFERED=1` ortam değişkenlerini tanımlayan bir `Dockerfile` hazırlayın.
-3. Root olmayan bir kullanıcı (`appuser`) oluşturup yetkilendirin.
-4. İmajı `python-devops-api:v1.0` adıyla derleyin.
-5. Konteyneri başlatıp `http://localhost:8000/health` adresinden çalıştığını doğrulayın.
-
----
-
-## 5. İpuçları
-
-<details>
-<summary>💡 İpucu 1: PYTHONUNBUFFERED=1 Neden Önemlidir?</summary>
-
-Varsayılan olarak Python, standart çıktı akışını (`stdout`) biriktirir ve bloklar halinde yazar. `PYTHONUNBUFFERED=1` dendiğinde ise `print()` veya logger çıktıları anında ekrana basılır; böylece `docker logs -f` komutunda loglar gecikmesiz gerçek zamanlı akar.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Non-Root Kullanıcı UID Seçimi</summary>
-
-Linux sistemlerinde 1000'den küçük UID'ler sistem servislerine ayrılmıştır. Bu nedenle uygulama kullanıcıları için genellikle `10001` gibi 1000'in üzerindeki UID'ler tercih edilir (`useradd -u 10001 appuser`).
-</details>
-
----
-
-## 6. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Dockerfile ve Doğrulama Adımları</summary>
+## 4. Adım Adım Uygulama ve Doğrulama
 
 **`Dockerfile`:**
 ```dockerfile
@@ -132,11 +103,10 @@ docker run -d --name my-python-api -p 8000:8000 python-devops-api:v1.0
 # 3. Test etme
 curl -i http://localhost:8000/health
 ```
-</details>
 
 ---
 
-## 7. Doğrulama ve Beklenen Sonuç
+## 5. Beklenen Sonuç ve Doğrulama
 
 ```bash
 curl -s http://localhost:8000/

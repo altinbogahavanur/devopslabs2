@@ -22,7 +22,7 @@ services:
       - "8085:80"
     environment:
       - SINGLE_REGISTRY=true
-      - REGISTRY_TITLE=DevOps Atolyesi Container Registry
+      - REGISTRY_TITLE=DevOps Container Registry
       - REGISTRY_URL=http://registry:5000
     depends_on:
       - registry

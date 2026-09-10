@@ -61,26 +61,7 @@ Bu laboratuvarın amacı; kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katma
 
 ---
 
-## 4. İpuçları
-
-<details>
-<summary>💡 İpucu 1: Neden 2 Ayrı Network?</summary>
-
-Geleneksel tek network kullanımında tüm konteynerlar aynı yayın (broadcast) alanındadır. DMZ (Demilitarized Zone) deseniyle Nginx'i yalnızca API'ye, API'yi ise veritabanına bağlamak kurumsal güvenlik standartlarının (PCI-DSS, ISO 27001) temel gereksinimidir.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Çift Healthcheck ile Bağımlılık Zinciri</summary>
-
-API servisi hem `db` hem de `cache` (Redis) servislerinin `service_healthy` durumunu bekler. Bu sayede ilk başlatmada hiçbir connection refused hatası alınmaz.
-</details>
-
----
-
-## 5. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Otomasyon Betiği ve Komutlar</summary>
+## Adım Adım Uygulama ve Doğrulama
 
 ```bash
 # 1. Otomatik test ve başlatma
@@ -97,11 +78,10 @@ curl -i http://localhost/api/v1/products
 # 4. Temizlik
 docker compose down -v
 ```
-</details>
 
 ---
 
-## 6. Doğrulama ve Beklenen Sonuç
+## Beklenen Sonuç ve Doğrulama
 
 ```bash
 curl -s http://localhost/health

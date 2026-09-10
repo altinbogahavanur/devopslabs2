@@ -20,7 +20,7 @@ PHP'yi Dockerize ederken:
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Kurulum ve Çalıştırma
 
-Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
+Dockerfile direktiflerini kurgulamak için referans Linux çalıştırma adımları:
 
 ```bash
 # 1. PHP 8.3 ve Composer kurulumu
@@ -52,36 +52,7 @@ php -S 0.0.0.0:8000 -t public/
 
 ---
 
-## 4. Görevler (Tasks)
-
-1. `composer.json` ve `public/index.php` dosyalarını inceleyin.
-2. Composer aracını `composer:2` imajından kopyalayan ve `opcache` eklentisini kuran bir `Dockerfile` hazırlayın.
-3. `composer install --no-dev --optimize-autoloader` komutunu işletin.
-4. İmajı `php-devops-api:v1.0` adıyla derleyin.
-5. Konteyneri başlatıp `http://localhost:8000/health` adresinden yanıt aldığınızı doğrulayın.
-
----
-
-## 5. İpuçları
-
-<details>
-<summary>💡 İpucu 1: --optimize-autoloader (-o) Neden Kritiktir?</summary>
-
-Composer varsayılan olarak sınıfları çalışma anında dosya sistemini tarayarak arar (PSR-4). `--optimize-autoloader` dendiğinde ise tüm sınıfların dosya yolları tek bir PHP dizisi (Class Map) haline getirilir. Bu durum üretim ortamında disk okuma gecikmesini ortadan kaldırır.
-</details>
-
-<details>
-<summary>💡 İpucu 2: docker-php-ext-install Aracı</summary>
-
-Resmi `php` Docker imajlarında `docker-php-ext-install` ve `docker-php-ext-enable` yardımcı betikleri bulunur. Bu betikler `opcache`, `pdo_mysql`, `bcmath` gibi C eklentilerini derleyip doğrudan PHP yapılandırmasına bağlar.
-</details>
-
----
-
-## 6. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Dockerfile ve Doğrulama Adımları</summary>
+## 4. Adım Adım Uygulama ve Doğrulama
 
 **`Dockerfile`:**
 ```dockerfile
@@ -122,11 +93,10 @@ docker run -d --name my-php-app -p 8000:8000 php-devops-api:v1.0
 # 3. Test etme
 curl -i http://localhost:8000/health
 ```
-</details>
 
 ---
 
-## 7. Doğrulama ve Beklenen Sonuç
+## 5. Beklenen Sonuç ve Doğrulama
 
 ```bash
 curl -s http://localhost:8000/

@@ -50,27 +50,7 @@ Bu laboratuvarın amacı; birden fazla servisten oluşan mikroservis mimarilerin
 
 ---
 
-## 4. İpuçları
-
-<details>
-<summary>💡 İpucu 1: Neden Sadece depends_on Yetmez?</summary>
-
-Varsayılan `depends_on: [database]` tanımı yalnızca veritabanı konteynerının Linux sürecinin başlamasını bekler. Oysa PostgreSQL'in ayağa kalkıp portu dinlemesi birkaç saniye sürer. Eğer `condition: service_healthy` kullanılmazsa, API servisi henüz hazır olmayan veritabanına bağlanmaya çalışır ve hata vererek çöker (CrashLoop).
-</details>
-
-<details>
-<summary>💡 İpucu 2: docker compose down vs down -v</summary>
-
-* `docker compose down`: Konteynerları ve ağları siler, Named Volume verilerini korur.
-* `docker compose down -v`: Konteynerlar ve ağlarla birlikte veritabanı volume'unu da tamamen siler (Sıfırdan temiz kurulum için).
-</details>
-
----
-
-## 5. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Komutlar ve Doğrulama</summary>
+## Adım Adım Uygulama ve Doğrulama
 
 ```bash
 # 1. Konfigürasyonu doğrulama
@@ -88,11 +68,10 @@ curl -i http://localhost:8000
 # 5. Temizlik
 docker compose down -v
 ```
-</details>
 
 ---
 
-## 6. Doğrulama ve Beklenen Sonuç
+## Beklenen Sonuç ve Doğrulama
 
 ```bash
 docker compose ps

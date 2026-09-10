@@ -1,3 +1,3 @@
-module devops.atolyesi/go-service
+module devops.local/go-service
 
 go 1.23

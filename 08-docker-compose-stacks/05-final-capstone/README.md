@@ -62,26 +62,7 @@ Bu bitirme projesinde (Capstone), Docker eğitim serisi boyunca öğrenilen tüm
 
 ---
 
-## 4. İpuçları
-
-<details>
-<summary>💡 İpucu 1: Docker Secrets Neden Ortam Değişkeninden Üstündür?</summary>
-
-`environment: [POSTGRES_PASSWORD=123]` şeklinde tanımlanan şifreler, `docker inspect` komutu çalıştırıldığında veya `docker exec env` dendiğinde düz metin (plain text) olarak görünür. `secrets` kullanıldığında ise şifre RAM üzerinde geçici bir dosyaya (`/run/secrets/`) mount edilir; `inspect` çıktısında asla görünmez.
-</details>
-
-<details>
-<summary>💡 İpucu 2: deploy.resources.limits</summary>
-
-Compose V2'de `deploy.resources.limits` blokları `docker compose up` çalıştırıldığında doğrudan uygulanır. Bu sayede bir konteyner bellek sızıntısı yaşasa bile sunucudaki diğer konteynerları etkilemez.
-</details>
-
----
-
-## 5. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Başlatma ve Doğrulama Adımları</summary>
+## Adım Adım Uygulama ve Doğrulama
 
 ```bash
 # 1. Projeyi derleme ve başlatma
@@ -99,11 +80,10 @@ curl -i http://localhost/api/products
 # 5. Temizlik
 docker compose down -v
 ```
-</details>
 
 ---
 
-## 6. Doğrulama ve Beklenen Sonuç
+## Beklenen Sonuç ve Doğrulama
 
 ```bash
 curl -s http://localhost/api/products

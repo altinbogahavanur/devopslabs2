@@ -81,7 +81,7 @@ head -n 10 /tmp/nginx_extracted.conf
 
 ```bash
 # 1. Değiştirilmiş konteynerdan yeni bir imaj oluşturma
-docker commit -m "custom html added" -a "DevOps Student" my-web custom-nginx:v1.0
+docker commit -m "custom html added" -a "DevOps Engineer" my-web custom-nginx:v1.0
 
 # 2. Üretilen imajı listeleme
 docker images custom-nginx:v1.0

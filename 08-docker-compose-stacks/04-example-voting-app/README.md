@@ -60,26 +60,7 @@ Bu laboratuvarda Docker topluluğunun resmi referans projesi olan **Example Voti
 
 ---
 
-## 4. İpuçları
-
-<details>
-<summary>💡 İpucu 1: Worker Servisinin Önemi</summary>
-
-Worker servisi dış dünyaya hiçbir port açmaz (`ports` yoktur). Yalnızca Docker dahili ağında Redis ve Postgres servisleriyle TCP üzerinden konuşur. Bu durum asenkron kuyruk mimarilerinin (Queue Worker Pattern) tipik örneğidir.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Tek Komutta Yeniden Derleme</summary>
-
-Uygulama kodlarında değişiklik yaptığınızda tüm imajları sıfırdan derleyip ayağa kaldırmak için `docker compose up -d --build` komutu kullanılır.
-</details>
-
----
-
-## 5. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Komutlar ve Çalıştırma</summary>
+## Adım Adım Uygulama ve Doğrulama
 
 ```bash
 # 1. Stack'i derleyip başlatma
@@ -94,11 +75,10 @@ docker compose logs -f worker
 # 4. Temizlik
 docker compose down -v
 ```
-</details>
 
 ---
 
-## 6. Doğrulama ve Beklenen Sonuç
+## Beklenen Sonuç ve Doğrulama
 
 ```bash
 curl -I http://localhost:5000

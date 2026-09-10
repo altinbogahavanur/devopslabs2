@@ -20,7 +20,7 @@ Modern kurumsal ortamlarda C# ve ASP.NET Core yaygın bir omurgadır.
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Derleme ve Çalıştırma
 
-Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
+Dockerfile direktiflerini kurgulamak için referans Linux çalıştırma adımları:
 
 ```bash
 # 1. Ubuntu'ya .NET 8 SDK kurulması
@@ -57,37 +57,7 @@ ASPNETCORE_URLS="http://+:8080" dotnet /app/publish/DevOpsApi.dll
 
 ---
 
-## 4. Görevler (Tasks)
-
-1. `DevOpsApi.csproj` ve `Program.cs` dosyalarını inceleyin.
-2. 2 aşamalı bir `Dockerfile` yazın:
-   * **1. Aşama:** `mcr.microsoft.com/dotnet/sdk:8.0 AS build`
-   * **2. Aşama:** `mcr.microsoft.com/dotnet/aspnet:8.0-alpine`
-3. İmajı `dotnet-devops-api:v1.0` adıyla derleyin.
-4. Konteyneri başlatıp `http://localhost:8080/health` ve `http://localhost:8080/` adreslerinden yanıt aldığınızı doğrulayın.
-
----
-
-## 5. İpuçları
-
-<details>
-<summary>💡 İpucu 1: USER $APP_UID Direktifi</summary>
-
-.NET 8 sürümünden itibaren Microsoft'un resmi container imajlarında `app` isimli standart bir non-root kullanıcı (UID 1654) yerleşik olarak gelir. `USER $APP_UID` komutuyla doğrudan bu güvenli profile geçebilirsiniz.
-</details>
-
-<details>
-<summary>💡 İpucu 2: /p:UseAppHost=false Parametresi</summary>
-
-Bu parametre, mimariye özel (OS-dependent executable) bir başlatıcı ikili dosya üretmek yerine taşınabilir saf bir `.dll` üretilmesini sağlar. Bu sayede Linux ve Alpine üzerinde cross-platform uyumluluğu maksimum olur.
-</details>
-
----
-
-## 6. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Multi-Stage Dockerfile</summary>
+## 4. Adım Adım Uygulama ve Doğrulama
 
 **`Dockerfile`:**
 ```dockerfile
@@ -136,11 +106,10 @@ docker run -d --name my-dotnet-api -p 8080:8080 dotnet-devops-api:v1.0
 # 3. Test etme
 curl -i http://localhost:8080/health
 ```
-</details>
 
 ---
 
-## 7. Doğrulama ve Beklenen Sonuç
+## 5. Beklenen Sonuç ve Doğrulama
 
 ```bash
 curl -s http://localhost:8080/

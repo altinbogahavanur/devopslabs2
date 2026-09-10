@@ -72,7 +72,7 @@ docker exec hardened-app touch /tmp/legit.log && echo "Geçici log RAM üzerine 
 
 ```bash
 # Sınırı aşan bellek yükü çalıştırma
-docker run --name oom-demo -m 128m --memory-swap 128m -e MEMORY_MB=256 ghcr.io/devopsatolyesi/stress-tester:v1 || true
+docker run --name oom-demo -m 128m --memory-swap 128m python:3.12-slim python -c "a = 'x' * 200 * 1024 * 1024" || true
 
 # Linux kernel tarafından atanan çıkış kodunu okuma (137 dönmelidir)
 docker inspect -f 'OOMKilled: {{.State.OOMKilled}} - ExitCode: {{.State.ExitCode}}' oom-demo
