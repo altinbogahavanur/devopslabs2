@@ -1,0 +1,15 @@
+🔍 [SCEN-05 İpucu — Volume Erişim Reddi (Permission Denied)]
+
+1. Dizin sahipliğini ve izinlerini inceleyin:
+   ls -ld /tmp/perm-test
+   (Dizin sahibi root ve sadece 700 izinli)
+
+2. Konteynerin çalıştığı kullanıcıyı kontrol edin:
+   docker inspect -f '{{.Config.User}}' perm-app
+   (Kullanıcı UID: 1000)
+
+3. Çözüm Metodu:
+   Host dizininin sahipliğini veya yazma iznini düzenleyin:
+   sudo chown -R 1000:1000 /tmp/perm-test
+   veya:
+   chmod 777 /tmp/perm-test

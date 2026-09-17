@@ -1,0 +1,10 @@
+🔍 [SCEN-03 İpucu — Bellek Aşımı ve OOMKilled (137)]
+
+1. Çıkış kodunu ve OOM bayrağını denetleyin:
+   docker inspect -f 'ExitCode: {{.State.ExitCode}} | OOMKilled: {{.State.OOMKilled}}' memory-crasher
+   (ExitCode 137 = 128 + 9 [SIGKILL], OOMKilled = true)
+
+2. Çözüm Metodu:
+   docker rm -f memory-crasher
+   docker run -d --name memory-crasher --memory 256m python:3.12-alpine \
+     python3 -c "import time; a = 'x' * (80 * 1024 * 1024); time.sleep(60)"

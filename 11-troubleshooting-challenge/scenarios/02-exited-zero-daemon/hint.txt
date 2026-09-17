@@ -1,0 +1,14 @@
+🔍 [SCEN-02 İpucu — Anında Kapanan Konteyner (Exit Code 0)]
+
+1. Konteyner durumunu ve sonunu inceleyin:
+   docker ps -a --filter name=exit-web
+   docker logs exit-web
+
+2. Teşhis:
+   Docker sadece PID 1 (ön plandaki süreç) yaşadığı sürece ayakta kalır.
+   Nginx varsayılan olarak arka plana (daemon) geçtiği için süreç sonlanır ve Docker konteyneri kapatır.
+
+3. Çözüm Metodu:
+   Konteyneri silin ve 'daemon off;' direktifiyle ön planda başlatın:
+   docker rm -f exit-web
+   docker run -d --name exit-web nginx:alpine nginx -g "daemon off;"
