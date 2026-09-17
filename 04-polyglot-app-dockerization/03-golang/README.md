@@ -18,7 +18,7 @@ Eğer Go uygulamasını tek aşamalı (`golang:1.23`) imaj içinde çalıştır�
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Derleme ve Çalıştırma
 
-Dockerfile direktiflerini kurgulamak için referans Linux çalıştırma adımları:
+Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
 
 ```bash
 # 1. Ubuntu'ya Go SDK kurulması (Geliştirme / Derleme Aşaması)
@@ -54,7 +54,38 @@ PORT=8080 ./server
 
 ---
 
-## 4. Adım Adım Uygulama ve Doğrulama
+## 4. Görevler (Tasks)
+
+1. `main.go` ve `go.mod` dosyalarını inceleyin.
+2. 2 aşamalı bir `Dockerfile` yazın:
+   * **1. Aşama:** `golang:1.23-alpine AS builder` (Derleme aşaması)
+   * **2. Aşama:** `scratch` (Çalışma zamanı)
+3. İmajı `go-microservice:v1.0` adıyla derleyin.
+4. `docker images go-microservice:v1.0` ile imaj boyutunun **10 MB'ın altında** olduğunu doğrulayın.
+5. Konteyneri başlatın ve `curl http://localhost:8080/health` ile doğrulayın.
+
+---
+
+## 5. İpuçları
+
+<details>
+<summary>💡 İpucu 1: CGO_ENABLED=0 Neden Zorunludur?</summary>
+
+Go varsayılan olarak bazı C sistem kütüphanelerini (`glibc`) dinamik bağlar. `CGO_ENABLED=0` dendiğinde tüm işletim sistemi çağrıları saf Go ile derlenir; böylece içinde hiçbir Linux kütüphanesi bulunmayan boş `scratch` imajında bile sorunsuz çalışır.
+</details>
+
+<details>
+<summary>💡 İpucu 2: -ldflags="-s -w" Parametresi</summary>
+
+`-s` sembol tablosunu (symbol table), `-w` ise DWARF debug bilgilerini kaldırır. Bu bayraklar binary dosya boyutunu yaklaşık %30-40 oranında küçültür.
+</details>
+
+---
+
+## 6. Referans Çözüm
+
+<details>
+<summary>🎯 Referans Multi-Stage Dockerfile</summary>
 
 **`Dockerfile`:**
 ```dockerfile
@@ -105,10 +136,11 @@ docker run -d --name my-go-app -p 8080:8080 go-microservice:v1.0
 # 4. İstek atma
 curl -i http://localhost:8080/health
 ```
+</details>
 
 ---
 
-## 5. Beklenen Sonuç ve Doğrulama
+## 7. Doğrulama ve Beklenen Sonuç
 
 ```bash
 curl -s http://localhost:8080/

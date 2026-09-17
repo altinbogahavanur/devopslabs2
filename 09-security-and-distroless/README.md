@@ -1,111 +1,30 @@
-# LAB-09 — Üretim Seviyesi Güvenlik, Distroless, Konteyner Sertleştirme (Hardening) ve Trivy Taraması
+# LAB-DOC-09 — Konteyner Güvenliği, Sertleştirme ve Zafiyet Analizi
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| İleri / Uzman | 60 dakika | `distroless`, `trivy`, `cgroups v2`, `tini` | `8080` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| İleri - Uzman | `distroless`, `trivy`, `capabilities`, `read-only` | 8080 |
 
----
-
-## Savunma Derinliği ve Sertleştirme Mimarisi
-
-```text
-                     SALDIRGAN / GÜVENLİK TEHDİDİ
-                                  │
-                                  ▼
-+─────────────────────────────────────────────────────────────────────────────+
-| 1. DİSTROLESS VE SHELL-LESS İMAJ (gcr.io/distroless/static-debian12)        |
-|    - 'sh' veya 'bash' YOKTUR! Saldırgan reverse shell açamaz.               |
-+─────────────────────────────────────────────────────────────────────────────+
-                                  │
-                                  ▼
-+─────────────────────────────────────────────────────────────────────────────+
-| 2. NON-ROOT KULLANICI (UID 10001)                                           |
-|    - Konteynerdan kaçış olsa bile host makinede root olunamaz.              |
-+─────────────────────────────────────────────────────────────────────────────+
-                                  │
-                                  ▼
-+─────────────────────────────────────────────────────────────────────────────+
-| 3. SALT-OKUNUR DOSYA SİSTEMİ (--read-only)                                  |
-|    - Dosya sistemine zararlı yazılım (.sh, malware) indirilemez / yazılamaz.|
-|    - Sadece geçici /tmp dizini RAM üzerinde (tmpfs) açılır.                 |
-+─────────────────────────────────────────────────────────────────────────────+
-                                  │
-                                  ▼
-+─────────────────────────────────────────────────────────────────────────────+
-| 4. LINUX CAPABILITIES DÜŞÜRME (--cap-drop=ALL)                              |
-|    - Raw soket açma, sistem saatini değiştirme gibi kernel yetkileri kapalı.|
-+─────────────────────────────────────────────────────────────────────────────+
-```
+Konteyner ortamları varsayılan olarak root yetkileriyle çalışır ve ciddi güvenlik açıkları barındırabilir. Bu modülde, CIS Docker Benchmark ve NIST standartlarına uygun olarak Google Distroless imajları, non-root kullanıcı zorunluluğu, Trivy ile zafiyet taraması ve çalışma zamanı sertleştirme (runtime hardening) pratikleri ele alınır.
 
 ---
 
-## Adım Adım Uygulama
+## Modül Laboratuvarları
 
-### Adım 1: Sertleştirilmiş Konteyneri Başlatma
+Aşağıdaki laboratuvarları sırasıyla uygulayınız:
+
+| No | Modül Yolu | Seviye | Odak Konusu |
+|:---:|:---|:---:|:---|
+| **01** | [`01-nonroot-and-distroless`](01-nonroot-and-distroless/README.md) | İleri | Google Distroless taban imajları, shell'siz (`sh`/`bash` yok) imaj üretimi ve non-root kullanıcı (`UID 65532`) ile çalışma. |
+| **02** | [`02-vulnerability-scanning-trivy`](02-vulnerability-scanning-trivy/README.md) | İleri | Aqua Security Trivy ile CVE taraması, CRITICAL/HIGH filtreleme ve CI/CD derleme kırma (`--exit-code 1`) kapısı. |
+| **03** | [`advanced/03-runtime-hardening-and-capabilities`](advanced/03-runtime-hardening-and-capabilities/README.md) | Uzman | Linux yeteneklerini sıfırlama (`--cap-drop=ALL`), salt-okunur dosya sistemi (`--read-only`) ve yetki yükseltme engeli (`no-new-privileges`). |
+
+---
+
+## Hızlı Başlangıç
+
+İlk laboratuvar ile çalışmaya başlayın:
 
 ```bash
-# Sertleştirilmiş stack'i ayağa kaldırma
-docker compose up -d
-docker compose ps
-```
-
----
-
-### Adım 2: Güvenlik ve Sertleştirme Kısıtlarını Test Etme
-
-```bash
-# 1. Çalışan kullanıcı kimliğini sorgulama (UID 10001 dönmelidir)
-docker exec hardened-app id
-
-# 2. Salt-okunur dosya sistemine yazma denemesi (Read-only file system hatası vermelidir)
-docker exec hardened-app touch /root/evil.sh || echo "Yazma engellendi: Dosya sistemi salt-okunur!"
-
-# 3. RAM tabanlı geçici /tmp dizinine yazma testi (Başarılı olmalıdır)
-docker exec hardened-app touch /tmp/legit.log && echo "Geçici log RAM üzerine başarıyla yazıldı."
-```
-
----
-
-### Adım 3: Bellek Sınırı ve OOMKilled (Exit Code 137) Simülasyonu
-
-128 MB RAM sınırı tanımlanmış konteynerde bellek aşımı simülasyonu yapın:
-
-```bash
-# Sınırı aşan bellek yükü çalıştırma
-docker run --name oom-demo -m 128m --memory-swap 128m python:3.12-slim python -c "a = 'x' * 200 * 1024 * 1024" || true
-
-# Linux kernel tarafından atanan çıkış kodunu okuma (137 dönmelidir)
-docker inspect -f 'OOMKilled: {{.State.OOMKilled}} - ExitCode: {{.State.ExitCode}}' oom-demo
-```
-
----
-
-### Adım 4: PID 1 Problemi ve Tini ile Zarif Kapanma (Graceful Shutdown)
-
-```bash
-# Tini init yöneticisi kullanan imajı çalıştırma
-docker run -d --name graceful-demo app/Dockerfile.tini 2>/dev/null || true
-
-# SIGTERM sinyaline anında (0.2s) yanıt verdiğini doğrulama
-time docker stop hardened-app
-```
-
----
-
-### Adım 5: Trivy ile İmaj Zafiyet Taraması
-
-```bash
-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-  aquasec/trivy:latest image --severity HIGH,CRITICAL python:3.12-slim
-```
-
----
-
-## Temizlik
-
-Laboratuvar kaynaklarını temizleyin:
-
-```bash
-docker compose down 2>/dev/null || true
-docker rm -f oom-demo graceful-demo 2>/dev/null || true
+cd 01-nonroot-and-distroless
+cat README.md
 ```

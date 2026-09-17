@@ -19,7 +19,7 @@ Java uygulamalarını Dockerize ederken karşılaşılan 3 büyük problem vard�
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Derleme ve Çalıştırma
 
-Dockerfile direktiflerini kurgulamak için referans Linux çalıştırma adımları:
+Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
 
 ```bash
 # 1. Ubuntu'ya OpenJDK 17 ve Maven kurulması
@@ -78,7 +78,40 @@ java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -jar target/petclinic-de
 
 ---
 
-## 5. Adım Adım Uygulama ve Doğrulama
+## 5. Görevler (Tasks)
+
+1. `pom.xml` ve Java kaynak kodlarını inceleyin.
+2. 2 aşamalı bir `Dockerfile` oluşturun:
+   * **1. Aşama (`builder`):** `pom.xml` kopyalayıp derleyin ve `layertools` ile JAR'ı extract edin.
+   * **2. Aşama (`runner`):** `eclipse-temurin:17-jre-alpine` tabanını kullanarak 4 katmanı sırasıyla kopyalayın.
+3. JVM için `-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0` ortam değişkenini ekleyin.
+4. İmajı `petclinic-demo:v1.0` adıyla derleyin.
+5. Konteyneri `--memory=512m` sınırı ile başlatıp `http://localhost:8080/api/pets` adresinden test edin.
+
+---
+
+## 6. İpuçları
+
+<details>
+<summary>💡 İpucu 1: -XX:MaxRAMPercentage=75.0 Neden Hayatidir?</summary>
+
+Konteynera örneğin `docker run -m 512m` sınırı verdiğinizde, eğer JVM container-aware değilse host sunucunun (örneğin 16 GB RAM) %25'ini (4 GB) almaya çalışır ve Docker işletim sistemi konteyneri anında `OOMKilled` (Exit 137) ile öldürür. `MaxRAMPercentage=75.0` sayesinde JVM, konteynera tahsis edilen 512 MB'ın %75'ini (384 MB) aşmayacak şekilde heap alanını dinamik ayarlar.
+</details>
+
+<details>
+<summary>💡 İpucu 2: layertools Extract Komutu</summary>
+
+Spring Boot 3 ile gelen fat-jar yapısını parçalamak için builder aşamasında şu komut çalıştırılır:
+`RUN java -Djarmode=layertools -jar target/*.jar extract`
+Bu komut kök dizinde 4 ayrı klasör (`dependencies`, `spring-boot-loader`, `snapshot-dependencies`, `application`) oluşturur.
+</details>
+
+---
+
+## 7. Referans Çözüm
+
+<details>
+<summary>🎯 Referans Multi-Stage Dockerfile</summary>
 
 **`Dockerfile`:**
 ```dockerfile
@@ -141,10 +174,11 @@ docker logs -f my-petclinic
 # 4. API endpoint'ini test etme
 curl -i http://localhost:8080/api/pets
 ```
+</details>
 
 ---
 
-## 6. Beklenen Sonuç ve Doğrulama
+## 8. Doğrulama ve Beklenen Sonuç
 
 ```bash
 curl -s http://localhost:8080/api/pets

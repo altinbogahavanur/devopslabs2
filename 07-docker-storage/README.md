@@ -1,71 +1,30 @@
-# LAB-07 — Docker Storage: Named Volume, Host Bind Mount ve Bellek İçi tmpfs
+# LAB-DOC-07 — Kalıcı Depolama ve Veri Yönetimi
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Başlangıç - Orta | 40 dakika | `docker-ce`, `postgres:17-alpine`, `busybox` | `-` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta - İleri | `docker-ce`, `named-volume`, `bind-mount`, `tmpfs` | 8080 |
 
----
-
-## Adım Adım Uygulama
-
-### Adım 1: Named Volume ile Veritabanı Başlatma ve Veri Ekleme
-
-```bash
-# 1. Volume oluşturma ve inceleme
-docker volume create pgdata
-docker volume inspect pgdata
-
-# 2. PostgreSQL'i volume'a bağlayarak çalıştırma
-docker run -d --name db -e POSTGRES_PASSWORD=secret -v pgdata:/var/lib/postgresql/data postgres:17-alpine
-
-# 3. Tablo oluşturup veri ekleme
-sleep 4
-docker exec db psql -U postgres -c "CREATE TABLE orders (id int, item text); INSERT INTO orders VALUES (1, 'Server');"
-```
+Konteynerlar varsayılan olarak geçicidir (stateless / ephemeral). Veritabanları ve kalıcı durum saklayan uygulamalar için Docker'ın depolama mekanizmalarını bilmek zorunludur. Bu modülde Named Volume, Host Bind Mount, bellek içi `tmpfs` ve UID/GID izin uyuşmazlıkları ele alınır.
 
 ---
 
-### Adım 2: Konteyneri Silip Kalıcılığı Doğrulama
+## Modül Laboratuvarları
 
-```bash
-# 1. Çalışan veritabanı konteynerını tamamen silin
-docker rm -f db
+Aşağıdaki laboratuvarları sırasıyla uygulayınız:
 
-# 2. Aynı pgdata volume'unu bağlayarak yeni bir konteyner başlatın
-docker run -d --name db-new -e POSTGRES_PASSWORD=secret -v pgdata:/var/lib/postgresql/data postgres:17-alpine
-
-# 3. Verinin korunduğunu sorgulayın
-sleep 4
-docker exec db-new psql -U postgres -c "SELECT * FROM orders;"
-```
+| No | Modül Yolu | Seviye | Odak Konusu |
+|:---:|:---|:---:|:---|
+| **01** | [`01-volumes-and-bind-mounts`](01-volumes-and-bind-mounts/README.md) | Orta | Kalıcı veritabanı depolama için Named Volume oluşturma, Host Bind Mount ve salt-okunur (`:ro`) dizin eşleme. |
+| **02** | [`02-tmpfs-in-memory`](02-tmpfs-in-memory/README.md) | Orta | Bellek içi (`--tmpfs`) RAM diski oluşturma, hassas verilerin diske yazılmasını önleme ve anında sıfırlama. |
+| **03** | [`advanced/03-volume-backup-restore-and-permissions`](advanced/03-volume-backup-restore-and-permissions/README.md) | İleri | Host ve konteyner non-root UID/GID uyuşmazlığı (`Permission Denied`) çözümü ve `--user` bayrağı kullanımı. |
 
 ---
 
-### Adım 3: Host Bind Mount ile Canlı Dizin Paylaşımı
+## Hızlı Başlangıç
+
+İlk laboratuvar ile çalışmaya başlayın:
 
 ```bash
-# Mevcut çalışma dizinini konteyner içine bağlayarak listeleme
-docker run --rm -v "$PWD:/work" busybox ls -la /work
-```
-
----
-
-### Adım 4: Bellek İçi (tmpfs) RAM Depolama
-
-Geçici veya hassas verileri ana makinenin fiziksel belleğinde (RAM) tutmak için `tmpfs` kullanılır:
-
-```bash
-# 64 MB RAM disk tahsis ederek dosya yazma ve okuma testi
-docker run --rm --tmpfs /cache:rw,size=64m busybox sh -c "echo 'ram disk verisi' > /cache/token && cat /cache/token"
-```
-
----
-
-## Temizlik
-
-Laboratuvar kaynaklarını temizleyin:
-
-```bash
-docker rm -f db-new 2>/dev/null || true
-docker volume rm pgdata 2>/dev/null || true
+cd 01-volumes-and-bind-mounts
+cat README.md
 ```

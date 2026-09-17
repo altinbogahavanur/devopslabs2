@@ -1,95 +1,30 @@
-# LAB-06 — Docker Networking: Custom Bridge, Dahili DNS ve Ağ İzolasyonu
+# LAB-DOC-06 — Docker Ağ Mimarisi: Bridge, DNS ve İzolasyon
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Başlangıç - Orta | 40 dakika | `docker-ce`, `postgres:17-alpine`, `nginx:alpine`, `busybox` | `8080` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta - İleri | `docker-ce`, `bridge`, `host`, `none`, `dns` | 80, 8080 |
 
----
-
-## Mimari ve Çalışma Modeli
-
-```text
-               HOST MAKİNE (Ubuntu)
-  ┌─────────────────────────────────────────────────────────────────────────┐
-  │ Port 8080 ───┐                                                          │
-  │              ▼                                                          │
-  │   +───────────────────────────+       +─────────────────────────────+   │
-  │   | net-web (Nginx)           |       | net-db (PostgreSQL)         |   │
-  │   | IP: 172.18.0.3            |       | IP: 172.18.0.2              |   │
-  │   +─────────────┬─────────────+       +──────────────┬──────────────+   │
-  │                 │                                    │                  │
-  │                 ▼                                    ▼                  │
-  │   ======================= app-net (Bridge) ========================     │
-  │               (Dahili DNS Çözümleme: 'net-db' ➔ 172.18.0.2)             │
-  └─────────────────────────────────────────────────────────────────────────┘
-```
+Konteynerların birbirleriyle ve dış dünyayla nasıl iletişim kurduğu kurumsal mimarilerin temelini oluşturur. Bu modülde, kullanıcı tanımlı bridge ağları, yerleşik DNS çözümleme, host/none sürücüleri ve DMZ tarzı çoklu ağ mimarileri ele alınır.
 
 ---
 
-## Adım Adım Uygulama
+## Modül Laboratuvarları
 
-### Adım 1: Kullanıcı Tanımlı Bridge Ağ Oluşturma
+Aşağıdaki laboratuvarları sırasıyla uygulayınız:
 
-Varsayılan `bridge` ağından farklı olarak kullanıcı tanımlı ağlarda konteynerlar birbirini IP yerine doğrudan isimleriyle (Dahili DNS - `127.0.0.11`) bulabilir:
+| No | Modül Yolu | Seviye | Odak Konusu |
+|:---:|:---|:---:|:---|
+| **01** | [`01-custom-bridge-and-dns`](01-custom-bridge-and-dns/README.md) | Orta | Özel bridge ağı oluşturma, dahili DNS (`127.0.0.11`) çözümleme ve port eşleme (`-p`). |
+| **02** | [`02-host-and-none-networks`](02-host-and-none-networks/README.md) | Orta | `--network host` ile sıfır NAT gecikmesi ve `--network none` ile tam ağ izolasyonu. |
+| **03** | [`advanced/03-multi-network-dmz-and-aliases`](advanced/03-multi-network-dmz-and-aliases/README.md) | İleri | Çoklu ağ köprüsü (DMZ Mimarisi), veritabanını dış dünyadan yalıtma ve ağ takma adları (`--network-alias`). |
+
+---
+
+## Hızlı Başlangıç
+
+İlk laboratuvar ile çalışmaya başlayın:
 
 ```bash
-docker network create app-net
-docker network ls
-```
-
----
-
-### Adım 2: Veritabanını Ağ İçinde Başlatma
-
-```bash
-docker run -d --name net-db --network app-net -e POSTGRES_PASSWORD=secret postgres:17-alpine
-```
-
----
-
-### Adım 3: Dahili DNS Çözümlemesini Test Etme
-
-Aynı ağa geçici bir konteyner bağlayarak `net-db` isminin çözülmesini test edin:
-
-```bash
-docker run --rm --network app-net busybox nslookup net-db
-```
-
-*Çıktıda `net-db` isminin Docker dahili DNS'i tarafından `172.18.0.2` gibi bir IP'ye çözüldüğünü gözlemleyin.*
-
----
-
-### Adım 4: Web Sunucusunu Başlatma ve Port Eşleme
-
-```bash
-docker run -d --name net-web --network app-net -p 8080:80 nginx:alpine
-
-# Ağa bağlı konteynerları denetleme
-docker network inspect app-net
-
-# Host üzerinden erişimi doğrulama
-curl -I http://localhost:8080
-```
-
----
-
-### Adım 5: None Network ile Tam İzolasyon
-
-Dış dünya ile veya diğer konteynerlarla hiçbir temas kurmaması gereken güvenli iş yükleri için ağsız (`none`) mod kullanılır:
-
-```bash
-docker run --rm --network none busybox ip addr
-```
-
-*Çıktıda sadece `127.0.0.1 (lo)` olduğunu, harici ağ kartı (`eth0`) bulunmadığını gözlemleyin.*
-
----
-
-## Temizlik
-
-Laboratuvar kaynaklarını temizleyin:
-
-```bash
-docker rm -f net-web net-db 2>/dev/null || true
-docker network rm app-net 2>/dev/null || true
+cd 01-custom-bridge-and-dns
+cat README.md
 ```

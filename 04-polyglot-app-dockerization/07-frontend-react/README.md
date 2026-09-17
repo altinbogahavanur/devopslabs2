@@ -20,7 +20,7 @@ Modern web geliştirmede React, Vue veya Angular gibi Tek Sayfa Uygulamaları (S
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Kurulum ve Çalıştırma
 
-Dockerfile direktiflerini kurgulamak için referans Linux çalıştırma adımları:
+Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
 
 ```bash
 # 1. Derleme makinesinde Node.js ile statik dosyaların üretilmesi
@@ -79,7 +79,38 @@ sudo systemctl restart nginx
 
 ---
 
-## 5. Adım Adım Uygulama ve Doğrulama
+## 5. Görevler (Tasks)
+
+1. `package.json`, `src/App.jsx` ve `nginx.conf` dosyalarını inceleyin.
+2. 2 aşamalı bir `Dockerfile` yazın:
+   * **1. Aşama:** `node:20-alpine AS builder` (Build)
+   * **2. Aşama:** `nginx:1.25-alpine` (Runtime)
+3. İmajı `react-frontend-spa:v1.0` adıyla derleyin.
+4. İmaj boyutunun **30 MB altında** olduğunu `docker images` ile doğrulayın.
+5. Konteyneri başlatıp `http://localhost:80` üzerinden HTML başlığını doğrulayın.
+
+---
+
+## 6. İpuçları
+
+<details>
+<summary>💡 İpucu 1: try_files Neden Zorunludur?</summary>
+
+React Router gibi istemci taraflı kütüphanelerde kullanıcı sayfayı yenilediğinde (örneğin `http://localhost/users/profile`), Nginx diskte `/users/profile` adında fiziksel bir dosya arar ve bulamayıp **404 Not Found** döner. `try_files $uri $uri/ /index.html;` kuralı sayesinde Nginx, fiziksel dosya yoksa isteği `index.html`'e devreder ve sayfa 404 vermeden sorunsuz açılır.
+</details>
+
+<details>
+<summary>💡 İpucu 2: daemon off; Kuralı</summary>
+
+Nginx varsayılan olarak bir arka plan arka plan süreci (daemon) gibi başlar. Konteyner ortamında ana süreç sonlandığında konteyner duracağı için Nginx `daemon off;` direktifi ile ön planda (foreground) çalışmaya zorlanır.
+</details>
+
+---
+
+## 7. Referans Çözüm
+
+<details>
+<summary>🎯 Referans Multi-Stage Dockerfile</summary>
 
 **`Dockerfile`:**
 ```dockerfile
@@ -132,10 +163,11 @@ docker run -d --name my-react-spa -p 80:80 react-frontend-spa:v1.0
 # 4. Yanıtı test etme
 curl -i http://localhost:80
 ```
+</details>
 
 ---
 
-## 6. Beklenen Sonuç ve Doğrulama
+## 8. Doğrulama ve Beklenen Sonuç
 
 ```bash
 curl -s http://localhost:80 | grep "React SPA + Nginx"

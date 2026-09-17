@@ -1,0 +1,94 @@
+# LAB-DOC-05-03 (Advanced) — Kurumsal Harbor OCI Registry ve Trivy Güvenlik Taraması
+
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| İleri | `harbor`, `trivy`, `docker-ce`, `robot-accounts` | 8085 / 18082 |
+
+> **Önemli Erişim Notu:** Harbor web arayüzü kurulduğunda `http://<SUNUCU-IP>:8085` (veya ortamınızda ayrılmış port) üzerinden kullanıcı adı `admin` ve parola `Harbor12345` ile erişilebilir.
+
+---
+
+## Amaç
+
+- Standart `registry:2` yerine kurumsal ortamlarda neden **Harbor Enterprise Registry** tercih edildiğini kavramak.
+- Rol Tabanlı Erişim Denetimi (RBAC), Proje Kotaları ve Değiştirilemez Etiket (Tag Immutability) kurallarını öğrenmek.
+- CI/CD (Jenkins, GitLab CI) süreçleri için kısıtlı yetkili **Robot Hesapları (Robot Accounts)** oluşturmak.
+- Dahili **Trivy** güvenlik tarayıcısı ile depoya yüklenen imajlardaki CVE zafiyetlerini otomatik denetlemek.
+
+---
+
+## Ön Koşullar
+
+- LAB-DOC-05-01 ve 02 tamamlanmış olmalıdır.
+- En az 4 GB boş RAM (Harbor mikroservis kümesi için).
+
+---
+
+## Mimari ve Güvenlik Modeli
+
+```text
+[Geliştirici / CI/CD Robotu]
+            │
+            ├── 1. docker login harbor.domain:8085 (Robot Token)
+            ├── 2. docker push harbor.domain:8085/prod/app:v1.0
+            ▼
++───────────────────────────────────────────────────────────────+
+| HARBOR ENTERPRISE PLATFORMU                                   |
+|                                                               |
+|  [ harbor-core / portal ]  ──> RBAC & Proje İzolasyonu        |
+|  [ registry ]              ──> OCI Uyumlu Katman Deposu       |
+|  [ trivy-adapter ]         ──> 🛡️ OTOMATİK ZAFİYET TARAMASI    |
+|                                (HIGH/CRITICAL CVE varsa durdur|
+|  [ tag-immutability ]      ──> 'v1.0' etiketinin ezilmesini engelle|
++───────────────────────────────────────────────────────────────+
+```
+
+---
+
+## Adım Adım Uygulama Rehberi
+
+### 1. Harbor Mimarisi ve Proje Oluşturma
+Harbor web arayüzünde (veya API üzerinden):
+1. `devops-team` adında **Private** bir proje oluşturun.
+2. Proje ayarlarından **Automatically scan images on push** (İmaj yüklendiğinde otomatik tara) seçeneğini aktif edin.
+3. **Tag Immutability:** `v*` formatındaki etiketlerin silinmesini veya üzerine yazılmasını engelleyen kural tanımlayın.
+
+### 2. CI/CD Robot Hesabı Üretme
+1. Proje sekmesinden **Robot Accounts** menüsüne gidin.
+2. `robot-cicd-pusher` adında yeni bir hesap açıp sadece `Push Image` ve `Pull Image` izinleri verin.
+3. Üretilen gizli token'ı güvenli bir yere kaydedin.
+
+### 3. Docker CLI ile Robot Girişi ve İmaj Gönderme
+```bash
+# 1. Robot hesabı ile giriş yapın:
+# docker login <HARBOR-HOST>:8085 -u "robot$robot-cicd-pusher" -p "<TOKEN>"
+
+# 2. İmajı kurumsal proje yoluyla etiketleyin:
+# docker tag my-app:1.0 <HARBOR-HOST>:8085/devops-team/my-app:v1.0
+
+# 3. İmajı depoya yükleyin:
+# docker push <HARBOR-HOST>:8085/devops-team/my-app:v1.0
+```
+
+### 4. Trivy Zafiyet Raporunu İnceleme
+Harbor arayüzünde yüklenen imajın yanında beliren güvenlik raporuna tıklayın:
+- `CRITICAL`, `HIGH`, `MEDIUM` CVE listesini ve düzeltme sürümlerini (Fixed in) inceleyin.
+
+---
+
+## Doğal Doğrulama ve Beklenen Sonuç
+
+```bash
+# Harbor API üzerinden proje listesini sorgulayın:
+curl -s -u "admin:Harbor12345" http://localhost:8085/api/v2.0/projects | grep "devops-team"
+```
+
+---
+
+## Temizlik
+
+Harbor kümesini durdurmak için:
+```bash
+# cd ~/docker-labs/05-backup-restore-and-registry/harbor
+# docker compose down
+```

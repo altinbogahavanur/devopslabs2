@@ -1,10 +1,8 @@
-# LAB-DOC-16 — BuildKit Gizli Bilgi Yönetimi ve Katman Sızıntılarının Önlenmesi
+# LAB-DOC-09-04 (Advanced) — BuildKit Gizli Bilgi Yönetimi ve Katman Sızıntılarının Önlenmesi
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---|:---:|:---|:---:|
-| İleri | 35 Dakika | Docker BuildKit, docker history, Linux sh | Yok (Build Time Security) |
-
-[16-buildkit-secrets-and-layer-leaks.zip](16-buildkit-secrets-and-layer-leaks.zip)
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| İleri | Docker BuildKit, docker history, Linux sh | Yok (Build Time Security) |
 
 ---
 
