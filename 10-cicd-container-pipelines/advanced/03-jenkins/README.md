@@ -2,13 +2,13 @@
 
 | Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
 |:---:|:---:|:---:|:---:|
-| Orta - İleri | 40 dakika | `jenkins`, `declarative-pipeline`, `trivy`, `docker` | `8080` |
+| Orta - İleri | 40 dakika | `jenkins`, `declarative-pipeline`, `trivy`, `docker` | `18080` |
 
 ---
 
 ## 1. Amaç
 
-Bu laboratuvarda, kurumsal CI/CD süreçlerinin en yaygın kullanılan platformu **Jenkins** üzerinde **Declarative `Jenkinsfile`** ile uçtan uca bir Docker konteyner boru hattı işletmek:
+Bu laboratuvarda, kurumsal CI/CD süreçlerinin en yaygın kullanılan platformu **Jenkins** üzerinde **Declarative `Jenkinsfile`** ile uçtan uca bir Docker konteyner pipeline'ı işletmek:
 
 1. **Pipeline as Code:** Tüm derleme, test, güvenlik taraması ve dağıtım aşamalarını sürümlenebilir bir `Jenkinsfile` ile kod olarak tanımlamak.
 2. **Hadolint ve Trivy Entegrasyonu:** Konteyner derleme sürecine otomatik güvenlik kapıları (Quality Gates) eklemek.
@@ -19,7 +19,7 @@ Bu laboratuvarda, kurumsal CI/CD süreçlerinin en yaygın kullanılan platformu
 
 ## 2. Ön Koşullar
 
-* Çalışan bir Jenkins sunucusu (Port 8080).
+* Çalışan bir Jenkins sunucusu (Port 18080, `/jenkins`).
 * Jenkins üzerinde `docker` ve `pipeline` eklentilerinin kurulu olması.
 * Jenkins kullanıcısının Docker socket'ine erişim yetkisi (`usermod -aG docker jenkins`).
 
@@ -46,7 +46,7 @@ Bu laboratuvarda, kurumsal CI/CD süreçlerinin en yaygın kullanılan platformu
 1. **Jenkins Kimlik Tanımlaması:** Jenkins web arayüzünde **Manage Jenkins ➔ Credentials** altında `docker-registry-credentials` ID'si ile Username & Password kimliği oluşturun.
 2. **Jenkinsfile İncelemesi:** `Jenkinsfile` içerisindeki `environment`, `stages` ve `post` bloklarını inceleyin.
 3. **Hadolint Lint Aşaması:** Dockerfile hatalarının derleme başlamadan önce nasıl engellendiğini gözlemleyin.
-4. **Trivy Güvenlik Kapısı:** Güvenlik açığı tespit edildiğinde pipeline'ın nasıl davrandığını analiz edin.
+4. **Trivy Quality Gate:** Güvenlik açığı tespit edildiğinde pipeline'ın nasıl davrandığını analiz edin.
 5. **Otomatik Disk Temizliği:** `post { always { ... } }` bloğunun yerel imajları nasıl temizlediğini doğrulayın.
 
 ---
@@ -73,7 +73,7 @@ CI/CD sunucularında en sık karşılaşılan problem `No space left on device` 
 <summary>🎯 Çözüm Adımları ve Referans Yapılandırma (Tıklayınca Açılır)</summary>
 
 ### Adım 1: Jenkins Kimlik Bilgisini Ekleme
-1. Jenkins Web arayüzüne gidin (`http://<sunucu-ip>:8080`).
+1. Jenkins Web arayüzüne gidin (`http://<sunucu-ip>:18080/jenkins`).
 2. **Manage Jenkins ➔ Credentials ➔ System ➔ Global credentials ➔ Add Credentials** yolunu izleyin.
 3. Tür olarak **Username with password** seçin:
    * **Username:** Registry kullanıcı adınız

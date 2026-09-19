@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | Uzman | `docker compose`, Node.js, Postgres, Redis, Nginx, Secrets | 19001 (App1 Slotu) |
 
-> **Önemli Erişim Notu:** Nginx Gateway, platform mimarisinde katılımcı web uygulamaları için ayrılmış olan **Port 19001 (App1 Slotu)** üzerinden dışa açılır. Tarayıcınızdan doğrudan `http://<SUNUCU-IP>:19001` (veya ters vekil üzerinden `https://studentXX-app1.<domain>`) adresiyle web arayüzüne ve API'ye erişebilir veya yerel olarak `curl http://localhost:19001/api/health` komutunu çalıştırabilirsiniz.
+> **Önemli Erişim Notu:** Nginx Gateway, platform mimarisinde katılımcı web uygulamaları için ayrılmış olan **Port 19001 (App1 Slotu)** üzerinden dışa açılır. Tarayıcınızdan doğrudan `http://<SUNUCU-IP>:19001` (veya Reverse Proxy üzerinden `https://studentXX-app1.<domain>`) adresiyle web arayüzüne ve API'ye erişebilir veya yerel olarak `curl http://localhost:19001/api/health` komutunu çalıştırabilirsiniz.
 > 
 > *Not: Sunucuda Port 80 ve 443 doğrudan ana Nginx Master Reverse Proxy tarafından kullanıldığından, port çakışmasını önlemek için Compose dosyasında dış port `19001` olarak tanımlanmıştır.*
 

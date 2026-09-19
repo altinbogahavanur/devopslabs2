@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | İleri | `harbor`, `trivy`, `docker-ce`, `robot-accounts` | 18444 |
 
-> **Önemli Erişim Notu:** Platformumuzda kurumsal Harbor OCI Registry servisi halihazırda çalışır durumdadır. Web arayüzüne `http://<SUNUCU-IP>:18444` (veya ters vekil üzerinden `https://studentXX-harbor.<domain>` / `/harbor`) adresinden erişebilirsiniz. Varsayılan yönetici kullanıcısı `admin`dir.
+> **Önemli Erişim Notu:** Platformumuzda kurumsal Harbor OCI Registry servisi halihazırda çalışır durumdadır. Web arayüzüne `http://<SUNUCU-IP>:18444` (veya Reverse Proxy üzerinden `https://studentXX-harbor.<domain>` / `/harbor`) adresinden erişebilirsiniz. Varsayılan yönetici kullanıcısı `admin`dir.
 
 ---
 
@@ -13,7 +13,7 @@
 - Standart `registry:2` yerine kurumsal ortamlarda neden **Harbor Enterprise Registry** tercih edildiğini kavramak.
 - Rol Tabanlı Erişim Denetimi (RBAC), Proje Kotaları ve Değiştirilemez Etiket (Tag Immutability) kurallarını öğrenmek.
 - CI/CD (Jenkins, GitLab CI) süreçleri için kısıtlı yetkili **Robot Hesapları (Robot Accounts)** oluşturmak.
-- Dahili **Trivy** güvenlik tarayıcısı ile depoya yüklenen imajlardaki CVE zafiyetlerini otomatik denetlemek.
+- Dahili **Trivy** güvenlik tarayıcısı ile registry'ye yüklenen imajlardaki CVE zafiyetlerini otomatik denetlemek.
 
 ---
 

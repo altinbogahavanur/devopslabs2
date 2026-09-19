@@ -4,7 +4,7 @@ Bu laboratuvar serisi; Linux sistem yönetiminden ve Docker Engine mimarisinden 
 
 > **Platform Mimarisi ve Port Erişim Kuralı:** 
 > Azure eğitim sanal makinesinde Host **Port 80 (HTTP)** ve **Port 443 (HTTPS)** doğrudan **Nginx Master Reverse Proxy** tarafından kullanılmaktadır. Bu nedenle web arayüzü sunan laboratuvar uygulamaları (Modül 08 3-Tier Stack, Modül 12 Final Capstone vb.) platformda ayrılmış olan **Port 19001 (App1 Slotu)** üzerinden dışa açılır.
-> Servislere tarayıcınızdan `http://<SUNUCU-IP>:19001` (veya ters vekil üzerinden `https://studentXX-app1.<domain>`) adresiyle erişebilir ya da sunucu içinden `curl http://localhost:19001` komutuyla test edebilirsiniz.
+> Servislere tarayıcınızdan `http://<SUNUCU-IP>:19001` (veya Reverse Proxy üzerinden `https://studentXX-app1.<domain>`) adresiyle erişebilir ya da sunucu içinden `curl http://localhost:19001` komutuyla test edebilirsiniz.
 
 ---
 
@@ -77,14 +77,14 @@ Laboratuvar uygulamalarının çakışma yaşamadan çalışabilmesi için Azure
 | **Nginx Master Reverse Proxy** | `80`, `443` | HTTP / HTTPS | Sunucu ana giriş noktası ve wildcard SSL |
 | **Cockpit Web Terminal** | `9090` | HTTPS | Tarayıcı tabanlı Linux terminali |
 | **Docker Labs Capstone / App1** | `19001` | HTTP | **Lab 12 Capstone & Lab 08 3-Tier Gateway** |
-| **Docker Labs App2 Slotu** | `19002` | HTTP | Yedek öğrenci mikroservis slotu |
-| **Docker Labs App3 Slotu** | `19003` | HTTP | Yedek öğrenci mikroservis slotu |
-| **Harbor OCI Registry** | `18444` | HTTP | Kurumsal imaj kayıt defteri (`Lab 05`) |
-| **Yerel Registry:2** | `5000` | HTTP | Hafif test kayıt defteri (`Lab 05`) |
+| **Docker Labs App2 Slotu** | `19002` | HTTP | Yedek mikroservis slotu |
+| **Docker Labs App3 Slotu** | `19003` | HTTP | Yedek mikroservis slotu |
+| **Harbor OCI Registry** | `18444` | HTTP | Kurumsal OCI image registry'si (`Lab 05`) |
+| **Yerel Registry:2** | `5000` | HTTP | Hafif test image registry'si (`Lab 05`) |
 | **Jenkins CI/CD** | `18080` | HTTP | Jenkins otomasyon sunucusu |
-| **SonarQube** | `19000` | HTTP | Statik kod analizi ve kalite kapısı |
-| **GitLab CE** | `18929` | HTTP | SCM kaynak kod deposu |
-| **KinD K8s API** | `6443` | HTTPS | Yerel Kubernetes kontrol düzlemi |
+| **SonarQube** | `19000` | HTTP | Statik kod analizi ve Quality Gate |
+| **GitLab CE** | `18929` | HTTP | SCM kaynak kod repository'si (GitLab) |
+| **KinD K8s API** | `6443` | HTTPS | Yerel Kubernetes Control Plane API |
 
 ---
 

@@ -9,7 +9,7 @@
 ## Amaç
 
 - İnternetsiz (air-gapped) ortamlara imaj taşımak için `docker save` ve `docker load` komutlarını kullanmak.
-- Çalışan bir konteyner dosya sistemini düz arşiv olarak dışa aktarmak (`docker export`) ve geri almak (`docker import`).
+- Çalışan bir konteyner dosya sistemini düz arşiv olarak dışa aktarmak (`docker export`) ve içe aktarmak (`docker import`).
 - Geçici bir yardımcı konteyner (`alpine`) ile Named Volume kalıcı verilerini `.tar.gz` olarak yedeklemek ve geri yüklemek.
 
 ---

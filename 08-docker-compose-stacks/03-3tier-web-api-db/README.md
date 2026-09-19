@@ -4,7 +4,7 @@
 |:---:|:---:|:---:|:---:|
 | İleri | 45 dakika | `docker compose`, `nginx`, `fastapi`, `redis:7`, `postgres:16` | `19001 (App1 Slotu)` |
 
-> **Önemli Erişim Notu:** Sunucumuzda Port 80 ve 443 doğrudan Nginx Master Reverse Proxy tarafından dinlendiğinden, port çakışmasını engellemek amacıyla Gateway portu `.env` dosyasında `GATEWAY_PORT=19001` olarak yapılandırılmıştır. Servislere tarayıcınızdan `http://<SUNUCU-IP>:19001` veya ters vekil üzerinden `https://studentXX-app1.<domain>` ile erişebilirsiniz.
+> **Önemli Erişim Notu:** Sunucumuzda Port 80 ve 443 doğrudan Nginx Master Reverse Proxy tarafından dinlendiğinden, port çakışmasını engellemek amacıyla Gateway portu `.env` dosyasında `GATEWAY_PORT=19001` olarak yapılandırılmıştır. Servislere tarayıcınızdan `http://<SUNUCU-IP>:19001` veya Reverse Proxy üzerinden `https://studentXX-app1.<domain>` ile erişebilirsiniz.
 
 ---
 

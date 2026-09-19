@@ -4,7 +4,7 @@
 | --- | --- | --- |
 | Başlangıç | `bash`, `apt`, `procps`, `iproute2`, `systemd`, `curl` | 22 (SSH), 8080, 9000 (Test) |
 
-> **Önemli Erişim Notu:** Eğitim platformunda öğrenci sunucusuna (`student101`) erişirken ters vekil sunucusu (Reverse Proxy) tanımlı portlar (`app1` için `19001`, `app3` için `19003` vb.) kullanılabilir. Bunların dışındaki veya yerel test portları için tarayıcınızdan doğrudan `http://<SUNUCU-IP>:<PORT>` adresini kullanabilir veya sunucu içinde `curl http://localhost:<PORT>` ile test yapabilirsiniz.
+> **Önemli Erişim Notu:** Eğitim platformunda sunucuya erişirken Reverse Proxy tanımlı portlar (`app1` için `19001`, `app3` için `19003` vb.) kullanılabilir. Bunların dışındaki veya yerel test portları için tarayıcınızdan doğrudan `http://<SUNUCU-IP>:<PORT>` adresini kullanabilir veya sunucu içinde `curl http://localhost:<PORT>` ile test yapabilirsiniz.
 
 ---
 
