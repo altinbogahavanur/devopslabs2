@@ -64,8 +64,8 @@ docker run -d --name net-db --network app-net \
 
 ### 3. Dahili DNS Çözümlemesini Test Etme
 ```bash
-# Geçici bir busybox konteynerını aynı ağa bağlayıp 'net-db' ismini sorgulayın:
-docker run --rm --network app-net busybox nslookup net-db
+# Geçici bir busybox konteynerını aynı ağa bağlayıp 'net-db' ismini çözümleyip test edin:
+docker run --rm --network app-net busybox ping -c 2 net-db
 ```
 
 ### 4. Web Sunucusunu Başlatma ve Port Eşleme
@@ -82,8 +82,8 @@ curl http://localhost:8080
 ## Doğal Doğrulama ve Beklenen Sonuç
 
 ```bash
-docker run --rm --network app-net busybox ping -c 2 net-db
-# Paket kaybı olmadan 2 paketin başarıyla iletildiğini doğrulayın.
+docker run --rm --network app-net alpine getent hosts net-db
+# net-db ismi için IP adresi (172.x.x.x) başarıyla çözümlenmelidir.
 ```
 
 ---

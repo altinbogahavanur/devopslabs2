@@ -24,8 +24,8 @@ sleep 3
 echo "✓ net-db çalışıyor."
 
 # 4. Dahili DNS Çözümleme Testi (Embedded DNS)
-echo -e "\n[3/5] Dahili DNS Test Ediliyor (busybox nslookup net-db)..."
-DNS_IP=$(docker run --rm --network app-net busybox nslookup net-db | grep "Address:" | tail -n1 | awk '{print $2}')
+echo -e "\n[3/5] Dahili DNS Test Ediliyor (busybox ping net-db)..."
+DNS_IP=$(docker run --rm --network app-net busybox ping -c 1 net-db | head -n1 | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | head -n1)
 echo "✓ Başarılı: net-db ismi başarıyla IP'ye çözüldü -> ${DNS_IP}"
 
 # 5. Web Sunucusu ve Port Publishing
