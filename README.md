@@ -2,38 +2,27 @@
 
 ---
 
-## 📌 Docker Teorisi ve Mimarisi — Kısa Özet
+## Docker Teorisi ve Mimarisi
 
 Docker, uygulamaları bağımlılıklarıyla birlikte işletim sistemi seviyesinde izole eden (containerization) açık kaynaklı bir konteyner platformudur.
 
-### Üç Temel Mimari Kavram:
+### Temel Mimari Kavramlar:
 
 1. **Client / Server (Daemon) Mimarisi:**
-   - **Docker Client (CLI):** Terminalden çalıştırılan komutları (`docker run`, `docker build`) Unix Domain Socket (`/var/run/docker.sock`) üzerinden REST API çağrılarıyla Docker Daemon'a (`dockerd`) iletir.
-   - **containerd & runc:** `dockerd` iş yükünü OCI uyumlu `containerd` çalışma zamanına aktarır; `runc` ise Linux çekirdeğinde Namespaces ve Cgroups yapılarını kurarak konteyneri başlatır.
+   - **Docker Client (CLI):** Komutları (`docker run`, `docker build`) Unix Domain Socket (`/var/run/docker.sock`) üzerinden Docker Daemon'a (`dockerd`) iletir.
+   - **containerd & runc:** `dockerd` iş yükünü OCI uyumlu `containerd` çalışma zamanına aktarır; `runc` ise Linux Namespaces ve Cgroups yapılarını kurarak konteyneri başlatır.
 
 2. **İmaj Katmanları ve UnionFS (overlay2):**
    - Docker imajları salt-okunur (read-only) katmanlardan oluşur.
    - Konteyner başlatıldığında en üste ince bir yazılabilir katman (Container Read-Write Layer) eklenir; dosya değişiklikleri Copy-on-Write (CoW) stratejisiyle yönetilir.
 
-3. **Çekirdek İzolasyon Mekanizmaları:**
+3. **İzolasyon Mekanizmaları:**
    - **Namespaces:** Konteynerler için süreç (PID), ağ (NET), dosya sistemi (MNT) ve kullanıcı (USER) soyutlaması sağlar.
    - **Control Groups (cgroups v2):** Konteynerin tüketebileceği CPU, bellek (RAM) ve I/O kotalarını belirler. Sınır aşıldığında Linux kernel tarafından `Exit Code 137 (OOMKilled)` tetiklenir.
 
 ---
 
-## 🚀 Müfredat ve Laboratuvar Modülleri
-
-Bu laboratuvar mimarisi, sınıf içi eğitim verimliliğini en üst düzeye çıkarmak ve zaman baskısını ortadan kaldırmak için iki net bölüme ayrılmıştır:
-
-* **Ana Dizin (`lab-01` .. `lab-08`):** Derste hiçbir konu atlanmadan, sırayla baştan sona eksiksiz tamamlanan **8 aşamalı Konteyner ve Mikroservis Üretim Hattı**.
-* **Bonus Laboratuvarlar (`bonus-labs/`):** Eğitim sonrasında pekiştirme yapmak, Linux ön hazırlığı, air-gapped yedekleme, derinlemesine güvenlik (Trivy), CI/CD pipeline entegrasyonu veya interaktif simülatör için hazırlanan **6 tamamlayıcı modül**.
-
----
-
-### Bölüm 1: Sınıf İçi Temel Eğitim Hattı (Sıralı 8 Lab)
-
-*Sınıfta hiçbir lab atlanmadan 01'den 08'e kadar adım adım uygulanır.*
+## Çekirdek Laboratuvarlar (lab-01 - lab-08)
 
 | Modül | Dizin | Konu ve Kapsam | Seviye | Temel Araçlar |
 |---|---|---|---|---|
@@ -48,9 +37,7 @@ Bu laboratuvar mimarisi, sınıf içi eğitim verimliliğini en üst düzeye ç�
 
 ---
 
-### Bölüm 2: İleri Seviye ve Tamamlayıcı Bonus Laboratuvarlar (`bonus-labs/`)
-
-*Özel senaryolar, alternatif araçlar ve ileri düzey operasyonlar için tasarlanmış bağımsız modüller.*
+## Bonus Laboratuvarlar (bonus-labs)
 
 | Modül | Dizin | Konu ve Kapsam | Seviye | Temel Odak |
 |---|---|---|---|---|
@@ -63,15 +50,13 @@ Bu laboratuvar mimarisi, sınıf içi eğitim verimliliğini en üst düzeye ç�
 
 ---
 
-## 🌐 Platform Mimarisi ve Port Haritası
-
-Laboratuvar uygulamalarının çakışma yaşamadan çalışabilmesi için belirlenen standart port eşleştirmeleri:
+## Platform Port Haritası
 
 | Servis Adı | Port | Erişim Yolu / URL | Açıklama |
 |---|---|---|---|
 | **Nginx Master Reverse Proxy** | `80`, `443` | `http://<IP>`, `https://<IP>` | Sunucu ana giriş noktası ve SSL sonlandırma |
 | **Cockpit Web Terminal** | `9090` | `https://<IP>:9090` | Tarayıcı tabanlı Linux terminali |
-| **NovaShop Capstone (Lab 08)** | `19001` | `http://<IP>:19001` | **App1 Slotu** (Gateway -> Backend -> DB) |
+| **NovaShop Capstone (Lab 08)** | `19001` | `http://<IP>:19001` | App1 Slotu (Gateway -> Backend -> DB) |
 | **Harbor OCI Registry (Lab 06)**| `18444` | `http://<IP>:18444/harbor` | Kurumsal Harbor OCI Registry arayüzü ve API |
 | **Yerel Docker Registry (Lab 06)**| `5000` | `http://127.0.0.1:5000` | Hafif `registry:2` konteyneri |
 | **Jenkins CI/CD** | `18080` | `http://<IP>:18080/jenkins` | Jenkins otomasyon sunucusu |
@@ -81,7 +66,7 @@ Laboratuvar uygulamalarının çakışma yaşamadan çalışabilmesi için belir
 
 ---
 
-## ⚡ Hızlı Başlangıç
+## Hızlı Başlangıç
 
 ### 1. Docker Motor Durumunu Denetleme
 ```bash
@@ -89,7 +74,7 @@ docker version
 docker compose version
 ```
 
-### 2. Sınıf İçi Eğitim Hattına Başlama
+### 2. Çekirdek Laboratuvarlara Başlama
 ```bash
 cd lab-01-docker-engine-and-warmup
 cat README.md
