@@ -1,8 +1,8 @@
 # LAB-DOC-01 — Docker Engine Mimarisi ve Kademeli Isınma Komutları
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|---|---|---|---|
-| Başlangıç | 35 Dakika | `docker-ce`, `nginx:alpine`, `curl` | 8080 |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Başlangıç | `docker-ce`, `nginx:alpine`, `curl` | 8080 |
 
 ## Amaç
 - Docker Engine mimarisini (dockerd daemon, containerd, runc, shim) ve non-root çalışma izinlerini doğrulamak.

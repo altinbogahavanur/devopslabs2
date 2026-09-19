@@ -1,9 +1,10 @@
 # LAB-DOC-07 — Docker Compose Mimarileri ve Orkestrasyon
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta | 90 dakika | `docker compose v2`, `nginx`, `redis`, `postgres` | `8000`, `8080`, `5000` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta | `docker compose v2`, `nginx`, `redis`, `postgres` | 8000, 8080, 5000, 19001 |
 
+---
 
 ## Amaç
 
@@ -21,7 +22,7 @@ Bu laboratuvarda çoklu konteyner mimarilerinin (Multi-Container Stacks) Docker 
 
 - Docker Engine 24+ ve Docker Compose V2 eklentisi (`docker compose version`).
 - `curl` ve `jq` yardımcı araçları.
-- Çalışma dizininde port çakışması olmaması (`8000`, `8080`, `5000`).
+- Çalışma dizininde port çakışması olmaması (`8000`, `8080`, `5000`, `19001`).
 
 ```bash
 docker compose version
@@ -43,7 +44,7 @@ docker compose version
              │                                                           │
              ▼                                                           ▼
      [ web / nginx ] ───────────────────────────────────────────► [ postgres-db ]
-      (Port: 8080)             proxy_pass: api:8000               (Port: 5432 - Gizli)
+      (Port: 19001)            proxy_pass: api:8000               (Port: 5432 - Gizli)
              ▲                                                           ▲
              │                                                           │
              └─────────────────────► [ api-backend ] ────────────────────┘
@@ -102,16 +103,16 @@ docker compose ps
 
 ### Adım 4: Servis Sağlığını ve Ağ İzolasyonunu Doğrulama
 
-Nginx üzerinden API uç noktasına istek atın:
+Nginx Gateway üzerinden API uç noktasına istek atın:
 
 ```bash
-curl -i http://localhost:8080/api/health
+curl -i http://localhost:19001/health
 ```
 
 Veritabanı portunun host üzerinde açılmadığını doğrulayın:
 
 ```bash
-docker port 03-3tier-web-api-db-postgres-1 2>/dev/null || echo "Veritabanı portu izole ve dışa kapalı."
+docker port compose-postgres 2>/dev/null || echo "Veritabanı portu izole ve dışa kapalı."
 ```
 
 ---
@@ -131,9 +132,9 @@ docker port 03-3tier-web-api-db-postgres-1 2>/dev/null || echo "Veritabanı port
 
 3. **HTTP Endpoint Doğrulama:**
    ```bash
-   curl -s http://localhost:8080/api/health
+   curl -s http://localhost:19001/health
    ```
-   Beklenen Çıktı: `{"status":"ok","database":"connected","cache":"ready"}` benzeri 200 OK yanıtı.
+   Beklenen Çıktı: `{"status":"healthy","service":"ecommerce-api","cache":"connected","db":"connected"}`
 
 ---
 

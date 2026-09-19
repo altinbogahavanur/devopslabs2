@@ -1,8 +1,8 @@
-# LAB-05-06 — PHP 8.3 Uygulamasını Composer ve OPcache ile Dockerize Etme
+# LAB-DOC-03-06 — PHP 8.3 Uygulamasını Composer ve OPcache ile Dockerize Etme
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta | 35 dakika | `php:8.3-cli-alpine`, `composer:2`, `curl` | `8000` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta | `php:8.3-cli-alpine`, `composer:2`, `curl` | 8000 |
 
 ---
 

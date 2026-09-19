@@ -1,8 +1,8 @@
-# LAB-05-04 — Java Spring Boot (PetClinic) Uygulamasını Layered JAR ve JVM Tuning ile Dockerize Etme
+# LAB-DOC-03-04 — Java Spring Boot (PetClinic) Uygulamasını Layered JAR ve JVM Tuning ile Dockerize Etme
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta - İleri | 45 dakika | `maven:3.9-eclipse-temurin-17`, `eclipse-temurin:17-jre-alpine`, `curl` | `8080` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta - İleri | `maven:3.9-eclipse-temurin-17`, `eclipse-temurin:17-jre-alpine`, `curl` | 8080 |
 
 ---
 

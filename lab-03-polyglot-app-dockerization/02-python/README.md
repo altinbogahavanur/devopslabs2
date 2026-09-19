@@ -1,8 +1,8 @@
-# LAB-05-02 — Python Uygulamasını Üretime Hazır Dockerize Etme
+# LAB-DOC-03-02 — Python Uygulamasını Üretime Hazır Dockerize Etme
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Temel - Orta | 30 dakika | `python:3.12-slim`, `pip`, `curl` | `8000` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Temel - Orta | `python:3.12-slim`, `pip`, `curl` | 8000 |
 
 ---
 

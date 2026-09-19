@@ -1,8 +1,8 @@
-# LAB-05-01 — Node.js (Express) Uygulamasını Dockerize Etme
+# LAB-DOC-03-01 — Node.js (Express) Uygulamasını Dockerize Etme
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Başlangıç - Temel | 30 dakika | `node:20-alpine`, `npm`, `curl` | `3000` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Başlangıç - Temel | `node:20-alpine`, `npm`, `curl` | 3000 |
 
 ---
 

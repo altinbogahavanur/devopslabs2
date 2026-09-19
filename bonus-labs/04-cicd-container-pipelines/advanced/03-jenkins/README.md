@@ -1,8 +1,8 @@
 # LAB-10-03 — Jenkins Declarative Pipeline ile Docker İmaj Üretimi ve Harbor/Registry Dağıtımı
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta - İleri | 40 dakika | `jenkins`, `declarative-pipeline`, `trivy`, `docker` | `18080` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta - İleri | `jenkins`, `declarative-pipeline`, `trivy`, `docker` | 18080 |
 
 ---
 

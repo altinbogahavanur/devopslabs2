@@ -1,25 +1,34 @@
-# LAB-07-04 — Çok Dilli (Multi-Polyglot) 5-Mikroservis Mimarisi (Example Voting App)
+# LAB-DOC-07-04 (Advanced) — Çok Dilli (Multi-Polyglot) 5-Mikroservis Mimarisi (Example Voting App)
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| İleri | 45 dakika | `docker compose`, Python, Node.js, .NET, Redis, Postgres | `5000, 5001` |
-
----
-
-## 1. Amaç
-
-Docker'ın ve mikroservis dünyasının en büyük gücü **farklı programlama dillerini (Polyglot mimari)** aynı çatı altında, hiçbir bağımlılık çakışması yaşamadan birleştirebilmesidir.
-
-Bu laboratuvarda Docker topluluğunun resmi referans projesi olan **Example Voting App** ayağa kaldırılacaktır:
-1. **Python (`vote`):** Kullanıcının oy (Kedi vs Köpek) verdiği ön yüz web uygulaması.
-2. **Redis (`redis`):** Gelen oyları sıraya alan (queue) yüksek hızlı bellek içi önbellek.
-3. **.NET (`worker`):** Oyları Redis kuyruğundan çekip PostgreSQL veritabanına kalıcı yazan arka plan işçisi (background worker).
-4. **PostgreSQL (`db`):** Oyların nihai saklandığı ilişkisel veritabanı (Kalıcı Named Volume).
-5. **Node.js (`result`):** Veritabanındaki sonuçları WebSocket (Socket.io) ile gerçek zamanlı tarayıcıya yansıtan sonuç ekranı.
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| İleri | `docker compose`, Python, Node.js, .NET, Redis, Postgres | 5000 (Vote), 5001 (Result) |
 
 ---
 
-## 2. Mikroservis Veri Akış Mimarisi
+## Amaç
+
+Docker'ın ve mikroservis mimarisinin en büyük gücü **farklı programlama dillerini (Polyglot mimari)** aynı çatı altında, hiçbir bağımlılık çakışması yaşamadan birleştirebilmesidir.
+
+Bu laboratuvarda resmi Docker referans mimarisi olan **Example Voting App** 5 mikroservis ile ayağa kaldırılır:
+
+- **Python (`vote`):** Kullanıcının oy (Cats vs Dogs) verdiği ön yüz web uygulaması.
+- **Redis (`redis`):** Gelen oyları sıraya alan (in-memory queue) yüksek hızlı bellek içi önbellek.
+- **.NET (`worker`):** Oyları Redis kuyruğundan çekip PostgreSQL veritabanına kalıcı yazan arka plan işçisi.
+- **PostgreSQL (`db`):** Oyların nihai saklandığı ilişkisel veritabanı (Kalıcı Named Volume).
+- **Node.js (`result`):** Veritabanındaki sonuçları WebSocket (Socket.io) ile gerçek zamanlı tarayıcıya yansıtan sonuç ekranı.
+
+---
+
+## Ön Koşullar
+
+- Docker Engine 24+ ve Docker Compose V2 (`docker compose version`).
+- Host üzerinde `5000` ve `5001` portlarının boşta olması.
+- `curl` yardımcı aracının kurulu olması.
+
+---
+
+## Mimari ve Çalışma Modeli
 
 ```text
                   KULLANICI (Oy Veren)                 KULLANICI (Sonuç İzleyen)
@@ -49,61 +58,80 @@ Bu laboratuvarda Docker topluluğunun resmi referans projesi olan **Example Voti
 
 ---
 
-## 3. Görevler (Tasks)
+## Adım Adım Uygulama Rehberi
 
-1. Klasör içerisindeki `docker-compose.yml` dosyasını ve servis yapılarını inceleyin.
-2. `docker compose up -d` komutuyla 5 servisi birden ayağa kaldırın.
-3. `docker compose ps` komutuyla tüm servislerin `running` olduğunu teyit edin.
-4. Web tarayıcınızda `http://localhost:5000` adresine giderek bir oy verin.
-5. Yeni bir sekmede `http://localhost:5001` adresine giderek verdiğiniz oyun gerçek zamanlı olarak yüzdelere yansıdığını gözlemleyin.
-6. Test bittikten sonra `docker compose down -v` ile ortamı temizleyin.
+### 1. Yapılandırmayı ve Servisleri İnceleme
 
----
-
-## 4. İpuçları
-
-<details>
-<summary>💡 İpucu 1: Worker Servisinin Önemi</summary>
-
-Worker servisi dış dünyaya hiçbir port açmaz (`ports` yoktur). Yalnızca Docker dahili ağında Redis ve Postgres servisleriyle TCP üzerinden konuşur. Bu durum asenkron kuyruk mimarilerinin (Queue Worker Pattern) tipik örneğidir.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Tek Komutta Yeniden Derleme</summary>
-
-Uygulama kodlarında değişiklik yaptığınızda tüm imajları sıfırdan derleyip ayağa kaldırmak için `docker compose up -d --build` komutu kullanılır.
-</details>
-
----
-
-## 5. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Komutlar ve Çalıştırma</summary>
+`docker-compose.yml` dosyasındaki 5 servisi, ağları ve Named Volume tanımını doğrulayın:
 
 ```bash
-# 1. Stack'i derleyip başlatma
-docker compose up -d
-
-# 2. Çalışan servisleri listeleme
-docker compose ps
-
-# 3. Logları canlı izleme (Özellikle worker akışını görmek için)
-docker compose logs -f worker
-
-# 4. Temizlik
-docker compose down -v
+docker compose config
 ```
-</details>
+
+### 2. Stack'i Arka Planda Başlatma
+
+5 mikroservisi birden ayağa kaldırın:
+
+```bash
+docker compose up -d
+```
+
+### 3. Servislerin Durumunu Doğrulama
+
+Tüm konteynerların çalıştığını teyit edin:
+
+```bash
+docker compose ps
+```
+
+### 4. Worker Arka Plan Loglarını İzleme
+
+Worker servisinin Redis ve PostgreSQL ile TCP üzerinden bağlantı kurduğunu gözlemleyin:
+
+```bash
+docker compose logs --tail=20 worker
+```
 
 ---
 
-## 6. Doğrulama ve Beklenen Sonuç
+## Doğal Doğrulama ve Beklenen Sonuç
+
+### 1. Konteyner Durumlarını Doğrulama
+
+```bash
+docker compose ps
+```
+
+Beklenen çıktı:
+```text
+NAME                     IMAGE                                    COMMAND                  SERVICE   STATUS
+04-example-voting-app-db-1       postgres:15-alpine                       "docker-entrypoint.s…"   db        Up (running)
+04-example-voting-app-redis-1    redis:alpine                             "docker-entrypoint.s…"   redis     Up (running)
+04-example-voting-app-result-1   dockersamples/examplevotingapp_result    "node server.js"         result    Up (running)
+04-example-voting-app-vote-1     dockersamples/examplevotingapp_vote      "gunicorn app:app -b…"   vote      Up (running)
+04-example-voting-app-worker-1   dockersamples/examplevotingapp_worker    "/entrypoint.sh"         worker    Up (running)
+```
+
+### 2. HTTP Uç Noktalarını Test Etme
+
+Vote (5000) ve Result (5001) servislerinin yanıt verdiğini doğrulayın:
 
 ```bash
 curl -I http://localhost:5000
 curl -I http://localhost:5001
 ```
 
-* **Vote Uygulaması:** `HTTP/1.1 200 OK` (Port 5000)
-* **Result Uygulaması:** `HTTP/1.1 200 OK` (Port 5001)
+Beklenen HTTP yanıtları:
+```text
+HTTP/1.1 200 OK
+```
+
+---
+
+## Temizlik
+
+Test tamamlandıktan sonra tüm konteynerları, ağları ve Named Volume'u temizleyin:
+
+```bash
+docker compose down -v
+```

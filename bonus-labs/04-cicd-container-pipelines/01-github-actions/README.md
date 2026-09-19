@@ -1,8 +1,8 @@
 # LAB-10-01 — GitHub Actions ile Docker İmaj Derleme, Güvenlik Taraması ve Push
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta - İleri | 30 dakika | `github-actions`, `docker buildx`, `trivy`, `docker hub` | `-` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta - İleri | `github-actions`, `docker buildx`, `trivy`, `docker hub` | Yok |
 
 ---
 

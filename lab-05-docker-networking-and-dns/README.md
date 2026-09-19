@@ -1,8 +1,8 @@
 # LAB-DOC-05 — Docker Ağ Mimarisi: Bridge, Dahili DNS ve İzolasyon
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|---|---|---|---|
-| Orta | 40 Dakika | `docker-ce`, `bridge`, `host`, `none`, `dns` | 8080 |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta | `docker-ce`, `bridge`, `host`, `none`, `dns` | 8080 |
 
 ## Amaç
 - Konteynerların birbirleriyle ve dış dünyayla nasıl iletişim kurduğunu kavramak.

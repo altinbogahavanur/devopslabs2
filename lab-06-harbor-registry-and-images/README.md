@@ -1,8 +1,8 @@
 # LAB-DOC-06 — İmaj Yönetimi, Yerel Registry:2 ve Kurumsal Harbor Registry
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|---|---|---|---|
-| Orta - İleri | 45 Dakika | `docker-ce`, `registry:2`, `harbor`, `trivy` | 5000, 18444 |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta - İleri | `docker-ce`, `registry:2`, `harbor`, `trivy` | 5000, 18444 |
 
 ## Amaç
 - Konteyner imajlarının etiketleme standartlarını (Semantic Versioning: `v1.0.0`, `latest`) ve OCI imaj formatını kavramak.

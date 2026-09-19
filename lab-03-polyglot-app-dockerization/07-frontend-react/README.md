@@ -1,8 +1,8 @@
-# LAB-05-07 — Frontend (React SPA + Vite) Uygulamasını Multi-Stage ve Nginx ile Dockerize Etme
+# LAB-DOC-03-07 — Frontend (React SPA + Vite) Uygulamasını Multi-Stage ve Nginx ile Dockerize Etme
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta | 40 dakika | `node:20-alpine`, `nginx:1.25-alpine`, `curl` | `19001 (App1 Slotu)` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta | `node:20-alpine`, `nginx:1.25-alpine`, `curl` | 19001 (App Slot 1) |
 
 > **Önemli Erişim Notu:** Sunucuda Port 80 Nginx Master Reverse Proxy tarafından kullanıldığından, React SPA konteyneri platformdaki **19001** portuna eşlenir. Tarayıcınızdan `http://<SUNUCU-IP>:19001` veya `https://studentXX-app1.<domain>` üzerinden erişebilirsiniz.
 

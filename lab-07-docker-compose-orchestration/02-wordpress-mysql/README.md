@@ -1,99 +1,123 @@
-# LAB-07-02 — WordPress + MySQL Stack'inin Docker Compose ile Otomasyonu
+# LAB-DOC-07-02 — WordPress + MySQL Stack'inin Docker Compose ile Otomasyonu
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta | 30 dakika | `docker compose`, `mysql:8.0`, `wordpress:6-apache` | `8080` |
-
----
-
-## 1. Amaç
-
-Lab 06'da saf Docker CLI komutlarıyla (network oluşturma, volume oluşturma, uzun `docker run` bayrakları yazma) kurduğumuz WordPress ve MySQL mimarisini, **tek bir bildirimsel `docker-compose.yaml` ve `.env` dosyası** ile saniyeler içinde otomatik ayağa kaldırmak ve yönetmektir:
-
-* Manuel 15 komut yerine tek komut: `docker compose up -d`
-* `.env` üzerinden şifre ve ortam değişkeni izolasyonu
-* MySQL için `mysqladmin ping` tabanlı sağlık kontrolü
-* WordPress'in MySQL `healthy` olmadan başlamasını engelleyen `depends_on` mekanizması
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta | `docker compose`, `mysql:8.0`, `wordpress:6-apache` | 8080 |
 
 ---
 
-## 2. Mimari Karşılaştırması
+## Amaç
+
+Saf Docker CLI komutlarıyla (network oluşturma, volume oluşturma, uzun `docker run` bayrakları yazma) kurulan WordPress ve MySQL mimarisini, tek bir bildirimsel `docker-compose.yaml` ve `.env` dosyası ile otomatik ayağa kaldırmak ve yönetmektir:
+
+- Çok sayıda manuel komut yerine tek komutla (`docker compose up -d`) tüm ortamı ayağa kaldırmak.
+- Hassas şifreleri ve ortam değişkenlerini `.env` dosyası üzerinden izole etmek.
+- MySQL servisi için `mysqladmin ping` tabanlı sağlık kontrolü tanımlamak.
+- WordPress'in MySQL `healthy` olmadan başlamasını engelleyen `depends_on: condition: service_healthy` mekanizmasını uygulamak.
+
+---
+
+## Ön Koşullar
+
+- Docker Engine 24+ ve Docker Compose V2 (`docker compose version`).
+- Host üzerinde `8080` portunun boşta olması.
+- `.env` ve `docker-compose.yaml` dosyalarının bulunduğu dizinde olmak.
+
+---
+
+## Mimari ve Çalışma Modeli
 
 ```text
-MANUEL CLI (Lab 06 - 15 Komut):
+MANUEL CLI (15 Ayrı Komut):
 [docker network create] ➔ [docker volume create x2] ➔ [docker run mysql] ➔ [docker run wp]
 
-DOCKER COMPOSE (Lab 07-02 - Tek Komut):
+DOCKER COMPOSE (Tek Bildirimsel Komut):
 docker compose up -d
      │
      ├──> compose-wp-net (Bridge Ağı)
      ├──> compose-wp-db-data & compose-wp-site-data (Kalıcı Volumeler)
-     ├──> compose-wp-db (MySQL 8.0 - Healthcheck devrede)
+     ├──> compose-wp-db (MySQL 8.0 - Healthcheck: mysqladmin ping)
      └──> compose-wp-app (WordPress 6 - db:healthy bekler)
 ```
 
 ---
 
-## 3. Görevler (Tasks)
+## Adım Adım Uygulama Rehberi
 
-1. `docker-compose.yaml` ve `.env` dosyalarındaki değişken eşleşmelerini inceleyin.
-2. `docker compose up -d` komutuyla stack'i başlatın.
-3. `docker compose ps` ile MySQL'in `healthy` olmasını ve WordPress'in hazır duruma geçmesini gözlemleyin.
-4. Tarayıcınızda `http://localhost:8080` adresine giderek WordPress kurulum ekranının geldiğini teyit edin.
-5. `docker compose logs -f wordpress` ile web sunucusu istek loglarını canlı izleyin.
-6. Test bittikten sonra `docker compose down -v` ile tüm kaynakları temizleyin.
+### 1. Yapılandırma ve Değişkenleri İnceleme
 
----
-
-## 4. İpuçları
-
-<details>
-<summary>💡 İpucu 1: WORDPRESS_DB_HOST Değeri</summary>
-
-Compose içinde servis adı `db` olarak tanımlandığı için, WordPress ortam değişkeni doğrudan `WORDPRESS_DB_HOST: db:3306` olur. Docker Compose otomatik olarak servis adını dahili DNS'e kaydeder.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Tek Bir Servisi Yeniden Başlatma</summary>
-
-Tüm stack'i durdurup açmak yerine sadece WordPress servisini yeniden başlatmak için `docker compose restart wordpress` komutu yeterlidir.
-</details>
-
----
-
-## 5. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Komutlar ve Doğrulama</summary>
+`.env` dosyasındaki şifre ve konfigürasyon parametrelerini doğrulayın:
 
 ```bash
-# 1. Stack'i başlatma
+cat .env
+docker compose config
+```
+
+### 2. Stack'i Arka Planda Başlatma
+
+Tüm servisleri, ağları ve Named Volume'ları tek komutla oluşturup başlatın:
+
+```bash
 docker compose up -d
+```
 
-# 2. Durumu kontrol etme
+### 3. Servislerin Sağlık Durumunu İzleme
+
+MySQL'in `healthy` duruma geçmesini ve WordPress servisinin aktifleşmesini gözlemleyin:
+
+```bash
 docker compose ps
-
-# 3. HTTP başlığını doğrulama
-curl -I http://localhost:8080/wp-admin/install.php
-
-# 4. Temizlik
-docker compose down -v
 ```
 
-**Beklenen Çıktı:**
-```text
-NAME             IMAGE               STATUS
-compose-wp-app   wordpress:6-apache  running
-compose-wp-db    mysql:8.0           running (healthy)
+### 4. Servis Loglarını Görüntüleme
+
+WordPress ve MySQL servislerinin başlangıç loglarını inceleyin:
+
+```bash
+docker compose logs --tail=20 wordpress
+docker compose logs --tail=20 db
 ```
-</details>
 
 ---
 
-## 6. Doğrulama ve Beklenen Sonuç
+## Doğal Doğrulama ve Beklenen Sonuç
+
+### 1. Konteyner Durumlarını Doğrulama
+
+```bash
+docker compose ps
+```
+
+Beklenen çıktı:
+```text
+NAME             IMAGE                COMMAND                  SERVICE     STATUS
+compose-wp-app   wordpress:6-apache   "docker-entrypoint.s…"   wordpress   Up (running)
+compose-wp-db    mysql:8.0            "docker-entrypoint.s…"   db          Up (healthy)
+```
+
+### 2. WordPress Kurulum Ekranını Test Etme
+
+```bash
+curl -I http://localhost:8080/wp-admin/install.php
+```
+
+Beklenen HTTP yanıtı:
+```text
+HTTP/1.1 200 OK
+```
+
+HTML çıktısında WordPress kurulum başlığını doğrulayın:
 
 ```bash
 curl -s http://localhost:8080/wp-admin/install.php | grep -i "WordPress"
 ```
 
-* **HTTP Kodu:** `200 OK`
+---
+
+## Temizlik
+
+Test tamamlandıktan sonra tüm konteynerları, ağı ve kalıcı veritabanı volume'larını temizleyin:
+
+```bash
+docker compose down -v
+```

@@ -1,8 +1,8 @@
-# LAB-05-05 — .NET 8 (ASP.NET Core) Web API Uygulamasını Multi-Stage ile Dockerize Etme
+# LAB-DOC-03-05 — .NET 8 (ASP.NET Core) Web API Uygulamasını Multi-Stage ile Dockerize Etme
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta | 35 dakika | `dotnet/sdk:8.0`, `dotnet/aspnet:8.0-alpine`, `curl` | `8080` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta | `dotnet/sdk:8.0`, `dotnet/aspnet:8.0-alpine`, `curl` | 8080 |
 
 ---
 

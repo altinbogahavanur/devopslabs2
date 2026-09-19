@@ -1,8 +1,8 @@
 # LAB-DOC-04 — Kalıcı Depolama ve Veri Yönetimi: Volumes ve Bind Mounts
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|---|---|---|---|
-| Orta | 40 Dakika | `docker-ce`, `named-volume`, `bind-mount`, `tmpfs` | 8080 |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta | `docker-ce`, `named-volume`, `bind-mount`, `tmpfs` | 8080 |
 
 ## Amaç
 - Konteynerlerin varsayılan olarak geçici (stateless / ephemeral) çalışma mantığını ve veri kaybı riskini kavramak.

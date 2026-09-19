@@ -1,8 +1,8 @@
 # LAB-DOC-02 — Dockerfile Direktifleri, Önbellekleme ve Multi-Stage İmajlar
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|---|---|---|---|
-| Temel - Orta | 40 Dakika | `docker-ce`, `buildkit`, `golang`, `nodejs` | 3000, 8080 |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Temel - Orta | `docker-ce`, `buildkit`, `golang`, `nodejs` | 3000, 8080 |
 
 ## Amaç
 - Konteyner dünyasında imajların kod olarak altyapı (IaC) prensibiyle `Dockerfile` üzerinden tanımlanmasını öğrenmek.

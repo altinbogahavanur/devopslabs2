@@ -1,8 +1,8 @@
 # LAB-DOC-08 — Büyük Final Capstone Projesi ve Gerçek Hayat Sorun Giderme
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta - İleri | 90 dakika | `docker compose`, `nginx`, `nodejs`, `postgres`, `redis`, `ss`, `curl` | `19001 (App1 Slotu)` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta - İleri | `docker compose`, `nginx`, `nodejs`, `postgres`, `redis`, `ss`, `curl` | 19001 (App Slot 1) |
 
 
 ## Amaç

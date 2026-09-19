@@ -1,28 +1,36 @@
-# LAB-07-03 — 3-Tier Mikroservis Mimarisi (Nginx Gateway + FastAPI + Redis + PostgreSQL)
+# LAB-DOC-07-03 — 3-Tier Mikroservis Mimarisi (Nginx Gateway + FastAPI + Redis + PostgreSQL)
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| İleri | 45 dakika | `docker compose`, `nginx`, `fastapi`, `redis:7`, `postgres:16` | `19001 (App1 Slotu)` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| İleri | `docker compose`, `nginx`, `fastapi`, `redis:7`, `postgres:16` | 19001 (App Slot 1) |
 
-> **Önemli Erişim Notu:** Sunucumuzda Port 80 ve 443 doğrudan Nginx Master Reverse Proxy tarafından dinlendiğinden, port çakışmasını engellemek amacıyla Gateway portu `.env` dosyasında `GATEWAY_PORT=19001` olarak yapılandırılmıştır. Servislere tarayıcınızdan `http://<SUNUCU-IP>:19001` veya Reverse Proxy üzerinden `https://studentXX-app1.<domain>` ile erişebilirsiniz.
-
----
-
-## 1. Amaç
-
-Bu laboratuvarın amacı; kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katmanlı) Güvenli Mikroservis Mimarisini** Docker Compose ile ayağa kaldırmaktır:
-
-1. **Katman 1 (Sunum / Gateway):** Nginx Reverse Proxy (Dış dünyaya tek açık nokta: Port 19001).
-2. **Katman 2 (Uygulama Mantığı):** Python FastAPI mikroservisi (İş mantığı ve API endpoint'leri).
-3. **Katman 3 (Veri & Önbellek):** PostgreSQL 16 ve Redis 7.
-4. **Çift Ağ İzolasyonu (DMZ Modeli):**
-   * `public-net`: Yalnızca Nginx ve API bağlıdır.
-   * `internal-net`: Yalnızca API, Redis ve PostgreSQL bağlıdır.
-   * **Sonuç:** Veritabanı ve önbellek dış ağdan tamamen yalıtılmıştır; hacker Nginx'i ele geçirse bile veritabanına doğrudan TCP erişimi sağlayamaz!
+> **Önemli Erişim Notu:** Host üzerindeki 80 ve 443 port çakışmalarını önlemek için Nginx Gateway portu `.env` dosyasında `GATEWAY_PORT=19001` olarak yapılandırılmıştır. Tarayıcıdan `http://<SUNUCU-IP>:19001` üzerinden erişebilirsiniz.
 
 ---
 
-## 2. Mimari ve Ağ İzolasyon Modeli
+## Amaç
+
+Kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katmanlı) Güvenli Mikroservis Mimarisini** Docker Compose ile ayağa kaldırmak ve yönetmektir:
+
+- **Katman 1 (Gateway / Reverse Proxy):** Nginx Reverse Proxy (Dış dünyaya tek açık nokta: Port 19001).
+- **Katman 2 (Uygulama Mantığı):** Python FastAPI mikroservisi (İş mantığı ve API uç noktaları).
+- **Katman 3 (Veri ve Önbellek):** PostgreSQL 16 ve Redis 7 servisleri.
+- **Çift Ağ İzolasyonu (DMZ Deseni):**
+  - `public-net`: Yalnızca Nginx Gateway ve FastAPI servisleri bağlıdır.
+  - `internal-net`: Yalnızca FastAPI, Redis ve PostgreSQL servisleri bağlıdır.
+  - Veritabanı ve önbellek katmanı dış dünyaya tamamen kapatılarak doğrudan TCP erişimi engellenir.
+
+---
+
+## Ön Koşullar
+
+- Docker Engine 24+ ve Docker Compose V2 (`docker compose version`).
+- Host üzerinde `19001` portunun boşta olması.
+- `curl` ve `jq` araçlarının kurulu olması.
+
+---
+
+## Mimari ve Çalışma Modeli
 
 ```text
                            İNTERNET / WEB TARAYICI
@@ -30,9 +38,9 @@ Bu laboratuvarın amacı; kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katma
                                 Port: 19001
                                      ▼
 +─────────────────────────────────────────────────────────────────────────────+
-| PUBLIC NETWORK (Dışa Açık Ağ)                                               |
+| PUBLIC NETWORK (Dışa Açık Ağ: public-net)                                   |
 |                                                                             |
-|  [ NGINX REVERSE PROXY: compose-gateway ] (Port 19001)                      |
+|  [ NGINX GATEWAY: compose-gateway ] (Port 19001)                            |
 |                   │                                                         |
 |                   │ proxy_pass http://api:8000/                             |
 |                   ▼                                                         |
@@ -41,7 +49,7 @@ Bu laboratuvarın amacı; kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katma
                     │
                     ▼ (İki Ağa da Bağlı Köprü)
 +─────────────────────────────────────────────────────────────────────────────+
-| INTERNAL NETWORK (İzole İç Ağ - DIŞ DÜNYAYA TAMAMEN KAPALI!)                |
+| INTERNAL NETWORK (İzole İç Ağ: internal-net - DIŞ DÜNYAYA TAMAMEN KAPALI!)   |
 |                                                                             |
 |                   │                                 │                       |
 |                   ▼                                 ▼                       |
@@ -53,61 +61,87 @@ Bu laboratuvarın amacı; kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katma
 
 ---
 
-## 3. Görevler (Tasks)
+## Adım Adım Uygulama Rehberi
 
-1. `docker-compose.yaml`, `.env` ve `services/` dizinindeki Nginx/FastAPI kodlarını inceleyin.
-2. `public-net` ve `internal-net` ayrımını analiz edin.
-3. `./test-stack.sh` betiğini çalıştırarak stack'i başlatın ve otomatik sağlık testlerini yürütün.
-4. `http://localhost:19001/api/v1/products` adresine istek atarak veritabanından veri çekildiğini ve Redis'e önbelleklendiğini doğrulayın.
-5. Veritabanı portunun (5432) ana makinede açık olmadığını (`curl localhost:5432` veya `nc -zv localhost 5432`) teyit edin.
+### 1. Yapılandırmayı ve DMZ Ağlarını Doğrulama
 
----
-
-## 4. İpuçları
-
-<details>
-<summary>💡 İpucu 1: Neden 2 Ayrı Network?</summary>
-
-Geleneksel tek network kullanımında tüm konteynerlar aynı yayın (broadcast) alanındadır. DMZ (Demilitarized Zone) deseniyle Nginx'i yalnızca API'ye, API'yi ise veritabanına bağlamak kurumsal güvenlik standartlarının (PCI-DSS, ISO 27001) temel gereksinimidir.
-</details>
-
-<details>
-<summary>💡 İpucu 2: Çift Healthcheck ile Bağımlılık Zinciri</summary>
-
-API servisi hem `db` hem de `cache` (Redis) servislerinin `service_healthy` durumunu bekler. Bu sayede ilk başlatmada hiçbir connection refused hatası alınmaz.
-</details>
-
----
-
-## 5. Referans Çözüm
-
-<details>
-<summary>🎯 Referans Otomasyon Betiği ve Komutlar</summary>
+`.env` dosyasını ve Compose dosyasındaki çift ağ tanımlarını inceleyin:
 
 ```bash
-# 1. Otomatik test ve başlatma
+cat .env
+docker compose config
+```
+
+### 2. Stack'i Derleyip Arka Planda Başlatma
+
+API imajını derleyip tüm 4 servisi ayağa kaldırın:
+
+```bash
+docker compose up -d --build
+```
+
+### 3. Servislerin Sağlık Durumunu ve Konteynerları Doğrulama
+
+PostgreSQL ve Redis servislerinin `healthy` duruma geçmesini ve API ile Gateway'in aktifleşmesini gözlemleyin:
+
+```bash
+docker compose ps
+```
+
+### 4. Otomasyon Test Betiğini Çalıştırma
+
+Tüm katmanların (Gateway -> API -> Redis -> PostgreSQL) entegrasyon testlerini çalıştırın:
+
+```bash
 chmod +x test-stack.sh
 ./test-stack.sh
-
-# 2. Manuel Başlatma Komutları:
-docker compose up -d --build
-docker compose ps
-
-# 3. Nginx üzerinden API'ye istek atma
-curl -i http://localhost:19001/api/v1/products
-
-# 4. Temizlik
-docker compose down -v
 ```
-</details>
 
 ---
 
-## 6. Doğrulama ve Beklenen Sonuç
+## Doğal Doğrulama ve Beklenen Sonuç
+
+### 1. Sağlık Uç Noktası Kontrolü
 
 ```bash
 curl -s http://localhost:19001/health
+```
+
+Beklenen çıktı:
+```json
+{"status": "healthy", "service": "ecommerce-api", "cache": "connected", "db": "connected"}
+```
+
+### 2. Ürün API ve Önbellek Doğrulaması
+
+```bash
 curl -s http://localhost:19001/api/v1/products
 ```
 
-* **Gateway Yanıtı:** `{"status": "healthy", "service": "ecommerce-api", "cache": "connected", "db": "connected"}`
+Beklenen çıktı:
+```json
+{"source": "database", "products": [{"id": 1, "name": "Laptop", "price": 1500.0}, ...]}
+```
+
+Aynı isteği tekrar attığınızda verinin Redis üzerinden geldiğini gözlemleyin:
+```json
+{"source": "cache", "products": [{"id": 1, "name": "Laptop", "price": 1500.0}, ...]}
+```
+
+### 3. Ağ İzolasyonu Doğrulaması
+
+PostgreSQL (5432) portunun host üzerinden erişilemediğini teyit edin:
+
+```bash
+curl -m 2 http://localhost:5432 || echo "PostgreSQL portu dışarıya kapalı (DMZ Güvenliği Doğrulandı)"
+```
+
+---
+
+## Temizlik
+
+Test tamamlandıktan sonra tüm konteynerları, ağları ve Named Volume verilerini temizleyin:
+
+```bash
+docker compose down -v
+```

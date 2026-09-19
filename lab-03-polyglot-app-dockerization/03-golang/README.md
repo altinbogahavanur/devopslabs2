@@ -1,8 +1,8 @@
-# LAB-05-03 — Go (Golang) Mikroservisini Multi-Stage ve Scratch ile Dockerize Etme
+# LAB-DOC-03-03 — Go (Golang) Mikroservisini Multi-Stage ve Scratch ile Dockerize Etme
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta | 35 dakika | `golang:1.23-alpine`, `scratch`, `curl` | `8080` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta | `golang:1.23-alpine`, `scratch`, `curl` | 8080 |
 
 ---
 

@@ -1,8 +1,8 @@
 # LAB-DOC-03 — Çok Dilli (Polyglot) Uygulama Paketleme Alıştırması
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-| --- | --- | --- | --- |
-| Orta - İleri | 45 Dakika | `multi-stage`, `scratch`, `node`, `python`, `go`, `java`, `dotnet`, `php` | 3000, 8000, 8080 |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta - İleri | `multi-stage`, `scratch`, `node`, `python`, `go`, `java`, `dotnet`, `php` | 3000, 8000, 8080 |
 
 > **Önemli Erişim Notu:** Başlattığınız mikroservisleri test ederken tarayıcınızdan `http://<SUNUCU-IP>:<PORT>` veya yerel terminalden `curl http://localhost:<PORT>` komutunu kullanabilirsiniz.
 

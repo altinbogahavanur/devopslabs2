@@ -1,8 +1,8 @@
 # LAB-10-02 — GitLab CI ile Docker-in-Docker (dind) ve Harbor/Registry Entegrasyonu
 
-| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
-|:---:|:---:|:---:|:---:|
-| Orta - İleri | 35 dakika | `gitlab-ci`, `docker:dind`, `trivy`, `harbor` | `-` |
+| Seviye | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- |
+| Orta - İleri | `gitlab-ci`, `docker:dind`, `trivy`, `harbor` | Yok |
 
 ---
 
