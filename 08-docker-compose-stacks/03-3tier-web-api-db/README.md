@@ -2,7 +2,9 @@
 
 | Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
 |:---:|:---:|:---:|:---:|
-| İleri | 45 dakika | `docker compose`, `nginx`, `fastapi`, `redis:7`, `postgres:16` | `80` |
+| İleri | 45 dakika | `docker compose`, `nginx`, `fastapi`, `redis:7`, `postgres:16` | `19001 (App1 Slotu)` |
+
+> **Önemli Erişim Notu:** Sunucumuzda Port 80 ve 443 doğrudan Nginx Master Reverse Proxy tarafından dinlendiğinden, port çakışmasını engellemek amacıyla Gateway portu `.env` dosyasında `GATEWAY_PORT=19001` olarak yapılandırılmıştır. Servislere tarayıcınızdan `http://<SUNUCU-IP>:19001` veya ters vekil üzerinden `https://studentXX-app1.<domain>` ile erişebilirsiniz.
 
 ---
 
@@ -10,7 +12,7 @@
 
 Bu laboratuvarın amacı; kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katmanlı) Güvenli Mikroservis Mimarisini** Docker Compose ile ayağa kaldırmaktır:
 
-1. **Katman 1 (Sunum / Gateway):** Nginx Reverse Proxy (Dış dünyaya tek açık nokta: Port 80).
+1. **Katman 1 (Sunum / Gateway):** Nginx Reverse Proxy (Dış dünyaya tek açık nokta: Port 19001).
 2. **Katman 2 (Uygulama Mantığı):** Python FastAPI mikroservisi (İş mantığı ve API endpoint'leri).
 3. **Katman 3 (Veri & Önbellek):** PostgreSQL 16 ve Redis 7.
 4. **Çift Ağ İzolasyonu (DMZ Modeli):**
@@ -25,12 +27,12 @@ Bu laboratuvarın amacı; kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katma
 ```text
                            İNTERNET / WEB TARAYICI
                                      │
-                                 Port: 80
+                                Port: 19001
                                      ▼
 +─────────────────────────────────────────────────────────────────────────────+
 | PUBLIC NETWORK (Dışa Açık Ağ)                                               |
 |                                                                             |
-|  [ NGINX REVERSE PROXY: compose-gateway ] (Port 80)                         |
+|  [ NGINX REVERSE PROXY: compose-gateway ] (Port 19001)                      |
 |                   │                                                         |
 |                   │ proxy_pass http://api:8000/                             |
 |                   ▼                                                         |
@@ -56,7 +58,7 @@ Bu laboratuvarın amacı; kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katma
 1. `docker-compose.yaml`, `.env` ve `services/` dizinindeki Nginx/FastAPI kodlarını inceleyin.
 2. `public-net` ve `internal-net` ayrımını analiz edin.
 3. `./test-stack.sh` betiğini çalıştırarak stack'i başlatın ve otomatik sağlık testlerini yürütün.
-4. `http://localhost/api/v1/products` adresine istek atarak veritabanından veri çekildiğini ve Redis'e önbelleklendiğini doğrulayın.
+4. `http://localhost:19001/api/v1/products` adresine istek atarak veritabanından veri çekildiğini ve Redis'e önbelleklendiğini doğrulayın.
 5. Veritabanı portunun (5432) ana makinede açık olmadığını (`curl localhost:5432` veya `nc -zv localhost 5432`) teyit edin.
 
 ---
@@ -92,7 +94,7 @@ docker compose up -d --build
 docker compose ps
 
 # 3. Nginx üzerinden API'ye istek atma
-curl -i http://localhost/api/v1/products
+curl -i http://localhost:19001/api/v1/products
 
 # 4. Temizlik
 docker compose down -v
@@ -104,8 +106,8 @@ docker compose down -v
 ## 6. Doğrulama ve Beklenen Sonuç
 
 ```bash
-curl -s http://localhost/health
-curl -s http://localhost/api/v1/products
+curl -s http://localhost:19001/health
+curl -s http://localhost:19001/api/v1/products
 ```
 
 * **Gateway Yanıtı:** `{"status": "healthy", "service": "ecommerce-api", "cache": "connected", "db": "connected"}`

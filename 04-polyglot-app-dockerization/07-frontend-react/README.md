@@ -2,7 +2,9 @@
 
 | Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
 |:---:|:---:|:---:|:---:|
-| Orta | 40 dakika | `node:20-alpine`, `nginx:1.25-alpine`, `curl` | `80` |
+| Orta | 40 dakika | `node:20-alpine`, `nginx:1.25-alpine`, `curl` | `19001 (App1 Slotu)` |
+
+> **Önemli Erişim Notu:** Sunucuda Port 80 Nginx Master Reverse Proxy tarafından kullanıldığından, React SPA konteyneri platformdaki **19001** portuna eşlenir. Tarayıcınızdan `http://<SUNUCU-IP>:19001` veya `https://studentXX-app1.<domain>` üzerinden erişebilirsiniz.
 
 ---
 
@@ -158,10 +160,10 @@ docker build -t react-frontend-spa:v1.0 .
 docker images react-frontend-spa:v1.0
 
 # 3. Konteyneri başlatma
-docker run -d --name my-react-spa -p 80:80 react-frontend-spa:v1.0
+docker run -d --name my-react-spa -p 19001:80 react-frontend-spa:v1.0
 
 # 4. Yanıtı test etme
-curl -i http://localhost:80
+curl -i http://localhost:19001
 ```
 </details>
 
@@ -170,7 +172,7 @@ curl -i http://localhost:80
 ## 8. Doğrulama ve Beklenen Sonuç
 
 ```bash
-curl -s http://localhost:80 | grep "React SPA + Nginx"
+curl -s http://localhost:19001 | grep "React SPA + Nginx"
 ```
 
 * **HTML Yanıtı:** `<title>DevOps React SPA</title>`

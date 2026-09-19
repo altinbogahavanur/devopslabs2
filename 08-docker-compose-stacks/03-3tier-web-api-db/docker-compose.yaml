@@ -4,7 +4,7 @@ services:
       context: ./services/nginx
     container_name: compose-gateway
     ports:
-      - "${GATEWAY_PORT:-80}:80"
+      - "${GATEWAY_PORT:-19001}:80"
     depends_on:
       api:
         condition: service_started

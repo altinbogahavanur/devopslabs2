@@ -2,9 +2,9 @@
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
-| İleri | `harbor`, `trivy`, `docker-ce`, `robot-accounts` | 8085 / 18082 |
+| İleri | `harbor`, `trivy`, `docker-ce`, `robot-accounts` | 18444 |
 
-> **Önemli Erişim Notu:** Harbor web arayüzü kurulduğunda `http://<SUNUCU-IP>:8085` (veya ortamınızda ayrılmış port) üzerinden kullanıcı adı `admin` ve parola `Harbor12345` ile erişilebilir.
+> **Önemli Erişim Notu:** Platformumuzda kurumsal Harbor OCI Registry servisi halihazırda çalışır durumdadır. Web arayüzüne `http://<SUNUCU-IP>:18444` (veya ters vekil üzerinden `https://studentXX-harbor.<domain>` / `/harbor`) adresinden erişebilirsiniz. Varsayılan yönetici kullanıcısı `admin`dir.
 
 ---
 
@@ -20,7 +20,7 @@
 ## Ön Koşullar
 
 - LAB-DOC-05-01 ve 02 tamamlanmış olmalıdır.
-- En az 4 GB boş RAM (Harbor mikroservis kümesi için).
+- Platform Harbor servisinin (`18444`) aktif olması (`docker ps | grep harbor`).
 
 ---
 
@@ -29,11 +29,11 @@
 ```text
 [Geliştirici / CI/CD Robotu]
             │
-            ├── 1. docker login harbor.domain:8085 (Robot Token)
-            ├── 2. docker push harbor.domain:8085/prod/app:v1.0
+            ├── 1. docker login harbor.domain:18444 (Robot Token)
+            ├── 2. docker push harbor.domain:18444/prod/app:v1.0
             ▼
 +───────────────────────────────────────────────────────────────+
-| HARBOR ENTERPRISE PLATFORMU                                   |
+| HARBOR ENTERPRISE PLATFORMU (:18444)                          |
 |                                                               |
 |  [ harbor-core / portal ]  ──> RBAC & Proje İzolasyonu        |
 |  [ registry ]              ──> OCI Uyumlu Katman Deposu       |
@@ -61,13 +61,13 @@ Harbor web arayüzünde (veya API üzerinden):
 ### 3. Docker CLI ile Robot Girişi ve İmaj Gönderme
 ```bash
 # 1. Robot hesabı ile giriş yapın:
-# docker login <HARBOR-HOST>:8085 -u "robot$robot-cicd-pusher" -p "<TOKEN>"
+# docker login 127.0.0.1:18444 -u "robot$robot-cicd-pusher" -p "<TOKEN>"
 
 # 2. İmajı kurumsal proje yoluyla etiketleyin:
-# docker tag my-app:1.0 <HARBOR-HOST>:8085/devops-team/my-app:v1.0
+# docker tag my-app:1.0 127.0.0.1:18444/devops-team/my-app:v1.0
 
 # 3. İmajı depoya yükleyin:
-# docker push <HARBOR-HOST>:8085/devops-team/my-app:v1.0
+# docker push 127.0.0.1:18444/devops-team/my-app:v1.0
 ```
 
 ### 4. Trivy Zafiyet Raporunu İnceleme
@@ -80,15 +80,14 @@ Harbor arayüzünde yüklenen imajın yanında beliren güvenlik raporuna tıkla
 
 ```bash
 # Harbor API üzerinden proje listesini sorgulayın:
-curl -s -u "admin:Harbor12345" http://localhost:8085/api/v2.0/projects | grep "devops-team"
+curl -s http://127.0.0.1:18444/api/v2.0/projects
 ```
 
 ---
 
 ## Temizlik
 
-Harbor kümesini durdurmak için:
+Laboratuvarda push edilen test imajını Harbor Web UI üzerinden `devops-team` projesinden silebilirsiniz:
 ```bash
-# cd ~/docker-labs/05-backup-restore-and-registry/harbor
-# docker compose down
+docker rmi 127.0.0.1:18444/devops-team/my-app:v1.0 2>/dev/null || true
 ```

@@ -1,10 +1,12 @@
-# LAB-DOC-12 — Docker Final Capstone Projesi: Üretim Seviyesi Güvenli Mikroservis Platformu
+# * LAB-DOC-12 — Docker Final Capstone Projesi: Üretim Seviyesi Güvenli Mikroservis Platformu
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
-| Uzman | `docker compose`, Node.js, Postgres, Redis, Nginx, Secrets | 80 |
+| Uzman | `docker compose`, Node.js, Postgres, Redis, Nginx, Secrets | 19001 (App1 Slotu) |
 
-> **Önemli Erişim Notu:** Nginx Gateway Port 80 üzerinden dışa açılır. Tarayıcınızdan doğrudan `http://<SUNUCU-IP>` (veya öğrenci ortamında ters vekil portu `19001`) üzerinden web arayüzüne ve API'ye erişebilir veya yerel olarak `curl http://localhost` komutunu çalıştırabilirsiniz.
+> **Önemli Erişim Notu:** Nginx Gateway, platform mimarisinde katılımcı web uygulamaları için ayrılmış olan **Port 19001 (App1 Slotu)** üzerinden dışa açılır. Tarayıcınızdan doğrudan `http://<SUNUCU-IP>:19001` (veya ters vekil üzerinden `https://studentXX-app1.<domain>`) adresiyle web arayüzüne ve API'ye erişebilir veya yerel olarak `curl http://localhost:19001/api/health` komutunu çalıştırabilirsiniz.
+> 
+> *Not: Sunucuda Port 80 ve 443 doğrudan ana Nginx Master Reverse Proxy tarafından kullanıldığından, port çakışmasını önlemek için Compose dosyasında dış port `19001` olarak tanımlanmıştır.*
 
 ---
 
@@ -12,7 +14,7 @@
 
 Bu bitirme projesinde (Capstone), Docker eğitim serisi boyunca öğrenilen tüm mimari ve operasyonel yetkinlikler tek bir kurumsal mimaride birleştirilir:
 
-1. **Nginx Reverse Proxy Gateway:** Dış dünyaya tek giriş kapısı (Port 80) ve mikroservislere yönlendirme.
+1. **Nginx Reverse Proxy Gateway:** Dış dünyaya tek giriş kapısı (Port 19001) ve mikroservislere yönlendirme.
 2. **Hardened Backend REST API:** Non-root kullanıcı (UID 10001), layer cache optimizasyonu, CPU ve RAM sınırları (`cpus: 0.5`, `memory: 256M`).
 3. **Docker Secrets Entegrasyonu:** Veritabanı şifresini ortam değişkeni olarak açıkta bırakmak yerine `/run/secrets/db_password` dosyasından okuma.
 4. **PostgreSQL 16 & Otomatik Tablo Başlatma:** `init.sql` ile konteyner ilk açıldığında otomatik veritabanı şemasını kurma.
@@ -24,7 +26,7 @@ Bu bitirme projesinde (Capstone), Docker eğitim serisi boyunca öğrenilen tüm
 ## 2. Ön Koşullar
 
 * Docker Engine ve Docker Compose V2 çalışır durumda olmalıdır.
-* Host üzerinde `80` portu boşta olmalıdır.
+* Platform üzerindeki App1 slotu (`19001`) boşta olmalıdır.
 * Önceki tüm modüllerin (Dockerfile, Ağ, Depolama, Compose, Güvenlik) tamamlanmış olması.
 
 ---
@@ -34,7 +36,7 @@ Bu bitirme projesinde (Capstone), Docker eğitim serisi boyunca öğrenilen tüm
 ```text
                            KULLANICI (Web Tarayıcı)
                                       │
-                                  Port: 80
+                                 Port: 19001 (App1)
                                       ▼
 +─────────────────────────────────────────────────────────────────────────────+
 | CAPSTONE PUBLIC NETWORK (Dışa Açık Ağ)                                      |
@@ -67,7 +69,7 @@ Bu bitirme projesinde (Capstone), Docker eğitim serisi boyunca öğrenilen tüm
 1. **Mimari Dosyaları İnceleme:** `docker-compose.yaml`, `secrets/db_password.txt`, `gateway/nginx.conf` ve `init.sql` dosyalarını inceleyin.
 2. **Platformu Derleme ve Başlatma:** `docker compose up -d --build` komutuyla platformu ayağa kaldırın.
 3. **Servis Durumu ve Sağlık Denetimi:** `docker compose ps` komutunu çalıştırarak tüm servislerin (`postgres`, `redis`, `backend`, `gateway`) durumlarının `healthy` olduğunu doğrulayın.
-4. **API ve Veritabanı Testi:** `curl http://localhost/api/products` adresine istek atarak veritabanındaki 3 ürünün JSON olarak döndüğünü teyit edin.
+4. **API ve Veritabanı Testi:** `curl http://localhost:19001/api/products` adresine istek atarak veritabanındaki 3 ürünün JSON olarak döndüğünü teyit edin.
 5. **Kaynak Sınırları ve Güvenlik:** `docker inspect capstone-backend` ile CPU (`0.5`) ve RAM (`256MB`) sınırlarının devrede olduğunu, non-root kullanıcının çalıştığını kontrol edin.
 6. **Ağ İzolasyonunu Kanıtlama:** Veritabanının (`capstone-postgres`) host üzerinde dışa açılmış hiçbir portu olmadığını teyit edin.
 
@@ -102,7 +104,7 @@ Compose içinde backend servisinin veritabanına bağlanabilmesi için PostgreSQ
 
 ### Adım 1: Çalışma Dizinine Geçiş
 ```bash
-cd ~/docker-labs/11-final-capstone-project
+cd 12-final-capstone-project
 ```
 
 ### Adım 2: Projeyi Derleme ve Başlatma
@@ -118,10 +120,10 @@ docker compose ps
 ### Adım 4: Gateway ve REST API Doğrulama
 ```bash
 # Gateway üzerinden sistem sağlık kontrolü
-curl -i http://localhost/api/health
+curl -i http://localhost:19001/api/health
 
 # Veritabanından gelen ürün listesini çekme
-curl -i http://localhost/api/products
+curl -i http://localhost:19001/api/products
 ```
 
 ### Adım 5: Kaynak Limitlerini ve İzolasyonu İnceleme
@@ -142,7 +144,7 @@ docker port capstone-postgres
 Aşağıdaki komutla mikroservis API'sinden dönen ürün listesini denetleyin:
 
 ```bash
-curl -s http://localhost/api/products
+curl -s http://localhost:19001/api/products
 ```
 
 * **Beklenen JSON Çıktısı:**

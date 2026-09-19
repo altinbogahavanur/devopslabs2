@@ -5,6 +5,9 @@
 | Başlangıç | `docker-ce`, `docker-compose-plugin`, `portainer` | 9000, 9443 |
 
 > **Önemli Erişim Notu:** Portainer web arayüzüne erişirken `http://<SUNUCU-IP>:9000` adresini kullanabilir veya yerel doğrulama için `curl http://localhost:9000` komutunu çalıştırabilirsiniz.
+> 
+> [!WARNING]
+> **Platform & Canlı Ortam Güvenlik Uyarısı:** Azure eğitim sanal makinesinde Docker Engine ve Docker Compose V2 **zaten önceden kurulu ve aktif** durumdadır. Arka planda GitLab, Jenkins, Harbor ve KinD gibi temel servisler çalışmaktadır. Bu servislerin kesintiye uğramaması için `install-docker.sh` betiğindeki APT paket temizliğini (`apt remove containerd runc`) ve Docker daemon'ı yeniden başlatma (`systemctl restart docker`) adımlarını **çalıştırmayınız**. Bu laboratuvarda kurulum prensiplerini inceleyip doğrudan **Adım 7 / Doğal Doğrulama** komutlarıyla motor yapılandırmasını denetleyiniz.
 
 ---
 
