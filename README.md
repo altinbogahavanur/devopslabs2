@@ -16,55 +16,55 @@ Bu laboratuvar serisi; Linux sistem yönetiminden ve Docker Engine mimarisinden 
 ### 🛠️ 0. Altyapı Hazırlığı ve Docker Kurulumu
 | No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
 |:---:|:---|:---:|:---|:---:|
-| **00** | [`00-linux-essentials`](00-linux-essentials/README.md) | Başlangıç | **Linux Ön Hazırlığı:** Paket, Servis, Multi-Port (`ss`), Kullanıcı/Sudo, Süreç (`htop`), 16 GB Swap ve Ağ/DNS Araçları | *Ön Hazırlık / Hızlı Kontrol* |
-| **01** | [`01-docker-installation`](01-docker-installation/README.md) | Başlangıç | Resmi Docker Engine, Buildx ve Compose V2 Mimarisi, Non-root İzni, `daemon.json` Log Rotasyonu | *Platform Doğrulama (Zaten Kurulu)* |
+| [**00**](00-linux-essentials/README.md) | [`00-linux-essentials`](00-linux-essentials/README.md) | Başlangıç | **Linux Ön Hazırlığı:** Paket, Servis, Multi-Port (`ss`), Kullanıcı/Sudo, Süreç (`htop`), 16 GB Swap ve Ağ/DNS Araçları | *Ön Hazırlık / Hızlı Kontrol* |
+| [**01**](01-docker-installation/README.md) | [`01-docker-installation`](01-docker-installation/README.md) | Başlangıç | Resmi Docker Engine, Buildx ve Compose V2 Mimarisi, Non-root İzni, `daemon.json` Log Rotasyonu | *Platform Doğrulama (Zaten Kurulu)* |
 
 ---
 
 ### 🟢 1. Konteyner Çekirdek İş Yükleri ve İmaj Üretimi
 | No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
 |:---:|:---|:---:|:---|:---:|
-| **`*` 02** | [`02-container-fundamentals`](02-container-fundamentals/README.md) | Başlangıç - İleri | **Konteyner Temelleri:** Yaşam Döngüsü (`run`, `exec`, `logs`, port mapping), `docker cp` / `commit` ve CPU/RAM Sınırları & Exit Code 137 OOMKilled | **Çekirdek Zorunlu** |
-| **`*` 03** | [`03-dockerfile-and-caching`](03-dockerfile-and-caching/README.md) | Temel - İleri | **Dockerfile Mimarisi:** Temel Direktifler, Katman Önbellekleme Optimizasyonu (BuildKit), Multi-Stage Build & Minimal İmajlar | **Çekirdek Zorunlu** |
-| **`*` 04** | [`04-polyglot-app-dockerization`](04-polyglot-app-dockerization/README.md) | Orta - İleri | **Çok Dilli Paketleme (Fast-Track: Node.js & Go Scratch):** Web runtime ve ultra hafif (~8MB) Go derlemesi. *(Python, Java, .NET, PHP, React referans)* | **Çekirdek Zorunlu** |
+| [**`*` 02**](02-container-fundamentals/README.md) | [`02-container-fundamentals`](02-container-fundamentals/README.md) | Başlangıç - İleri | **Konteyner Temelleri:** Yaşam Döngüsü (`run`, `exec`, `logs`, port mapping), `docker cp` / `commit` ve CPU/RAM Sınırları & Exit Code 137 OOMKilled | **Çekirdek Zorunlu** |
+| [**`*` 03**](03-dockerfile-and-caching/README.md) | [`03-dockerfile-and-caching`](03-dockerfile-and-caching/README.md) | Temel - İleri | **Dockerfile Mimarisi:** Temel Direktifler, Katman Önbellekleme Optimizasyonu (BuildKit), Multi-Stage Build & Minimal İmajlar | **Çekirdek Zorunlu** |
+| [**`*` 04**](04-polyglot-app-dockerization/README.md) | [`04-polyglot-app-dockerization`](04-polyglot-app-dockerization/README.md) | Orta - İleri | **Çok Dilli Paketleme (Fast-Track: Node.js & Go Scratch):** Web runtime ve ultra hafif (~8MB) Go derlemesi. *(Python, Java, .NET, PHP, React referans)* | **Çekirdek Zorunlu** |
 
 ---
 
-### 🌐 2. Kalıcı Depolama, Ağ ve Kayıt Defteri (Storage & Networking)
+### 🌐 2. Kalıcı Depolama, Ağ ve Registry (Storage & Networking)
 | No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
 |:---:|:---|:---:|:---|:---:|
-| **`*` 05** | [`05-backup-restore-and-registry`](05-backup-restore-and-registry/README.md) | Orta - İleri | **Yedekleme ve Kayıt Defteri:** İmaj/Volume Yedekleme (`save`/`load`), Yerel `registry:2` (`5000`) ve Kurumsal Harbor Registry (`18444`) Push/Pull | **Çekirdek Zorunlu** |
-| **`*` 06** | [`06-docker-networking`](06-docker-networking/README.md) | Orta - İleri | **Ağ Sürücüleri ve İzolasyon:** Özel Bridge & Dahili DNS (`127.0.0.11`), Host & None Network, Çoklu Ağ DMZ Mimarisi | **Çekirdek Zorunlu** |
-| **`*` 07** | [`07-docker-storage`](07-docker-storage/README.md) | Orta - İleri | **Kalıcı Depolama Yönetimi:** Named Volume & Bind Mounts, Bellek İçi `tmpfs`, Volume İzinleri (UID/GID Mismatch) Çözümü | **Çekirdek Zorunlu** |
+| [**`*` 05**](05-backup-restore-and-registry/README.md) | [`05-backup-restore-and-registry`](05-backup-restore-and-registry/README.md) | Orta - İleri | **Yedekleme ve Registry:** İmaj/Volume Yedekleme (`save`/`load`), Yerel `registry:2` (`5000`) ve Kurumsal Harbor Registry (`18444`) Push/Pull | **Çekirdek Zorunlu** |
+| [**`*` 06**](06-docker-networking/README.md) | [`06-docker-networking`](06-docker-networking/README.md) | Orta - İleri | **Ağ Sürücüleri ve İzolasyon:** Özel Bridge & Dahili DNS (`127.0.0.11`), Host & None Network, Çoklu Ağ DMZ Mimarisi | **Çekirdek Zorunlu** |
+| [**`*` 07**](07-docker-storage/README.md) | [`07-docker-storage`](07-docker-storage/README.md) | Orta - İleri | **Kalıcı Depolama Yönetimi:** Named Volume & Bind Mounts, Bellek İçi `tmpfs`, Volume İzinleri (UID/GID Mismatch) Çözümü | **Çekirdek Zorunlu** |
 
 ---
 
 ### 📦 3. Çoklu Konteyner ve Orkestrasyon (Docker Compose V2)
 | No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
 |:---:|:---|:---:|:---|:---:|
-| **`*` 08** | [`08-docker-compose-stacks`](08-docker-compose-stacks/README.md) | Orta - İleri | **Bildirimsel Orkestrasyon:** Compose V2 Temelleri & Healthcheck, 3-Tier Web-API-DB Stack (`19001`), Profiller ve Çevre Değişkenleri | **Çekirdek Zorunlu** |
+| [**`*` 08**](08-docker-compose-stacks/README.md) | [`08-docker-compose-stacks`](08-docker-compose-stacks/README.md) | Orta - İleri | **Bildirimsel Orkestrasyon:** Compose V2 Temelleri & Healthcheck, 3-Tier Web-API-DB Stack (`19001`), Profiller ve Çevre Değişkenleri | **Çekirdek Zorunlu** |
 
 ---
 
 ### 🔒 4. Kurumsal Güvenlik, Sertleştirme ve Zafiyet Analizi
 | No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
 |:---:|:---|:---:|:---|:---:|
-| **`*` 09** | [`09-security-and-distroless`](09-security-and-distroless/README.md) | İleri - Uzman | **Konteyner Sertleştirme:** Google Distroless & Non-Root Kullanıcı, Aqua Security Trivy CVE Taraması, Linux Capabilities Drop | **Çekirdek Zorunlu** |
+| [**`*` 09**](09-security-and-distroless/README.md) | [`09-security-and-distroless`](09-security-and-distroless/README.md) | İleri - Uzman | **Konteyner Sertleştirme:** Google Distroless & Non-Root Kullanıcı, Aqua Security Trivy CVE Taraması, Linux Capabilities Drop | **Çekirdek Zorunlu** |
 
 ---
 
 ### 🚀 5. Sürekli Entegrasyon ve Dağıtım (CI/CD Pipelines)
 | No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
 |:---:|:---|:---:|:---|:---:|
-| **10** | [`10-cicd-container-pipelines`](10-cicd-container-pipelines/README.md) | İleri | **Konteyner Boru Hatları:** GitHub Actions, GitLab CI ve Jenkins Entegrasyonu *(Bu konular bağımsız Jenkins ve GitLab modüllerinde detaylı işlenir)* | *Seçmeli / Crossover* |
+| [**10**](10-cicd-container-pipelines/README.md) | [`10-cicd-container-pipelines`](10-cicd-container-pipelines/README.md) | İleri | **Konteyner Pipeline'ları (CI/CD):** GitHub Actions, GitLab CI ve Jenkins Entegrasyonu *(Bu konular bağımsız Jenkins ve GitLab modüllerinde detaylı işlenir)* | *Seçmeli / Crossover* |
 
 ---
 
 ### 🏆 6. Hata Ayıklama ve Bitirme Projesi (Challenge & Capstone)
 | No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
 |:---:|:---|:---:|:---|:---:|
-| **`*` 11** | [`11-troubleshooting-challenge`](11-troubleshooting-challenge/README.md) | İleri | **Sorun Giderme Simülatörü:** Port Çakışması, Anında Kapanan Konteyner, OOMKilled (137), Volume Yetki Reddi ve Bridge DNS Kopukluğu | **Çekirdek Zorunlu** |
-| **`*` 12** | [`12-final-capstone-project`](12-final-capstone-project/README.md) | Uzman | **Büyük Final Projesi:** Nginx Gateway (`19001`) + Hardened REST API + PostgreSQL 16 + Redis 7 + Docker Secrets + Kaynak Sınırları ve Çift Ağ İzolasyonu | **Büyük Final** |
+| [**`*` 11**](11-troubleshooting-challenge/README.md) | [`11-troubleshooting-challenge`](11-troubleshooting-challenge/README.md) | İleri | **Sorun Giderme Simülatörü:** Port Çakışması, Anında Kapanan Konteyner, OOMKilled (137), Volume Yetki Reddi ve Bridge DNS Kopukluğu | **Çekirdek Zorunlu** |
+| [**`*` 12**](12-final-capstone-project/README.md) | [`12-final-capstone-project`](12-final-capstone-project/README.md) | Uzman | **Büyük Final Projesi:** Nginx Gateway (`19001`) + Hardened REST API + PostgreSQL 16 + Redis 7 + Docker Secrets + Kaynak Sınırları ve Çift Ağ İzolasyonu | **Büyük Final** |
 
 ---
 
@@ -97,7 +97,7 @@ Laboratuvar uygulamalarının çakışma yaşamadan çalışabilmesi için Azure
    free -h
    ```
 
-2. Çekirdek rota üzerinden ilk zorunlu laboratuvara geçin:
+2. Çekirdek rota üzerinden ilk zorunlu laboratuvara ([`02-container-fundamentals/01-container-lifecycle`](02-container-fundamentals/01-container-lifecycle/README.md)) geçin:
    ```bash
    cd 02-container-fundamentals/01-container-lifecycle
    cat README.md
