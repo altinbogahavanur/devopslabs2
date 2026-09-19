@@ -4,7 +4,6 @@
 |:---:|:---:|:---:|:---:|
 | Orta | 90 dakika | `docker compose v2`, `nginx`, `redis`, `postgres` | `8000`, `8080`, `5000` |
 
-[lab-07-docker-compose-orchestration.zip](lab-07-docker-compose-orchestration.zip)
 
 ## Amaç
 

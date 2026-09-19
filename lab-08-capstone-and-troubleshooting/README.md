@@ -4,7 +4,6 @@
 |:---:|:---:|:---:|:---:|
 | Orta - İleri | 90 dakika | `docker compose`, `nginx`, `nodejs`, `postgres`, `redis`, `ss`, `curl` | `19001 (App1 Slotu)` |
 
-[lab-08-capstone-and-troubleshooting.zip](lab-08-capstone-and-troubleshooting.zip)
 
 ## Amaç
 
