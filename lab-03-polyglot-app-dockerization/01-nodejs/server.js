@@ -7,7 +7,7 @@ app.get('/', (req, res) => {
   res.send('<html><body style="font-family:sans-serif;background:#0d1117;color:#c9d1d9;padding:40px;"><h1>🐳 DevOps Atölyesi - Node.js API</h1><p>Dockerize edilmis Express.js web uygulamasi basariyla calisiyor.</p></body></html>\n');
 });
 
-app.get('/api/health', (req, res) => {
+app.get(['/health', '/api/health'], (req, res) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
