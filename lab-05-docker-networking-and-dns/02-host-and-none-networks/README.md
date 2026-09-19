@@ -1,4 +1,4 @@
-# LAB-DOC-06-02 — Host ve None Ağ Sürücüleri: Yüksek Performans ve Tam İzolasyon
+# LAB-DOC-05-02 — Host ve None Ağ Sürücüleri: Yüksek Performans ve Tam İzolasyon
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
@@ -15,7 +15,7 @@
 
 ## Ön Koşullar
 
-- LAB-DOC-06-01 tamamlanmış olmalıdır.
+- LAB-DOC-05-01 tamamlanmış olmalıdır.
 - Host üzerinde `80` portu boşta olmalıdır.
 
 ---
@@ -24,11 +24,11 @@
 
 ```text
 1. HOST NETWORK (--network host)
-   [ Host Ağ Kartı (eth0) ] ──── [ Konteyner Süreci (Nginx) ]  (NAT Yok! Sıfır Gecikme ⚡)
+   [ Host Ağ Kartı (eth0) ] ──── [ Konteyner Süreci (Nginx) ]  (NAT Yok! Sıfır Gecikme)
 
 2. NONE NETWORK (--network none)
    +───────────────────────────────────+
-   | KONTEYNER (Yalıtılmış Ada 🏝️)     |
+   | KONTEYNER (Yalıtılmış Ada)        |
    | - Sadece 'lo' (127.0.0.1) var.    |
    | - 'eth0' YOKTUR! İnternet/Ağ YOK! |
    +───────────────────────────────────+

@@ -1,4 +1,4 @@
-# LAB-DOC-06-01 — Özel Bridge Ağı, Dahili DNS ve Port Yönlendirme
+# LAB-DOC-05-01 — Özel Bridge Ağı, Dahili DNS ve Port Yönlendirme
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
@@ -18,7 +18,7 @@
 
 ## Ön Koşullar
 
-- Docker Engine çalışır durumda olmalıdır.
+- LAB-DOC-04 tamamlanmış olmalıdır.
 - Host üzerinde `8080` portu boşta olmalıdır.
 
 ---
@@ -58,7 +58,7 @@ docker network ls
 ```bash
 # Veritabanını app-net ağına bağlayarak başlatın (Dış dünyaya port açmaya gerek yok!):
 docker run -d --name net-db --network app-net \
-  -e POSTGRES_PASSWORD=DevopsPassword2026! \
+  -e POSTGRES_PASSWORD=BilgincIT454 \
   postgres:17-alpine
 ```
 

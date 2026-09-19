@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# LAB 04 - DOCKER NETWORKING DOĞRULAMA VE TESTİ
+# LAB 05 - DOCKER NETWORKING DOĞRULAMA VE TESTİ
 # ==============================================================================
 set -euo pipefail
 
 echo "=========================================================="
-echo "🌐 DOCKER AĞ MİMARİSİ VE DNS TESTİ BAŞLATILIYOR 🌐"
+echo "DOCKER AĞ MİMARİSİ VE DNS TESTİ BAŞLATILIYOR"
 echo "=========================================================="
 
 # 1. Temizlik
@@ -19,7 +19,7 @@ echo "✓ app-net ağı oluşturuldu."
 
 # 3. Veritabanı Konteynerını Başlatma
 echo -e "\n[2/5] PostgreSQL Konteyneri app-net üzerinde Başlatılıyor..."
-docker run -d --name net-db --network app-net -e POSTGRES_PASSWORD=secret postgres:17-alpine
+docker run -d --name net-db --network app-net -e POSTGRES_PASSWORD=BilgincIT454 postgres:17-alpine
 sleep 3
 echo "✓ net-db çalışıyor."
 
@@ -46,5 +46,5 @@ docker rm -f net-web net-db >/dev/null
 docker network rm app-net >/dev/null
 
 echo -e "\n=========================================================="
-echo "✅ BAŞARILI: Docker Networking ve Dahili DNS kusursuz çalışıyor!"
+echo "BAŞARILI: Docker Networking ve Dahili DNS kusursuz çalışıyor!"
 echo "=========================================================="

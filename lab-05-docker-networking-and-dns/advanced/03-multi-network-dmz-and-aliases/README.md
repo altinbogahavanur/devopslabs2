@@ -1,4 +1,4 @@
-# LAB-DOC-06-03 (Advanced) — Çoklu Ağ Mimarisi (DMZ) ve Network Aliases
+# LAB-DOC-05-03 (Advanced) — Çoklu Ağ Mimarisi (DMZ) ve Network Aliases
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
@@ -17,7 +17,7 @@
 
 ## Ön Koşullar
 
-- LAB-DOC-06-01 ve 02 tamamlanmış olmalıdır.
+- LAB-DOC-05-01 ve 02 tamamlanmış olmalıdır.
 - Host üzerinde `8080` portu boşta olmalıdır.
 
 ---
@@ -55,7 +55,7 @@ docker network create back-net
 ```bash
 docker run -d --name secure-db --network back-net \
   --network-alias db.internal \
-  -e POSTGRES_PASSWORD=Secret2026! \
+  -e POSTGRES_PASSWORD=BilgincIT454 \
   postgres:17-alpine
 ```
 
