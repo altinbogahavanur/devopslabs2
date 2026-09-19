@@ -90,8 +90,12 @@ docker exec backend-api ping -c 2 db.internal
 ## Doğal Doğrulama ve Beklenen Sonuç
 
 ```bash
-docker inspect secure-db -f '{{range $k, $v := .NetworkSettings.Networks}}{{$k}}{{end}}'
-# Çıktı SADECE 'back-net' olmalıdır.
+# back-net ağındaki konteynerleri doğrulayın:
+docker network inspect back-net --format '{{range .Containers}}{{.Name}} {{end}}'
+
+# front-net ağındaki konteynerleri doğrulayın:
+docker network inspect front-net --format '{{range .Containers}}{{.Name}} {{end}}'
+# Çıktılarda backend-api her iki ağda görünürken, secure-db YALNIZCA back-net ağında bulunmalıdır.
 ```
 
 ---
