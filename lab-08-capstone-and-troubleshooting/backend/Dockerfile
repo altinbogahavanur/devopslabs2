@@ -1,7 +1,7 @@
 FROM node:20-alpine AS builder
 WORKDIR /build
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --omit=dev --no-audit --no-fund
 
 FROM node:20-alpine
 WORKDIR /app
