@@ -11,7 +11,7 @@ app = FastAPI(title="Microservice Product Catalog")
 # 12-Factor: Konfigürasyon tamamen ortam değişkenlerinden okunur
 DB_HOST = os.getenv("POSTGRES_HOST", "db")
 DB_USER = os.getenv("POSTGRES_USER", "appuser")
-DB_PASS = os.getenv("POSTGRES_PASSWORD", "supersecretpassword123")
+DB_PASS = os.getenv("POSTGRES_PASSWORD", "BilgincIT454")
 DB_NAME = os.getenv("POSTGRES_DB", "productdb")
 DB_PORT = os.getenv("POSTGRES_PORT", "5432")
 
@@ -48,10 +48,10 @@ def startup_db():
             conn.commit()
             cur.close()
             conn.close()
-            print("✅ PostgreSQL veritabanı tablosu hazır.")
+            print("PostgreSQL veritabanı tablosu hazır.")
             break
         except Exception as e:
-            print(f"⏳ Veritabanı henüz hazır değil, bekleniyor: {e}")
+            print(f"Veritabanı henüz hazır değil, bekleniyor: {e}")
             retries -= 1
             time.sleep(2)
 
@@ -63,11 +63,14 @@ def read_root():
         "architecture": "Nginx Proxy -> FastAPI -> Redis Cache -> PostgreSQL DB"
     }
 
+@app.get("/health")
 @app.get("/healthz")
+@app.get("/api/health")
 def healthz():
     return {"status": "healthy"}
 
 @app.get("/products")
+@app.get("/api/v1/products")
 def list_products():
     r = get_redis_client()
     cached = r.get("all_products")
@@ -94,6 +97,7 @@ def list_products():
     return {"source": "postgresql_database", "data": serialized}
 
 @app.post("/products")
+@app.post("/api/v1/products")
 def create_product(title: str, price: float):
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)

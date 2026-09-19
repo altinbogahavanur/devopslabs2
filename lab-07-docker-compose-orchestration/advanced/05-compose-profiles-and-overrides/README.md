@@ -1,4 +1,4 @@
-# LAB-DOC-08-05 (Advanced) — Docker Compose Profilleri ve Çoklu Ortam (Dev/Prod) Yönetimi
+# LAB-DOC-07-05 (Advanced) — Docker Compose Profilleri ve Çoklu Ortam (Dev/Prod) Yönetimi
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
@@ -47,7 +47,7 @@ Bu labın amacı; Docker Compose V2'de **Servis Profilleri (`profiles`)** kullan
 ## 3. Ön Koşullar
 
 * Docker Engine ve Docker Compose V2 kurulu olmalıdır.
-* Çalışma dizini: `docker-labs/18-compose-profiles-and-overrides/`
+* Çalışma dizini: `lab-07-docker-compose-orchestration/advanced/05-compose-profiles-and-overrides/`
 
 ---
 
@@ -58,8 +58,8 @@ Bu labın amacı; Docker Compose V2'de **Servis Profilleri (`profiles`)** kullan
 Herhangi bir profil bayrağı vermeden stack'i başlatın:
 
 ```bash
-docker compose up -d --build || docker-compose up -d --build
-docker compose ps || docker-compose ps
+docker compose up -d --build
+docker compose ps
 ```
 *Gözlem:* Yalnızca `web` ve `db` ayağa kalkmıştır. `monitoring-agent` ve `db-admin` servisleri bekletilmektedir.
 
@@ -70,8 +70,8 @@ docker compose ps || docker-compose ps
 Sadece `monitoring` bileşenlerini ekleyerek ayağa kaldırın:
 
 ```bash
-docker compose --profile monitoring up -d || docker-compose --profile monitoring up -d
-docker compose ps || docker-compose ps
+docker compose --profile monitoring up -d
+docker compose ps
 ```
 *Gözlem:* Artık `profile-metrics-collector` servisi de çalışmaktadır.
 
@@ -121,6 +121,5 @@ curl -s http://localhost:8080/
 Tüm profillere ait servisleri kapatmak için `--profile "*"` kullanın:
 
 ```bash
-docker compose --profile "*" down -v || docker-compose --profile "*" down -v
-docker rmi 18-compose-profiles-and-overrides-web 2>/dev/null || true
+docker compose --profile "*" down -v
 ```

@@ -2,7 +2,7 @@
 set -e
 
 echo "=========================================================="
-echo "🚀 MULTI-CONTAINER COMPOSE STACK TESTİ 🚀"
+echo "MULTI-CONTAINER COMPOSE STACK TESTİ"
 echo "=========================================================="
 
 echo -e "\n[1/4] Servisler Başlatılıyor (docker compose up -d)..."
@@ -27,6 +27,6 @@ echo -e "\nİkinci Okuma (Redis Cache'ten anında gelmeli):"
 curl -s "http://localhost:${PORT}/products" | grep "source"
 
 echo -e "\n=========================================================="
-echo "✅ BAŞARILI: Nginx -> FastAPI -> Redis -> PostgreSQL mimarisi"
+echo "BAŞARILI: Nginx -> FastAPI -> Redis -> PostgreSQL mimarisi"
 echo "12-Factor ortam değişkenleri ile eksiksiz çalıştı!"
 echo "=========================================================="
