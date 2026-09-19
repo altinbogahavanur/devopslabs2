@@ -35,14 +35,22 @@ sleep 2
 curl -s -I http://localhost:8080 | grep "HTTP/1.1 200 OK"
 echo "✓ Port 8080 üzerinden Nginx erişimi doğrulandı."
 
-# 6. None Network İzolasyon Testi
-echo -e "\n[5/5] 'none' Ağ İzolasyonu Test Ediliyor..."
+# 6. Host Network Testi (8088 Portu)
+echo -e "\n[5/6] Host Ağı Doğrulanıyor (python http.server 8088)..."
+docker run -d --name host-web --network host python:3.12-alpine python3 -m http.server 8088
+sleep 1
+curl -s -I http://localhost:8088 | grep "200 OK"
+docker rm -f host-web >/dev/null
+echo "✓ Host ağı üzerinden doğrudan port 8088 erişimi doğrulandı."
+
+# 7. None Network İzolasyon Testi
+echo -e "\n[6/6] 'none' Ağ İzolasyonu Test Ediliyor..."
 IFACES=$(docker run --rm --network none busybox ip addr | grep -E "^[0-9]+:" | awk '{print $2}')
 echo "✓ Kullanılabilir Arayüzler: ${IFACES} (Sadece loopback 'lo', dış dünya yok!)"
 
-# 7. Temizlik
+# 8. Temizlik
 echo -e "\n[TEMİZLİK] Test konteynerları ve ağ temizleniyor..."
-docker rm -f net-web net-db >/dev/null
+docker rm -f net-web net-db host-web 2>/dev/null || true
 docker network rm app-net >/dev/null
 
 echo -e "\n=========================================================="

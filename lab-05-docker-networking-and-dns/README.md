@@ -2,7 +2,7 @@
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
-| Orta | `docker-ce`, `bridge`, `host`, `none`, `dns` | 8080 |
+| Orta | `docker-ce`, `bridge`, `host`, `none`, `dns` | 8080, 8088 |
 
 ## Amaç
 - Konteynerların birbirleriyle ve dış dünyayla nasıl iletişim kurduğunu kavramak.
