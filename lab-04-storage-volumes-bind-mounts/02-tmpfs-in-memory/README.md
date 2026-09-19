@@ -1,4 +1,4 @@
-# LAB-DOC-07-02 — Bellek İçi Depolama: tmpfs Mounts
+# LAB-DOC-04-02 — Bellek İçi Depolama: tmpfs Mounts
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
@@ -16,7 +16,7 @@
 
 ## Ön Koşullar
 
-- LAB-DOC-07-01 tamamlanmış olmalıdır.
+- LAB-DOC-04-01 tamamlanmış olmalıdır.
 
 ---
 
@@ -29,7 +29,7 @@
 +───────────────────────────────────────────────+
 | KONTEYNER                                     |
 |  - /app/secure-temp (Yalnızca RAM'de yaşar)   |
-|  - Diske (SSD/HDD) HİÇBİR ŞEY YAZILMAZ! 🔒     |
+|  - Diske (SSD/HDD) hiçbir şey yazılmaz!       |
 +───────────────────────────────────────────────+
 ```
 

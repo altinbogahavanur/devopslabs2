@@ -1,4 +1,4 @@
-# LAB-DOC-07-01 — Kalıcı Depolama: Named Volumes ve Host Bind Mounts
+# LAB-DOC-04-01 — Kalıcı Depolama: Named Volumes ve Host Bind Mounts
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
@@ -16,7 +16,7 @@
 
 ## Ön Koşullar
 
-- LAB-DOC-06 tamamlanmış olmalıdır.
+- LAB-DOC-03 tamamlanmış olmalıdır.
 - Host üzerinde `8080` portu boşta olmalıdır.
 
 ---
@@ -42,7 +42,7 @@ docker volume create pg-storage
 
 # 2. Volume'u bağlayarak veritabanını başlatın:
 docker run -d --name db-persisted -v pg-storage:/var/lib/postgresql/data \
-  -e POSTGRES_PASSWORD=StorageLab2026! \
+  -e POSTGRES_PASSWORD=BilgincIT454 \
   postgres:17-alpine
 
 # 3. Tablo ve veri oluşturun:
@@ -57,7 +57,7 @@ docker rm -f db-persisted
 
 # Aynı volume ile YENİ bir konteyner açın:
 docker run -d --name db-recovered -v pg-storage:/var/lib/postgresql/data \
-  -e POSTGRES_PASSWORD=StorageLab2026! \
+  -e POSTGRES_PASSWORD=BilgincIT454 \
   postgres:17-alpine
 
 # Verinin silinmediğini teyit edin:
@@ -66,13 +66,13 @@ docker exec -i db-recovered psql -U postgres -c "SELECT * FROM test;"
 
 ### 3. Host Bind Mount ve Salt-Okunur (:ro) Modu
 ```bash
-# 1. Host üzerinde bir dizin açın:
-mkdir -p /tmp/web-content
-echo "<h1>Host Bind Mount ile Canli Yayinda!</h1>" > /tmp/web-content/index.html
+# 1. Host üzerinde bir html dizini açın:
+mkdir -p html
+echo "<h1>Host Bind Mount ile Canli Yayinda!</h1>" > html/index.html
 
 # 2. Dizini konteynere :ro (read-only) olarak bağlayın:
 docker run -d --name web-bind -p 8080:80 \
-  -v /tmp/web-content:/usr/share/nginx/html:ro \
+  -v "$(pwd)/html":/usr/share/nginx/html:ro \
   nginx:alpine
 
 # 3. Test edin:
@@ -98,5 +98,5 @@ docker exec -i db-recovered psql -U postgres -c "SELECT msg FROM test;" | grep "
 ```bash
 docker rm -f db-recovered web-bind 2>/dev/null || true
 docker volume rm pg-storage 2>/dev/null || true
-rm -rf /tmp/web-content
+rm -rf html
 ```

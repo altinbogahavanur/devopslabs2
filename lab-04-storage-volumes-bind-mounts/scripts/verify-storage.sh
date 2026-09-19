@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# LAB 05 - DOCKER STORAGE DOĞRULAMA VE TESTİ
+# LAB 04 - DOCKER STORAGE DOĞRULAMA VE TESTİ
 # ==============================================================================
 set -euo pipefail
 
 echo "=========================================================="
-echo "💾 DOCKER STORAGE ÜÇLÜSÜ DOĞRULAMA TESTİ 💾"
+echo "DOCKER STORAGE DOĞRULAMA TESTİ"
 echo "=========================================================="
 
 # 1. Temizlik
@@ -15,19 +15,19 @@ docker volume rm pgdata 2>/dev/null || true
 # 2. Named Volume Oluşturma ve Veri Yazma
 echo -e "\n[1/4] Named Volume Oluşturuluyor (pgdata)..."
 docker volume create pgdata
-docker run -d --name store-db -e POSTGRES_PASSWORD=secret -v pgdata:/var/lib/postgresql/data postgres:17-alpine
+docker run -d --name store-db -e POSTGRES_PASSWORD=BilgincIT454 -v pgdata:/var/lib/postgresql/data postgres:17-alpine
 sleep 5
-docker exec store-db psql -U postgres -c "CREATE TABLE users (name text); INSERT INTO users VALUES ('hakan');"
-echo "✓ PostgreSQL çalıştırıldı ve 'hakan' kaydı yazıldı."
+docker exec store-db psql -U postgres -c "CREATE TABLE users (name text); INSERT INTO users VALUES ('student');"
+echo "✓ PostgreSQL çalıştırıldı ve 'student' kaydı yazıldı."
 
 # 3. Felaket & Kalıcılık Testi: Konteyneri Silip Yeniden Başlatma
 echo -e "\n[2/4] Konteyner Siliniyor ve Aynı Volume ile Yeni Konteyner Açılıyor..."
 docker rm -f store-db
-docker run -d --name store-db-recovered -e POSTGRES_PASSWORD=secret -v pgdata:/var/lib/postgresql/data postgres:17-alpine
+docker run -d --name store-db-recovered -e POSTGRES_PASSWORD=BilgincIT454 -v pgdata:/var/lib/postgresql/data postgres:17-alpine
 sleep 5
 RECOVERED_USER=$(docker exec store-db-recovered psql -U postgres -t -c "SELECT name FROM users LIMIT 1;" | tr -d '[:space:]')
 
-if [ "$RECOVERED_USER" = "hakan" ]; then
+if [ "$RECOVERED_USER" = "student" ]; then
     echo "✓ BAŞARILI: Veri kaybolmadı! Kurtarılan kullanıcı: $RECOVERED_USER"
 else
     echo "HATA: Veri kalıcılığı başarısız!"; exit 1
@@ -51,5 +51,5 @@ fi
 docker volume rm pgdata >/dev/null
 
 echo -e "\n=========================================================="
-echo "✅ BAŞARILI: Volume, Bind Mount ve tmpfs ayrımı kanıtlandı!"
+echo "BAŞARILI: Volume, Bind Mount ve tmpfs ayrımı kanıtlandı!"
 echo "=========================================================="
