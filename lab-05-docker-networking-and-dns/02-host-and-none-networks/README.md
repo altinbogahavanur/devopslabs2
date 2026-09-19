@@ -69,8 +69,8 @@ docker run --rm --network none busybox ping -c 1 8.8.8.8 2>&1 || true
 ## Doğal Doğrulama ve Beklenen Sonuç
 
 ```bash
-docker run --rm --network none busybox ip -br link
-# Çıktıda yalnızca 'lo UNKNOWN' görünmeli, 'eth0' bulunmamalıdır.
+docker run --rm --network none busybox ip link
+# Çıktıda yalnızca '1: lo:' görünmeli, 'eth0' bulunmamalıdır.
 ```
 
 ---
