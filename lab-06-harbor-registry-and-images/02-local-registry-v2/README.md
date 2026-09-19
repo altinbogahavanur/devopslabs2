@@ -1,4 +1,4 @@
-# LAB-DOC-05-02 — Yerel OCI Registry (Docker Registry v2)
+# LAB-DOC-06-01 — Yerel OCI Registry (Docker Registry v2)
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
@@ -18,7 +18,7 @@
 
 ## Ön Koşullar
 
-- LAB-DOC-05-01 tamamlanmış olmalıdır.
+- LAB-DOC-05 tamamlanmış olmalıdır.
 - Host üzerinde `5000` portu boşta olmalıdır.
 
 ---

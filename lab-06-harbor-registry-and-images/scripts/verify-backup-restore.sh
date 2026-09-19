@@ -50,14 +50,14 @@ docker volume create "$VOLUME_NAME"
 
 # PostgreSQL baslatma ve veri yazma
 docker run -d --name pg-test \
-    -e POSTGRES_PASSWORD=secret123 \
+    -e POSTGRES_PASSWORD=BilgincIT454 \
     -e POSTGRES_DB=devopsdb \
     -v "$VOLUME_NAME":/var/lib/postgresql/data \
     postgres:16-alpine
 
 echo "Veritabani hazirlaniyor (10s)..."
 sleep 10
-docker exec pg-test psql -U postgres -d devopsdb -c "CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(50)); INSERT INTO users (name) VALUES ('Hakan'), ('DevOps-Learner');"
+docker exec pg-test psql -U postgres -d devopsdb -c "CREATE TABLE users (id SERIAL PRIMARY KEY, name VARCHAR(50)); INSERT INTO users VALUES (1, 'Student'), (2, 'DevOps-Learner');"
 
 # Yardimci konteyner (Helper container) ile salt-okunur volume yedegi alma
 docker run --rm \
@@ -90,7 +90,7 @@ docker run --rm \
 
 # Yeni volume ile PostgreSQL baslatma
 docker run -d --name pg-restored \
-    -e POSTGRES_PASSWORD=secret123 \
+    -e POSTGRES_PASSWORD=BilgincIT454 \
     -e POSTGRES_DB=devopsdb \
     -v "$RESTORED_VOLUME":/var/lib/postgresql/data \
     postgres:16-alpine

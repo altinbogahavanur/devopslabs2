@@ -1,4 +1,4 @@
-# LAB-DOC-05-03 (Advanced) — Kurumsal Harbor OCI Registry ve Trivy Güvenlik Taraması
+# LAB-DOC-06-02 (Advanced) — Kurumsal Harbor OCI Registry ve Trivy Güvenlik Taraması
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
@@ -19,7 +19,7 @@
 
 ## Ön Koşullar
 
-- LAB-DOC-05-01 ve 02 tamamlanmış olmalıdır.
+- LAB-DOC-06-01 tamamlanmış olmalıdır.
 - Platform Harbor servisinin (`18444`) aktif olması (`docker ps | grep harbor`).
 
 ---
