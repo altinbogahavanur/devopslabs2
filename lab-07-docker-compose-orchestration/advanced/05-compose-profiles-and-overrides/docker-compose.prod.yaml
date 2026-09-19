@@ -12,5 +12,5 @@ services:
     restart: always
     environment:
       POSTGRES_USER: prod_master_user
-      POSTGRES_PASSWORD: SecretProductionPassword999
+      POSTGRES_PASSWORD: BilgincIT454
       POSTGRES_DB: prod_database

@@ -16,7 +16,7 @@ services:
     container_name: profile-db
     environment:
       POSTGRES_USER: devuser
-      POSTGRES_PASSWORD: devpassword
+      POSTGRES_PASSWORD: BilgincIT454
       POSTGRES_DB: devdb
 
   # ==============================================================================

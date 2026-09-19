@@ -2,7 +2,7 @@
 set -e
 
 echo "=========================================================="
-echo "🎯 DOCKER COMPOSE PROFİLLERİ VE OVERRIDE TESTİ 🎯"
+echo "DOCKER COMPOSE PROFİLLERİ VE OVERRIDE TESTİ"
 echo "=========================================================="
 
 echo -e "\n[1/4] Standart Başlatma (Hiçbir profil belirtilmedi)..."
@@ -23,6 +23,6 @@ echo -e "\n[3/4] Üretim (Prod) Override Konfigürasyonunun Birleştirilmesi (Co
 docker compose -f docker-compose.yaml -f docker-compose.prod.yaml config | grep -A 5 "APP_ENV"
 
 echo -e "\n=========================================================="
-echo "✅ BAŞARILI: Compose Profiles ve Çoklu Ortam yapılandırması"
+echo "BAŞARILI: Compose Profiles ve Çoklu Ortam yapılandırması"
 echo "kusursuz olarak doğrulandı!"
 echo "=========================================================="
