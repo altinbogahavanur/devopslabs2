@@ -1,4 +1,4 @@
-# LAB-DOC-02-03 (Advanced) — Kaynak Sınırları, Cgroups v2 ve OOMKilled Teşhisi
+# BONUS-DOC-06 — Kaynak Sınırları, Cgroups v2 ve OOMKilled Teşhisi
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |

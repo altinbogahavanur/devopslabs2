@@ -1,10 +1,10 @@
-# LAB-DOC-10 — CI/CD ile Konteyner Otomasyonu (Container Pipelines)
+# BONUS-DOC-04 — CI/CD ile Konteyner Otomasyonu (Container Pipelines)
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
 | İleri | `github-actions`, `gitlab-ci`, `jenkins`, `trivy` | - |
 
-Modern DevOps süreçlerinde Dockerfile dosyaları manuel olarak derlenip yüklenmez. Her `git push` yapıldığında otomatik imaj üreten, güvenlik açıklarını (Trivy) tarayan ve Docker Hub / Harbor Registry'ye yükleyen tam otomatik CI/CD boru hatları kullanılır.
+Modern DevOps süreçlerinde Dockerfile dosyaları manuel olarak derlenip yüklenmez. Her `git push` yapıldığında otomatik imaj üreten, güvenlik açıklarını (Trivy) tarayan ve Docker Hub / Harbor Registry'ye yükleyen tam otomatik CI/CD pipeline'ları kullanılır.
 
 ---
 

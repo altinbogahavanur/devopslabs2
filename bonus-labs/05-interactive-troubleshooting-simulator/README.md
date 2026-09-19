@@ -1,4 +1,4 @@
-# LAB-DOC-11 — Docker Arıza Teşhis ve Onarım Simülatörü (Troubleshooting Challenge)
+# BONUS-DOC-05 — Docker Arıza Teşhis ve Onarım Simülatörü (Troubleshooting Simulator)
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
@@ -8,7 +8,7 @@ Bu laboratuvarda; Docker üretim ve geliştirme ortamlarında en sık karşıla�
 
 ---
 
-## 🎯 Öğrenme Hedefleri
+## Öğrenme Hedefleri
 
 1. **Port Yönetimi:** `bind: address already in use` arızasını tespit edip portu serbest bırakmak veya konteyneri yönlendirmek.
 2. **PID 1 ve Yaşam Döngüsü:** Ön plan (foreground) süreci eksikliği nedeniyle `Exit Code 0` ile anında kapanan konteynerleri onarmak.
@@ -18,19 +18,19 @@ Bu laboratuvarda; Docker üretim ve geliştirme ortamlarında en sık karşıla�
 
 ---
 
-## 🚀 İnteraktif Simülatör ile Çalışma (Önerilen Yöntem)
+## İnteraktif Simülatör ile Çalışma (Önerilen Yöntem)
 
 Laboratuvar dizinindeki simülatörü çalıştırarak arızaları canlı olarak üretebilir ve test edebilirsiniz:
 
 ```bash
 # 1. Laboratuvar dizinine gidin
-cd 11-troubleshooting-challenge
+cd bonus-labs/05-interactive-troubleshooting-simulator
 
 # 2. İnteraktif menüyü başlatın
 ./troubleshoot-menu.sh
 ```
 
-### 🎮 Menü Kullanım Döngüsü
+### Menü Kullanım Döngüsü
 
 Menüden bir senaryo seçtiğinizde ilgili arıza odasına girersiniz:
 - **`[B] Break`:** Sistemi bozar, arızayı simüle eder ve konteyneri başlatır.
@@ -42,7 +42,7 @@ Menüden bir senaryo seçtiğinizde ilgili arıza odasına girersiniz:
 
 ---
 
-## 🔍 Manuel Çalışma ve Senaryo Detayları
+## Manuel Çalışma ve Senaryo Detayları
 
 Simülatör yerine komutları doğrudan terminalinizde adım adım denemek isterseniz:
 

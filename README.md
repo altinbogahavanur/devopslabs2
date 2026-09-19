@@ -1,109 +1,120 @@
 # Docker Hands-on Lab Serisi (DevOps Practitioner)
 
-Bu laboratuvar serisi; Linux sistem yönetiminden ve Docker Engine mimarisinden başlayarak konteyner yaşam döngüsünü, Dockerfile katman önbellekleme optimizasyonunu, çok dilli (polyglot) mikroservis paketlemeyi, kullanıcı tanımlı köprü (bridge) ağlarını, kalıcı depolama yönetimini (Volume / Bind Mounts), Docker Compose V2 orkestrasyonunu, Google Distroless ve Trivy ile kurumsal güvenliği, 5 kritik arıza senaryosunu içeren **Troubleshooting Challenge** modülünü ve Port 19001 üzerinde çalışan uçtan uca çok katmanlı **Final Capstone** projesini uygulamalı olarak öğretmek üzere tasarlanmıştır.
-
-> **Platform Mimarisi ve Port Erişim Kuralı:** 
-> Azure eğitim sanal makinesinde Host **Port 80 (HTTP)** ve **Port 443 (HTTPS)** doğrudan **Nginx Master Reverse Proxy** tarafından kullanılmaktadır. Bu nedenle web arayüzü sunan laboratuvar uygulamaları (Modül 08 3-Tier Stack, Modül 12 Final Capstone vb.) platformda ayrılmış olan **Port 19001 (App1 Slotu)** üzerinden dışa açılır.
-> Servislere tarayıcınızdan `http://<SUNUCU-IP>:19001` (veya Reverse Proxy üzerinden `https://studentXX-app1.<domain>`) adresiyle erişebilir ya da sunucu içinden `curl http://localhost:19001` komutuyla test edebilirsiniz.
+Bu laboratuvar serisi; uluslararası DevOps Practitioner standartlarına uygun olarak Docker Engine mimarisinden başlayarak konteyner yaşam döngüsünü, Dockerfile katman önbellekleme optimizasyonunu, çok dilli (polyglot) mikroservis paketlemeyi, kalıcı depolama yönetimini (Volume & Bind Mounts), kullanıcı tanımlı bridge ağlarını ve dahili DNS çözümlemesini, kurumsal OCI Registry (Harbor) entegrasyonunu, Docker Compose V2 bildirimsel orkestrasyonunu, gerçek hayat sorun giderme senaryolarını ve Port 19001 üzerinde çalışan çok katmanlı **NovaShop Final Capstone** projesini uygulamalı olarak öğretmek üzere yapılandırılmıştır.
 
 ---
 
-## Müfredat ve Laboratuvar Modülleri
+## Docker Motor Mimarisi ve Çalışma Modeli
 
-> **Eğitmen İçin Hızlandırılmış Rota (Fast-Track) Notu:**
-> İsminin başında **`*`** bulunan modüller, sıfırdan başlayan katılımcılar için eğitim süresinin (1.5 - 2 gün) kısıtlı olduğu durumlarda öncelikli olarak tamamlanması gereken **olmazsa olmaz çekirdek** laboratuvarlarıdır. İşaretsiz modüller (`00`, `01`, `10`) ise ön hazırlık, platform doğrulaması veya tamamlayıcı referans konulardır.
+Docker, istemci-sunucu (Client-Server) mimarisinde çalışır. Kullanıcının çalıştırdığı her komut doğrudan çekirdeğe değil, arka plandaki servis mimarisine iletilir:
 
-### 🛠️ 0. Altyapı Hazırlığı ve Docker Kurulumu
-| No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
-|:---:|:---|:---:|:---|:---:|
-| [**00**](00-linux-essentials/README.md) | [`00-linux-essentials`](00-linux-essentials/README.md) | Başlangıç | **Linux Ön Hazırlığı:** Paket, Servis, Multi-Port (`ss`), Kullanıcı/Sudo, Süreç (`htop`), 16 GB Swap ve Ağ/DNS Araçları | *Ön Hazırlık / Hızlı Kontrol* |
-| [**01**](01-docker-installation/README.md) | [`01-docker-installation`](01-docker-installation/README.md) | Başlangıç | Resmi Docker Engine, Buildx ve Compose V2 Mimarisi, Non-root İzni, `daemon.json` Log Rotasyonu | *Platform Doğrulama (Zaten Kurulu)* |
-
----
-
-### 🟢 1. Konteyner Çekirdek İş Yükleri ve İmaj Üretimi
-| No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
-|:---:|:---|:---:|:---|:---:|
-| [**`*` 02**](02-container-fundamentals/README.md) | [`02-container-fundamentals`](02-container-fundamentals/README.md) | Başlangıç - İleri | **Konteyner Temelleri:** Yaşam Döngüsü (`run`, `exec`, `logs`, port mapping), `docker cp` / `commit` ve CPU/RAM Sınırları & Exit Code 137 OOMKilled | **Çekirdek Zorunlu** |
-| [**`*` 03**](03-dockerfile-and-caching/README.md) | [`03-dockerfile-and-caching`](03-dockerfile-and-caching/README.md) | Temel - İleri | **Dockerfile Mimarisi:** Temel Direktifler, Katman Önbellekleme Optimizasyonu (BuildKit), Multi-Stage Build & Minimal İmajlar | **Çekirdek Zorunlu** |
-| [**`*` 04**](04-polyglot-app-dockerization/README.md) | [`04-polyglot-app-dockerization`](04-polyglot-app-dockerization/README.md) | Orta - İleri | **Çok Dilli Paketleme (Fast-Track: Node.js & Go Scratch):** Web runtime ve ultra hafif (~8MB) Go derlemesi. *(Python, Java, .NET, PHP, React referans)* | **Çekirdek Zorunlu** |
-
----
-
-### 🌐 2. Kalıcı Depolama, Ağ ve Registry (Storage & Networking)
-| No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
-|:---:|:---|:---:|:---|:---:|
-| [**`*` 05**](05-backup-restore-and-registry/README.md) | [`05-backup-restore-and-registry`](05-backup-restore-and-registry/README.md) | Orta - İleri | **Yedekleme ve Registry:** İmaj/Volume Yedekleme (`save`/`load`), Yerel `registry:2` (`5000`) ve Kurumsal Harbor Registry (`18444`) Push/Pull | **Çekirdek Zorunlu** |
-| [**`*` 06**](06-docker-networking/README.md) | [`06-docker-networking`](06-docker-networking/README.md) | Orta - İleri | **Ağ Sürücüleri ve İzolasyon:** Özel Bridge & Dahili DNS (`127.0.0.11`), Host & None Network, Çoklu Ağ DMZ Mimarisi | **Çekirdek Zorunlu** |
-| [**`*` 07**](07-docker-storage/README.md) | [`07-docker-storage`](07-docker-storage/README.md) | Orta - İleri | **Kalıcı Depolama Yönetimi:** Named Volume & Bind Mounts, Bellek İçi `tmpfs`, Volume İzinleri (UID/GID Mismatch) Çözümü | **Çekirdek Zorunlu** |
-
----
-
-### 📦 3. Çoklu Konteyner ve Orkestrasyon (Docker Compose V2)
-| No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
-|:---:|:---|:---:|:---|:---:|
-| [**`*` 08**](08-docker-compose-stacks/README.md) | [`08-docker-compose-stacks`](08-docker-compose-stacks/README.md) | Orta - İleri | **Bildirimsel Orkestrasyon:** Compose V2 Temelleri & Healthcheck, 3-Tier Web-API-DB Stack (`19001`), Profiller ve Çevre Değişkenleri | **Çekirdek Zorunlu** |
+```text
++─────────────────────────────────────────────────────────────────────────────+
+| DOCKER CLIENT (CLI)                                                         |
+| docker run / docker build / docker compose                                 |
++──────────────────────────────────────┬──────────────────────────────────────+
+                                       │ Unix Domain Socket (/var/run/docker.sock)
+                                       ▼
++─────────────────────────────────────────────────────────────────────────────+
+| DOCKER DAEMON (dockerd)                                                     |
+| - API Endpoint, Güvenlik, Ağ Yönetimi, İmaj Yönetimi                        |
++──────────────────────────────────────┬──────────────────────────────────────+
+                                       │ gRPC
+                                       ▼
++─────────────────────────────────────────────────────────────────────────────+
+| CONTAINER RUNTIME (containerd)                                              |
+| - OCI İmaj Dağıtımı, Snapshot Yönetimi (overlay2)                           |
++──────────────────────────────────────┬──────────────────────────────────────+
+                                       │ OCI Runtime Spec
+                                       ▼
++─────────────────────────────────────────────────────────────────────────────+
+| LOW-LEVEL RUNTIME (runc)                                                    |
+| - Linux Namespaces (PID, NET, IPC, MNT, UTS, USER)                          |
+| - Linux Control Groups (cgroups v2: CPU, Memory, I/O Limitleri)             |
+| - Linux Capabilities & Seccomp                                              |
++─────────────────────────────────────────────────────────────────────────────+
+```
 
 ---
 
-### 🔒 4. Kurumsal Güvenlik, Sertleştirme ve Zafiyet Analizi
-| No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
-|:---:|:---|:---:|:---|:---:|
-| [**`*` 09**](09-security-and-distroless/README.md) | [`09-security-and-distroless`](09-security-and-distroless/README.md) | İleri - Uzman | **Konteyner Sertleştirme:** Google Distroless & Non-Root Kullanıcı, Aqua Security Trivy CVE Taraması, Linux Capabilities Drop | **Çekirdek Zorunlu** |
+## Eğitim Metodolojisi ve Modül Mimarisi
+
+Müfredat, katılımcıların sınıf içi eğitim süresinde (1.5 - 2 gün) bilişsel aşırı yüklenme (cognitive overload) yaşamadan sağlam refleksler kazanmasını sağlayacak şekilde iki temel katmana ayrılmıştır:
+
+1. **Sınıf İçi Temel Eğitim Hattı (8 Sıralı Lab):** Sıfırdan başlayarak Docker Engine, CLI ısınma komutları, Dockerfile, Polyglot paketleme, Depolama, Ağ, Harbor ve Compose orkestrasyonunu doğrudan Capstone projesine bağlayan omurga.
+2. **İleri Seviye ve Tamamlayıcı Bonus Laboratuvarlar (6 Modül):** Erken bitiren, Linux altyapısını güçlendirmek isteyen, air-gapped ortamlarda offline yedekleme yapan, Trivy ile zafiyet tarayan, CI/CD pipeline'ı kurgulayan veya interaktif simülatörle arıza çözen katılımcılar için tasarlanmış bağımsız modüller.
 
 ---
 
-### 🚀 5. Sürekli Entegrasyon ve Dağıtım (CI/CD Pipelines)
-| No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
+## 1. Sınıf İçi Temel Eğitim Hattı (Sıralı 8 Lab)
+
+Tüm katılımcıların sınıfta eğitmen eşliğinde sırayla tamamlaması gereken çekirdek laboratuvarlar:
+
+| No | Laboratuvar Dizini | Seviye | Odak Konusu ve Uygulama | Açık Portlar |
 |:---:|:---|:---:|:---|:---:|
-| [**10**](10-cicd-container-pipelines/README.md) | [`10-cicd-container-pipelines`](10-cicd-container-pipelines/README.md) | İleri | **Konteyner Pipeline'ları (CI/CD):** GitHub Actions, GitLab CI ve Jenkins Entegrasyonu *(Bu konular bağımsız Jenkins ve GitLab modüllerinde detaylı işlenir)* | *Seçmeli / Crossover* |
+| **01** | [`lab-01-docker-engine-and-warmup`](lab-01-docker-engine-and-warmup/README.md) | Başlangıç | **Engine Doğrulama ve 8 Aşamalı CLI Isınma:** `run`, `-d`, `-p`, `ps`, `top`, `logs -f`, `exec -it`, `cp`, `diff`, `inspect`, `stats`, `stop`, `rm`, `prune`. | `8080`, `8081` |
+| **02** | [`lab-02-dockerfile-and-caching`](lab-02-dockerfile-and-caching/README.md) | Temel - Orta | **Dockerfile Mimarisi ve Önbellek:** BuildKit katman sırası, `COPY package*.json`, `.dockerignore`, Multi-Stage Build ile imaj küçültme. | `3000` |
+| **03** | [`lab-03-polyglot-app-dockerization`](lab-03-polyglot-app-dockerization/README.md) | Orta | **Çok Dilli Uygulama Paketleme:** Node.js, Go (Scratch ile 8MB ultra-küçük imaj), Python, Java, .NET, PHP ve React paketleme. | `3000`, `8080`, `5000` |
+| **04** | [`lab-04-storage-volumes-bind-mounts`](lab-04-storage-volumes-bind-mounts/README.md) | Orta | **Kalıcı Depolama Yönetimi:** Named Volume ile veritabanı kalıcılığı, geliştirici Bind Mounts (hot-reload), `tmpfs` ve UID/GID izinleri. | `5432`, `8080` |
+| **05** | [`lab-05-docker-networking-and-dns`](lab-05-docker-networking-and-dns/README.md) | Orta | **Konteyner Ağları ve DNS:** Custom bridge ağı, Dahili DNS (`127.0.0.11`), host/none ağları ve DMZ çift ağ izolasyonu. | `8080` |
+| **06** | [`lab-06-harbor-registry-and-images`](lab-06-harbor-registry-and-images/README.md) | Orta - İleri | **Harbor Registry ve İmaj Yaşam Döngüsü:** Semantik etiketleme, yerel `registry:2` (`5000`), kurumsal Harbor (`18444`), Robot Account, Tag Immutability ve Digest (`@sha256`). | `5000`, `18444` |
+| **07** | [`lab-07-docker-compose-orchestration`](lab-07-docker-compose-orchestration/README.md) | Orta - İleri | **Docker Compose V2 Orkestrasyonu:** Bildirimsel stack yönetimi, `.env`, `condition: service_healthy` zinciri, 3-Tier DMZ stack ve Voting App. | `8000`, `8080`, `5000` |
+| **08** | [`lab-08-capstone-and-troubleshooting`](lab-08-capstone-and-troubleshooting/README.md) | İleri - Uzman | **Büyük Final Capstone & Sorun Giderme:** Nginx Gateway (**Port 19001**), Hardened REST API, PostgreSQL 16, Redis 7, Secrets, cgroup limitleri + 3 Kritik Arıza Çözümü (Port conflict, PID 1 exit, OOMKilled 137). | `19001` (App1 Slotu) |
 
 ---
 
-### 🏆 6. Hata Ayıklama ve Bitirme Projesi (Challenge & Capstone)
-| No | Modül Klasörü | Seviye | Konu Başlığı ve Kapsam | Durum |
-|:---:|:---|:---:|:---|:---:|
-| [**`*` 11**](11-troubleshooting-challenge/README.md) | [`11-troubleshooting-challenge`](11-troubleshooting-challenge/README.md) | İleri | **Sorun Giderme Simülatörü:** Port Çakışması, Anında Kapanan Konteyner, OOMKilled (137), Volume Yetki Reddi ve Bridge DNS Kopukluğu | **Çekirdek Zorunlu** |
-| [**`*` 12**](12-final-capstone-project/README.md) | [`12-final-capstone-project`](12-final-capstone-project/README.md) | Uzman | **Büyük Final Projesi:** Nginx Gateway (`19001`) + Hardened REST API + PostgreSQL 16 + Redis 7 + Docker Secrets + Kaynak Sınırları ve Çift Ağ İzolasyonu | **Büyük Final** |
+## 2. İleri Seviye ve Tamamlayıcı Bonus Laboratuvarlar (6 Modül)
+
+Eğitimi erken bitiren, konuları derinleştirmek isteyen veya spesifik kurumsal ihtiyaçları olan katılımcılar için tamamlayıcı modüller:
+
+| No | Modül Dizini | Seviye | Odak Konusu ve Kapsam | Kullanım Amacı |
+|:---:|:---|:---:|:---|:---|
+| **BONUS-01** | [`bonus-labs/01-linux-essentials-and-swap`](bonus-labs/01-linux-essentials-and-swap/README.md) | Başlangıç | Paket yönetimi, port denetimi (`ss`), kullanıcı/sudo, `htop` ve OOM önleyici 16 GB Swap yapılandırması. | Linux hazırlığı ve donanım optimizasyonu |
+| **BONUS-02** | [`bonus-labs/02-backup-restore-disaster-recovery`](bonus-labs/02-backup-restore-disaster-recovery/README.md) | Orta | İmaj ve Named Volume yedekleme (`docker save/load`, `docker export/import`, helper pattern ile `.tar.gz`). | Air-gapped / internetsiz ortamlara aktarım |
+| **BONUS-03** | [`bonus-labs/03-security-distroless-trivy`](bonus-labs/03-security-distroless-trivy/README.md) | İleri | Google Distroless taban imajları, non-root zorunluluğu, Aqua Trivy CVE analizi ve Linux Capabilities drop (`--cap-drop=ALL`). | Kurumsal güvenlik ve DevSecOps |
+| **BONUS-04** | [`bonus-labs/04-cicd-container-pipelines`](bonus-labs/04-cicd-container-pipelines/README.md) | İleri | GitHub Actions, GitLab CI ve Jenkins üzerinde otomatik Docker derleme, Trivy taraması ve Registry push pipeline'ları. | CI/CD otomasyonu entegrasyonu |
+| **BONUS-05** | [`bonus-labs/05-interactive-troubleshooting-simulator`](bonus-labs/05-interactive-troubleshooting-simulator/README.md) | Orta - İleri | 5 senaryolu interaktif bash simülatörü (`troubleshoot-menu.sh`): Break, Diagnose, Remediate, Verify döngüsü. | Arıza teşhis ve pratik refleks geliştirme |
+| **BONUS-06** | [`bonus-labs/06-advanced-cgroups-oom-profiling`](bonus-labs/06-advanced-cgroups-oom-profiling/README.md) | İleri | Cgroups v2 çekirdek limitleri, bellek taşması simülasyonu, Exit Code 137 OOMKilled ve Tini init yöneticisi. | Çekirdek seviyesinde kaynak profilleme |
 
 ---
 
 ## Platform Port ve Servis Haritası
 
-Laboratuvar uygulamalarının çakışma yaşamadan çalışabilmesi için Azure VM üzerindeki port düzeni:
+Eğitim ortamında tüm laboratuvarların port çakışması yaşamadan çalışabilmesi için belirlenen standart port eşleştirmeleri:
 
 | Servis / Uygulama | Port | Protokol | Açıklama |
 |---|---|---|---|
-| **Nginx Master Reverse Proxy** | `80`, `443` | HTTP / HTTPS | Sunucu ana giriş noktası ve wildcard SSL |
+| **Nginx Master Reverse Proxy** | `80`, `443` | HTTP / HTTPS | Sunucu ana giriş kapısı ve SSL sonlandırma |
 | **Cockpit Web Terminal** | `9090` | HTTPS | Tarayıcı tabanlı Linux terminali |
-| **Docker Labs Capstone / App1** | `19001` | HTTP | **Lab 12 Capstone & Lab 08 3-Tier Gateway** |
-| **Docker Labs App2 Slotu** | `19002` | HTTP | Yedek mikroservis slotu |
-| **Docker Labs App3 Slotu** | `19003` | HTTP | Yedek mikroservis slotu |
-| **Harbor OCI Registry** | `18444` | HTTP | Kurumsal OCI image registry'si (`Lab 05`) |
-| **Yerel Registry:2** | `5000` | HTTP | Hafif test image registry'si (`Lab 05`) |
+| **NovaShop Final Capstone (Lab 08)** | `19001` | HTTP | **App1 Slotu** (Gateway -> Backend -> DB) |
+| **Harbor OCI Registry (Lab 06)** | `18444` | HTTP | Kurumsal Harbor OCI Registry arayüzü ve API |
+| **Yerel Docker Registry (Lab 06)** | `5000` | HTTP | Hafif `registry:2` konteyneri |
 | **Jenkins CI/CD** | `18080` | HTTP | Jenkins otomasyon sunucusu |
-| **SonarQube** | `19000` | HTTP | Statik kod analizi ve Quality Gate |
-| **GitLab CE** | `18929` | HTTP | SCM kaynak kod repository'si (GitLab) |
+| **SonarQube** | `19000` | HTTP | Kod kalite ve statik güvenlik kapısı |
+| **GitLab CE** | `18929` | HTTP | Kurumsal GitLab sunucusu |
 | **KinD K8s API** | `6443` | HTTPS | Yerel Kubernetes Control Plane API |
 
 ---
 
-## ⚡ Hızlı Başlangıç
+## Hızlı Başlangıç
 
-1. Sunucu kaynaklarını ve Docker motor durumunu doğrulayın:
+1. Docker motor durumunu ve Compose V2 sürümünü kontrol edin:
    ```bash
    docker version
    docker compose version
-   free -h
    ```
 
-2. Çekirdek rota üzerinden ilk zorunlu laboratuvara ([`02-container-fundamentals/01-container-lifecycle`](02-container-fundamentals/01-container-lifecycle/README.md)) geçin:
+2. Sınıf içi çekirdek hattın ilk laboratuvarına geçerek başlayın:
    ```bash
-   cd 02-container-fundamentals/01-container-lifecycle
+   cd lab-01-docker-engine-and-warmup
    cat README.md
    ```
 
-3. Her laboratuvar bitiminde oluşturulan konteynerleri durdurup temizleyin:
+3. Her laboratuvar tamamlandığında ilgili dizinde temizlik komutunu çalıştırın:
    ```bash
-   docker compose down -v 2>/dev/null || docker rm -f $(docker ps -q --filter "name=lab-") 2>/dev/null || true
+   # Compose kullanılan laboratuvarlar için:
+   docker compose down -v
+   
+   # Bağımsız konteynerler için:
+   docker rm -f <konteyner-adi>
    ```

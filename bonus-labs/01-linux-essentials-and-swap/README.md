@@ -1,4 +1,4 @@
-# LAB-DOC-00 — Temel Linux Becerileri, Sunucu Hazırlığı ve 16 GB Swap Yapılandırması
+# BONUS-DOC-01 — Temel Linux Becerileri, Sunucu Hazırlığı ve 16 GB Swap Yapılandırması
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |

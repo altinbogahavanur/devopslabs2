@@ -1,8 +1,8 @@
-# LAB-DOC-04 — Çok Dilli (Polyglot) Uygulama Paketleme (App Dockerization)
+# LAB-DOC-03 — Çok Dilli (Polyglot) Uygulama Paketleme Alıştırması
 
-| Seviye | Profil / Araçlar | Açık Portlar |
-| --- | --- | --- |
-| Orta - İleri | `multi-stage`, `scratch`, `node`, `python`, `go`, `java`, `dotnet`, `php` | 3000, 8000, 8080 |
+| Seviye | Tahmini Süre | Profil / Araçlar | Açık Portlar |
+| --- | --- | --- | --- |
+| Orta - İleri | 45 Dakika | `multi-stage`, `scratch`, `node`, `python`, `go`, `java`, `dotnet`, `php` | 3000, 8000, 8080 |
 
 > **Önemli Erişim Notu:** Başlattığınız mikroservisleri test ederken tarayıcınızdan `http://<SUNUCU-IP>:<PORT>` veya yerel terminalden `curl http://localhost:<PORT>` komutunu kullanabilirsiniz.
 
@@ -21,6 +21,7 @@ Bu laboratuvarın amacı; modern yazılım dünyasında en çok kullanılan **7 
 
 ## 2. Ön Koşullar
 
+* `lab-02-dockerfile-and-caching` tamamlanmış olmalıdır.
 * Docker Engine ve BuildKit aktif olmalıdır (`docker info`).
 * Host üzerinde `3000`, `8000` ve `8080` portları boşta olmalıdır.
 

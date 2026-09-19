@@ -1,4 +1,4 @@
-# LAB-DOC-09 — Konteyner Güvenliği, Sertleştirme ve Zafiyet Analizi
+# BONUS-DOC-03 — Konteyner Güvenliği, Google Distroless ve Trivy Zafiyet Analizi
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
