@@ -74,7 +74,7 @@ Geleneksel fat-JAR yönteminde 50 MB'lık uygulamanın 45 MB'ı kütüphane (dep
 
 ### Adım 1: Go Scratch Uygulamasını Derleme ve Çalıştırma
 ```bash
-cd ~/docker-labs/04-polyglot-app-dockerization/03-golang
+cd ~/docker-labs/lab-03-polyglot-app-dockerization/03-golang
 docker build -t go-app:v1 .
 docker images go-app:v1
 docker run -d --name go-demo -p 8080:8080 go-app:v1
@@ -83,7 +83,7 @@ curl http://localhost:8080/health
 
 ### Adım 2: Python FastAPI Uygulamasını Derleme ve Doğrulama
 ```bash
-cd ~/docker-labs/04-polyglot-app-dockerization/02-python
+cd ~/docker-labs/lab-03-polyglot-app-dockerization/02-python
 docker build -t py-app:v1 .
 docker run -d --name py-demo -p 8000:8000 py-app:v1
 docker exec py-demo whoami
@@ -92,7 +92,7 @@ curl http://localhost:8000/health
 
 ### Adım 3: Node.js Express Uygulamasını Derleme
 ```bash
-cd ~/docker-labs/04-polyglot-app-dockerization/01-nodejs
+cd ~/docker-labs/lab-03-polyglot-app-dockerization/01-nodejs
 docker build -t node-app:v1 .
 docker run -d --name node-demo -p 3000:3000 node-app:v1
 curl http://localhost:3000/health
