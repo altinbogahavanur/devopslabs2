@@ -14,3 +14,6 @@ node_modules/
 __pycache__/
 *.pyc
 target/
+
+# Bonus labs (temporary private / unpublished)
+bonus-labs/

@@ -1,8 +1,0 @@
-FROM python:3.12-alpine
-RUN apk add --no-cache tini
-WORKDIR /app
-COPY signal_app.py .
-ENV PYTHONUNBUFFERED=1
-ENV HANDLE_SIGTERM=true
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["python", "signal_app.py"]

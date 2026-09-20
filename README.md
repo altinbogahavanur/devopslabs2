@@ -53,19 +53,6 @@ Konteyner dünyasında cerrahi müdahale ve sorun giderme refleksleri kazandıra
 
 ---
 
-## Bonus Laboratuvarlar (bonus-labs)
-
-| Modül | Dizin | Konu ve Kapsam | Seviye | Temel Odak |
-|---|---|---|---|---|
-| [**BONUS-DOC-01**](bonus-labs/01-linux-essentials-and-swap/README.md) | [`bonus-labs/01-linux-essentials-and-swap`](bonus-labs/01-linux-essentials-and-swap/README.md) | Temel Linux Becerileri, Port Denetimi (`ss`) ve 16 GB Swap Yapılandırması | Başlangıç | `linux`, `apt`, `systemd`, `swap-16gb` |
-| [**BONUS-DOC-02**](bonus-labs/02-backup-restore-disaster-recovery/README.md) | [`bonus-labs/02-backup-restore-disaster-recovery`](bonus-labs/02-backup-restore-disaster-recovery/README.md) | İmaj ve Volume Yedekleme (`save`/`load`, `export`/`import`, `.tar.gz`) | Orta | `air-gapped`, `save-load`, `tar-helper` |
-| [**BONUS-DOC-03**](bonus-labs/03-security-distroless-trivy/README.md) | [`bonus-labs/03-security-distroless-trivy`](bonus-labs/03-security-distroless-trivy/README.md) | Konteyner Güvenliği: Google Distroless, Aqua Trivy CVE Taraması ve Cap Drop | İleri | `distroless`, `trivy`, `cap-drop` |
-| [**BONUS-DOC-04**](bonus-labs/04-cicd-container-pipelines/README.md) | [`bonus-labs/04-cicd-container-pipelines`](bonus-labs/04-cicd-container-pipelines/README.md) | CI/CD Konteyner Otomasyonu: GitHub Actions, GitLab CI ve Jenkins Entegrasyonu | İleri | `github-actions`, `gitlab-ci`, `pipelines` |
-| [**BONUS-DOC-05**](bonus-labs/05-interactive-troubleshooting-simulator/README.md) | [`bonus-labs/05-interactive-troubleshooting-simulator`](bonus-labs/05-interactive-troubleshooting-simulator/README.md) | 5 Senaryolu İnteraktif Bash Sorun Giderme Simülatörü (`troubleshoot-menu.sh`) | Orta / İleri | `break-fix`, `troubleshoot`, `simulator` |
-| [**BONUS-DOC-06**](bonus-labs/06-advanced-cgroups-oom-profiling/README.md) | [`bonus-labs/06-advanced-cgroups-oom-profiling`](bonus-labs/06-advanced-cgroups-oom-profiling/README.md) | Kaynak Sınırları, Cgroups v2, Bellek Taşması Profilleme ve Tini Init | İleri | `cgroups-v2`, `stress`, `oomkilled-137` |
-
----
-
 ## Platform Port Haritası
 
 | Servis Adı | Port | Erişim Yolu / URL | Açıklama |
