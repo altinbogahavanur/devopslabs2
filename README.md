@@ -31,6 +31,7 @@ Konteyner dünyasında cerrahi müdahale ve sorun giderme refleksleri kazandıra
 | [**PRATİK-DOC-01**](pratik-lablar/01-exec-ve-dosya-transferi/README.md) | [`pratik-lablar/01-exec-ve-dosya-transferi`](pratik-lablar/01-exec-ve-dosya-transferi/README.md) | `exec` ve `cp` İle Canlı Konteyner Teftişi ve Dosya Transferi | Başlangıç | `exec`, `cp-in`, `cp-out`, `hotfix` |
 | [**PRATİK-DOC-02**](pratik-lablar/02-log-ve-canli-teftis/README.md) | [`pratik-lablar/02-log-ve-canli-teftis`](pratik-lablar/02-log-ve-canli-teftis/README.md) | Log İnceleme (`-f`, `--tail`), Proses Dedektifliği (`top`) ve `inspect` | Temel | `logs`, `top`, `stats`, `inspect` |
 | [**PRATİK-DOC-03**](pratik-lablar/03-volume-ve-network-kontrol/README.md) | [`pratik-lablar/03-volume-ve-network-kontrol`](pratik-lablar/03-volume-ve-network-kontrol/README.md) | Volume ve Network İnceleme, Ağ İzolasyonu ve Dahili DNS İletişimi | Temel - Orta | `volumes`, `networks`, `dns-ping` |
+| [**PRATİK-DOC-04**](pratik-lablar/04-veri-kaliciligi-ve-volume-kurtarma/README.md) | [`pratik-lablar/04-veri-kaliciligi-ve-volume-kurtarma`](pratik-lablar/04-veri-kaliciligi-ve-volume-kurtarma/README.md) | Veri Kalıcılığı: Ephemeral vs Named Volume ile MySQL Kurtarma | Orta | `mysql`, `volume`, `data-recovery` |
 
 👉 **[Tüm Docker Pratik Lablar İndeksi](./pratik-lablar/README.md)**
 
