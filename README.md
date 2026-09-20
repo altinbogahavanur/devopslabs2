@@ -34,6 +34,7 @@ Docker, uygulamaları bağımlılıklarıyla birlikte işletim sistemi seviyesin
 | [**LAB-DOC-06**](lab-06-harbor-registry-and-images/README.md) | [`lab-06-harbor-registry-and-images`](lab-06-harbor-registry-and-images/README.md) | İmaj Yaşam Döngüsü, Yerel Registry:2 ve Kurumsal Harbor OCI Registry (18444) | Orta - İleri | `harbor`, `registry:2`, `tag-immutability` |
 | [**LAB-DOC-07**](lab-07-docker-compose-orchestration/README.md) | [`lab-07-docker-compose-orchestration`](lab-07-docker-compose-orchestration/README.md) | Docker Compose V2 Orkestrasyonu: .env, Healthcheck Zinciri ve 3-Tier Stack | Orta - İleri | `compose-v2`, `service_healthy`, `voting-app` |
 | [**LAB-DOC-08**](lab-08-capstone-and-troubleshooting/README.md) | [`lab-08-capstone-and-troubleshooting`](lab-08-capstone-and-troubleshooting/README.md) | NovaShop Capstone (Port 19001) ve 3 Kritik Gerçek Hayat Sorun Giderme Senaryosu | İleri / Bitirme | `novashop`, `gateway`, `oomkilled`, `ss` |
+| [**Eğlence & Araç Merkezi**](eglence-merkezi/README.md) | [`eglence-merkezi`](eglence-merkezi/README.md) | Docker Arcade & DevOps Toolbox (Tetris, IT-Tools, Excalidraw, 2048, FileBrowser) | Başlangıç / Pratik | `compose`, `cli-tools`, `excalidraw`, `tetris` |
 
 ---
 

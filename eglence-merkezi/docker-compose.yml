@@ -1,0 +1,58 @@
+services:
+  tetris:
+    image: bsord/tetris:latest
+    container_name: arcade-tetris
+    ports:
+      - "${TETRIS_PORT:-19001}:80"
+    restart: unless-stopped
+
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: devops-tools
+    ports:
+      - "${IT_TOOLS_PORT:-19002}:80"
+    restart: unless-stopped
+
+  excalidraw:
+    image: excalidraw/excalidraw:latest
+    container_name: local-excalidraw
+    ports:
+      - "${EXCALIDRAW_PORT:-19003}:80"
+    restart: unless-stopped
+
+  game-2048:
+    image: kubespheredev/2048:latest
+    container_name: arcade-2048
+    ports:
+      - "${GAME2048_PORT:-19004}:80"
+    restart: unless-stopped
+
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: devops-filebrowser
+    ports:
+      - "${FILEBROWSER_PORT:-19005}:80"
+    volumes:
+      - /home/student:/srv
+    restart: unless-stopped
+
+  whoami:
+    image: traefik/whoami:latest
+    container_name: debug-whoami
+    ports:
+      - "${WHOAMI_PORT:-19006}:80"
+    restart: unless-stopped
+
+  speedtest:
+    image: adolfintel/speedtest:latest
+    container_name: lab-speedtest
+    ports:
+      - "${SPEEDTEST_PORT:-19007}:80"
+    restart: unless-stopped
+
+  drawio:
+    image: jgraph/drawio:latest
+    container_name: local-drawio
+    ports:
+      - "${DRAWIO_PORT:-19008}:8080"
+    restart: unless-stopped
