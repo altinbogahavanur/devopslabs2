@@ -7,7 +7,7 @@ Bu pratik laboratuvarda, Docker log yönetiminin inceliklerini (`-f`, `--tail`, 
 ## 1. Test Konteynerini Başlatma
 
 ```bash
-docker run -d --name log-app -p 19002:80 nginx:alpine
+docker run -d --name log-app -p 19012:80 nginx:alpine
 ```
 
 ---
@@ -29,8 +29,8 @@ docker run -d --name log-app -p 19002:80 nginx:alpine
    LOG_PID=$!
 
    # İstek atarak logun düştüğünü görün:
-   curl -s http://localhost:19002 > /dev/null
-   curl -s http://localhost:19002/olmayan-sayfa > /dev/null
+   curl -s http://localhost:19012 > /dev/null
+   curl -s http://localhost:19012/olmayan-sayfa > /dev/null
 
    kill $LOG_PID
    ```

@@ -7,10 +7,10 @@ Bu pratik laboratuvarda, çalışan bir Nginx web konteynerinin içine interakti
 ## 1. Konteyneri Başlatma
 
 ```bash
-docker run -d --name lab-web -p 19001:80 nginx:alpine
+docker run -d --name lab-web -p 19011:80 nginx:alpine
 docker ps -f name=lab-web
 ```
-* Tarayıcınızdan `http://localhost:19001` (veya sunucu IP'niz) adresine gidin; varsayılan "Welcome to nginx!" sayfasını görün.
+* Tarayıcınızdan `http://localhost:19011` (veya sunucu IP'niz) adresine gidin; varsayılan "Welcome to nginx!" sayfasını görün.
 
 ---
 
@@ -47,7 +47,7 @@ docker cp ornek-hotfix.html lab-web:/usr/share/nginx/html/index.html
 
 Test edin:
 ```bash
-curl http://localhost:19001
+curl http://localhost:19011
 ```
 * Sayfanın anında değiştiğini ve servisin sıfır kesintiyle güncellendiğini doğrulayın!
 
