@@ -22,6 +22,20 @@ Docker, uygulamaları bağımlılıklarıyla birlikte işletim sistemi seviyesin
 
 ---
 
+## 🧪 Pratik Isınma ve Canlı Teftiş Laboratuvarları (pratik-lablar)
+
+Konteyner dünyasında cerrahi müdahale ve sorun giderme refleksleri kazandıran pratik laboratuvarlar:
+
+| Modül | Dizin | Konu ve Kapsam | Seviye | Temel Odak |
+|---|---|---|---|---|
+| [**PRATİK-DOC-01**](pratik-lablar/01-exec-ve-dosya-transferi/README.md) | [`pratik-lablar/01-exec-ve-dosya-transferi`](pratik-lablar/01-exec-ve-dosya-transferi/README.md) | `exec` ve `cp` İle Canlı Konteyner Teftişi ve Dosya Transferi | Başlangıç | `exec`, `cp-in`, `cp-out`, `hotfix` |
+| [**PRATİK-DOC-02**](pratik-lablar/02-log-ve-canli-teftis/README.md) | [`pratik-lablar/02-log-ve-canli-teftis`](pratik-lablar/02-log-ve-canli-teftis/README.md) | Log İnceleme (`-f`, `--tail`), Proses Dedektifliği (`top`) ve `inspect` | Temel | `logs`, `top`, `stats`, `inspect` |
+| [**PRATİK-DOC-03**](pratik-lablar/03-volume-ve-network-kontrol/README.md) | [`pratik-lablar/03-volume-ve-network-kontrol`](pratik-lablar/03-volume-ve-network-kontrol/README.md) | Volume ve Network İnceleme, Ağ İzolasyonu ve Dahili DNS İletişimi | Temel - Orta | `volumes`, `networks`, `dns-ping` |
+
+👉 **[Tüm Docker Pratik Lablar İndeksi](./pratik-lablar/README.md)**
+
+---
+
 ## Çekirdek Laboratuvarlar (lab-01 - lab-08)
 
 | Modül | Dizin | Konu ve Kapsam | Seviye | Temel Araçlar |
