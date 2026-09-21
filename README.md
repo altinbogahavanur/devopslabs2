@@ -10,7 +10,7 @@ Eğitmen sunumda her teorik bölümü tamamladığında, ilgili **LAB** slaytın
 
 | Sunum Slaytı | Sunum Bölümü / Başlığı | Uygulanacak Sınıf İçi Laboratuvar | Temel Pratik Çıktısı |
 |:---:|---|---|---|
-| **Slayt 01-40** | `Linux Fundamentals` (Temel Sistem Yönetimi) | [**\* LAB-00**](lab-00-linux/README.md) | Linux mimarisi, dosya sistemi, izinler (`rwx`), process & sinyaller, paket, disk, ağ |
+| **Ön Hazırlık** | `Linux Temelleri` (Sistem Yönetimi & Teftiş) | [**\* LAB-00**](lab-00-linux/README.md) | Donanım, CPU, RAM, disk, kullanıcı yönetimi, aktif servisler, loglar ve ağ teftişi |
 | **Slayt 14** | `LAB — İlk Container` | [**\* LAB-01**](lab-01-container-lifecycle-and-cli/README.md) | Nginx run, port eşleme (`8080:80`), stop, start, pause, curl testi |
 | **Slayt 32** | `LAB — LifeCycle & TroubleShooting` | [**\* LAB-02**](lab-02-live-debugging-and-logging/README.md) | `exec` ile kabuk açma, `logs`, `docker cp` ile canlı hotfix, `diff`, `inspect` |
 | **Slayt 50** | `LAB — Image Build` (Dockerfile Temelleri) | [**\* LAB-03**](lab-03-dockerfile-from-scratch/README.md) | Linux Terminali vs Dockerfile, `FROM`, `WORKDIR`, `COPY`, `CMD` vs `ENTRYPOINT` |
@@ -35,7 +35,7 @@ Eğitmen sunumda her teorik bölümü tamamladığında, ilgili **LAB** slaytın
 
 ```text
 docker-labs/
-├── * lab-00-linux/                            # [Slayt 01-40] Linux temelleri, izinler, process, disk, ağ
+├── * lab-00-linux/                            # [Ön Hazırlık] Linux temelleri, teftiş ve sistem yönetimi
 ├── * lab-01-container-lifecycle-and-cli/       # [Slayt 14] Yaşam döngüsü (run, pause, stop, kill, rm)
 ├── * lab-02-live-debugging-and-logging/        # [Slayt 32] Canlı teftiş (exec, cp hotfix, logs, inspect)
 ├── * lab-03-dockerfile-from-scratch/           # [Slayt 50] Sıfırdan Dockerfile: FROM, WORKDIR, COPY, CMD vs ENTRYPOINT
