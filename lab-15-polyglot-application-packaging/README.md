@@ -1,4 +1,6 @@
-# LAB-11: Polyglot Uygulama Paketleme Atölyesi (7 Farklı Yazılım Dili)
+# LAB-15: Polyglot Uygulama Paketleme Atölyesi (7 Farklı Yazılım Dili)
+
+> 📌 **Atölye / Pekiştirme:** Bu laboratuvar, temel Dockerfile ve çok aşamalı derleme mantığını farklı yazılım dillerinde (Go, Python, Node, React, Java, .NET, PHP) derinleştirmek için tamamlayıcı atölye olarak tasarlanmıştır.
 
 ## 🎯 Labın Amacı
 Farklı programlama dillerindeki uygulamaların **normal bir Linux sunucusunda elle nasıl kurulup çalıştırıldığını** ve bu geleneksel Linux adımlarının **Dockerfile direktiflerine satır satır nasıl uyarlandığını** kavramak; 7 popüler dili ana makineye tek bir kütüphane bile kurmadan izole şekilde paketlemek.
@@ -24,11 +26,18 @@ Tüm web tabanlı konteynerler sunucunuzdaki **App Slotları** ile tam uyumludur
 
 #### 🐧 Geleneksel Linux Sunucusunda Elle Ne Yapardık?
 ```bash
-# Linux terminalinde elle:
-python3 -m venv venv && source venv/bin/activate
+# 1. Sunucuda Python ve pip kurarsınız:
+sudo apt update && sudo apt install -y python3 python3-pip
+
+# 2. Çalışma klasörü açıp kodları atarsınız:
+mkdir -p /opt/app && cd /opt/app
+# (scp / rsync app.py requirements.txt /opt/app/)
+
+# 3. Bağımlılıkları yüklersiniz:
 pip install -r requirements.txt
-export PORT=5000
-python app.py
+
+# 4. Uygulamayı arka planda çalıştırırsınız:
+python3 app.py &
 ```
 
 #### 🐳 Dockerfile'da Nasıl Tanımladık?
@@ -45,7 +54,7 @@ CMD ["python", "app.py"]
 #### 💻 Uygulama Adımları:
 ```bash
 # 1. Adım: Python dizinine geçin:
-cd lab-11-polyglot-application-packaging/02-python
+cd lab-15-polyglot-application-packaging/02-python
 
 # 2. Adım: İmajı derleyin:
 docker build -t app-python:1.0 .

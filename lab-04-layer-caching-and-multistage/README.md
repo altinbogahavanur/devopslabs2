@@ -1,4 +1,6 @@
-# LAB-07: Dockerfile Optimizasyonu: Katman Önbellekleme (Layer Caching) ve Multi-Stage Build
+# * LAB-04: Dockerfile Optimizasyonu: Katman Önbellekleme (Layer Caching) ve Multi-Stage Build
+
+> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 50 (LAB — Image Build & Optimization)** optimizasyon aşamasında sınıfla birlikte uygulanır.
 
 ## 🎯 Labın Amacı
 Docker imaj derleme sürecini hızlandırmak ve nihai imaj boyutunu küçültmek;
@@ -34,7 +36,7 @@ COPY . .                  ──> Sadece değişen kaynak kod kopyalanır (0.2 s
 
 ### Adım 1: Caching Dizinine Geçin
 ```bash
-cd lab-07-image-size-reduction-and-multistage/caching
+cd lab-04-layer-caching-and-multistage/caching
 ```
 
 ### Adım 2: Kötü Sıralı İmajı İlk Kez Derleyin

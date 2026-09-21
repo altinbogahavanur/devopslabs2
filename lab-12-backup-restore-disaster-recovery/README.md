@@ -1,4 +1,6 @@
-# LAB-13: Felaket Kurtarma: İmaj ve Volume Yedekleme (Disaster Recovery)
+# * LAB-12: Felaket Kurtarma: İmaj ve Volume Yedekleme (Disaster Recovery)
+
+> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 66 (Backup/Restore Akışı)** sonrasında sınıfla birlikte uygulanır.
 
 ## 🎯 Labın Amacı
 İnternetsiz (air-gapped) ortamlara imaj taşımak için `docker save` ve `docker load` komutlarını kullanmak; üretim ortamında veri kaybını önlemek amacıyla geçici bir yardımcı (helper) konteyner ile Docker Named Volume'lerini sıkıştırılmış `.tar.gz` olarak yedeklemek ve sıfırdan geri yüklemek.

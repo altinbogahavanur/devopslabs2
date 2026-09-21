@@ -1,4 +1,6 @@
-# LAB-14: Kurumsal OCI Registry: Harbor Kurulumu, Public/Private Projeler ve Trivy Taraması
+# * LAB-13: Kurumsal OCI Registry: Harbor Kurulumu, Public/Private Projeler ve Trivy Taraması
+
+> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 20 (Registry Overview)** ve kurumsal imaj güvenliği aşamasında sınıfla birlikte uygulanır.
 
 ## 🎯 Labın Amacı
 Kurumsal ortamlarda konteyner depolama standardı olan **Harbor Enterprise OCI Registry** mimarisini kavramak; **Port 18444** üzerinde Harbor'ı kurmak veya doğrulamak, Cloudflare 100 MB sınırını aşmak için **yerel port (127.0.0.1:18444)** stratejisini uygulamak, Harbor üzerinde hem **Public** hem de **Private** projeler açmak, CI/CD için **Robot Account** oluşturmak, imaj push/pull işlemlerini test etmek, **Tag Immutability (Değiştirilemez Etiket)** ile sürüm üzerine yazılmasını engellemek ve Harbor'ın yerleşik **Trivy** motoruyla zafiyet taraması yapmak.
@@ -66,7 +68,7 @@ curl -I http://127.0.0.1:18444
 #### Seçenek B: Sıfırdan Harbor Kurulumu (Kendi Sunucunuzda)
 Dizindeki hazır kurulum betiğini çalıştırarak Harbor ve Trivy bileşenlerini tek adımda kurabilirsiniz:
 ```bash
-cd lab-14-enterprise-harbor-registry
+cd lab-13-enterprise-harbor-registry
 sudo bash ./install_harbor.sh
 ```
 

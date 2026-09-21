@@ -1,4 +1,6 @@
-# LAB-08: Konteyner Güvenliği: Non-Root, Distroless ve Trivy Zafiyet Taraması
+# * LAB-10: Konteyner Güvenliği: Non-Root, Distroless ve Trivy Zafiyet Taraması
+
+> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 79 (Runtime Hardening)** sonrasında sınıfla birlikte uygulanır.
 
 ## 🎯 Labın Amacı
 Üretim ortamlarında konteynerleri `root` olarak çalıştırmanın getirdiği güvenlik risklerini önlemek, `USER nonroot` direktifiyle en az ayrıcalık (least privilege) ilkesini uygulamak, Google **Distroless** imajları ile saldırı yüzeyini sıfırlamak (kabuksuz çalışma) ve **Trivy** güvenlik tarayıcısı ile imajlardaki CVE zafiyetlerini denetleyip CI/CD güvenlik kapısı (`--exit-code 1`) simülasyonu yapmak.
@@ -17,7 +19,7 @@
 Varsayılan olarak Dockerfile'lar `root` (UID 0) yetkisiyle çalışır:
 
 ```bash
-cd lab-08-distroless-and-nonroot-security/app
+cd lab-10-distroless-and-nonroot-security/app
 
 # 1. Güvensiz imajı derleyin:
 docker build -f Dockerfile.bad -t sec-demo:root .

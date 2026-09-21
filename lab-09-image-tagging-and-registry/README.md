@@ -1,4 +1,6 @@
-# LAB-09: İmaj Etiketleme ve Docker Hub (Public ve Private) Yayını
+# * LAB-09: İmaj Etiketleme ve Docker Hub (Public ve Private) Yayını
+
+> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 79-84 (Production & Registries)** bölümünde sınıfla birlikte uygulanır.
 
 ## 🎯 Labın Amacı
 Docker imajlarını semantik versiyonlama kurallarıyla etiketlemek (`docker tag`); **Docker Hub** üzerinde hem **Public (Herkese Açık)** hem de **Private (Gizli / Yetkili)** iki ayrı repository oluşturmak, imajları yüklemek (`docker push`), oturumsuz (anonim) ve oturumlu çekme (`docker pull`) farklarını uygulamalı olarak gözlemlemek ve yetkisiz çekme hatasını (`pull access denied`) doğrulamak.

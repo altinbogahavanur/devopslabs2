@@ -1,4 +1,6 @@
-# LAB-15: NovaShop Capstone ve Gerçek Hayat Sorun Giderme
+# * LAB-14: NovaShop Capstone ve Gerçek Hayat Sorun Giderme
+
+> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 84 (Production Troubleshooting & Incidents)** ve eğitim günü kapanışında capstone projesi olarak sınıfla birlikte uygulanır.
 
 ## 🎯 Labın Amacı
 Gerçekçi bir kurumsal mikroservis mimarisi olan **NovaShop** (Nginx Gateway -> Node.js Backend -> PostgreSQL DB + Docker Secrets) stack'ini çalıştırmak ve üretimde en sık karşılaşılan **3 kritik arıza senaryosunu** (Veritabanı bağlantı kopması, 502 Bad Gateway / Port uyuşmazlığı ve OOMKilled çökmesi) terminal başında dedektif gibi teşhis edip çözmek.
@@ -13,7 +15,7 @@ Gerçekçi bir kurumsal mikroservis mimarisi olan **NovaShop** (Nginx Gateway ->
 
 ### 1. Stack Mimarisi ve Başlatma
 ```bash
-cd lab-15-capstone-novashop-troubleshooting
+cd lab-14-capstone-novashop-troubleshooting
 
 # Stack'i derleyip arka planda başlatın:
 docker compose up -d --build

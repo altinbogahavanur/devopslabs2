@@ -1,4 +1,6 @@
-# LAB-01: Konteyner Yaşam Döngüsü ve Temel CLI
+# * LAB-01: Konteyner Yaşam Döngüsü ve Temel CLI
+
+> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 14 (LAB — İlk Container)** sonrasında sınıfla birlikte uygulanır.
 
 ## 🎯 Labın Amacı
 Docker Engine mimarisini doğrulamak ve konteynerlerin yaşam döngüsünü (`create`, `run`, `stop`, `start`, `restart`, `pause`, `unpause`, `kill`, `rm`, `prune`) uygulamalı olarak yönetmek.

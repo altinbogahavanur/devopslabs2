@@ -1,5 +1,7 @@
 # LAB-17: Docker ile SonarQube Kod Kalitesi ve Güvenlik Taraması (SAST)
 
+> 📌 **Atölye / Pekiştirme:** Bu laboratuvar, statik kod analizi (SAST) ve kod kalitesi süreçlerini sunucuya hiçbir şey kurmadan Docker CLI ile koşturmak isteyen öğrenciler için tamamlayıcı güvenlik atölyesidir.
+
 ## 🎯 Labın Amacı
 Ana makineye veya sunucuya Java, Maven veya yerel Sonar Scanner kurma zahmetine girmeden; doğrudan Docker üzerindeki resmi `sonarsource/sonar-scanner-cli` konteyneri ile kaynak kodları **Port 19000 SonarQube** sunucusuna taratmak, zafiyetleri (Vulnerabilities), kod kokularını (Code Smells) ve Kalite Kapısını (Quality Gate) incelemek.
 

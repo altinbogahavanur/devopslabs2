@@ -1,4 +1,6 @@
-# LAB-02: Canlı Konteyner Teftişi, Exec ve Log Yönetimi
+# * LAB-02: Canlı Konteyner Teftişi, Exec ve Log Yönetimi
+
+> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 32 (LAB — LifeCycle & TroubleShooting)** sonrasında sınıfla birlikte uygulanır.
 
 ## 🎯 Labın Amacı
 Çalışan bir konteynerin içine interaktif kabuk açmak (`exec`), canlı dosya kopyalayarak sıcak yama (hotfix) uygulamak (`cp`), dosya sistemi değişikliklerini listelemek (`diff`), zaman damgalı canlı log izlemek (`logs`) ve düşük seviye metadata sorgulamak (`inspect`).

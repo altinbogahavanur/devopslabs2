@@ -1,4 +1,6 @@
-# LAB-10: Docker Compose ile 3-Tier Mimari: Frontend, Backend, Database, Network ve Volume
+# * LAB-08: Docker Compose ile 3-Tier Mimari: Frontend, Backend, Database, Network ve Volume
+
+> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 76 (LAB — Docker Compose)** ileri aşamasında (Slayt 73 Healthcheck dahil) sınıfla birlikte uygulanır.
 
 ## 🎯 Labın Amacı
 Docker Compose ile modern bir kurumsal mikroservis yığınını (Stack) tek bir deklaratif dosya üzerinden ayağa kaldırmak; **Frontend**, **Backend**, **Database**, **İzole Ağlar (Network Segregation)** ve **Kalıcı Depolama (Named Volume)** bileşenlerini uygulamalı olarak kavramak.
@@ -50,7 +52,7 @@ Bu laboratuvarda kurulan sistem 4 konteyner, 2 izole ağ ve 1 kalıcı disk biri
 
 ### 1. Çalışma Dizinine Geçiş ve Dosyaları İnceleme
 ```bash
-cd lab-10-docker-compose-stack/03-3tier-web-api-db
+cd lab-08-docker-compose-stack/03-3tier-web-api-db
 
 # docker-compose.yaml dosyasındaki services, networks ve volumes bloklarını inceleyin:
 cat docker-compose.yaml

@@ -1,4 +1,6 @@
-# LAB-12: Kaynak Sınırlandırma (cgroups v2) ve OOMKilled Teşhisi
+# * LAB-11: Kaynak Sınırlandırma (cgroups v2) ve OOMKilled Teşhisi
+
+> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 79 (Runtime Resource Limits)** sonrasında sınıfla birlikte uygulanır.
 
 ## 🎯 Labın Amacı
 Üretim ortamında bir konteynerin kontrolsüz CPU ve bellek (RAM) tüketerek tüm sunucuyu kilitlemesini engellemek; Linux Kernel **Control Groups (cgroups v2)** ile kaynak kotaları koymak, kasıtlı bellek sızıntısı ile **Exit Code 137 (OOMKilled)** durumunu tetiklemek ve adli bilişim (forensic) teftişi yapmak.
@@ -27,7 +29,7 @@ docker stats --no-stream limited-nginx
 Lab dizinindeki Python uygulaması belleğe sürekli veri basarak kotayı aşmaya çalışır:
 
 ```bash
-cd lab-12-cgroups-resource-limits-and-oom/stress-app
+cd lab-11-cgroups-resource-limits-and-oom/stress-app
 cat stress.py
 ```
 
