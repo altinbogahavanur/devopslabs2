@@ -18,6 +18,22 @@ Dockerfile uzaydan gelen sihirli bir yapı değildir; **normal bir Linux sunucus
 | 5. Güvenlik duvarından port açarsınız (`ufw allow 3000`) | `EXPOSE 3000` | Konteynerin dinlediği port belgelemesi |
 | 6. Terminalden uygulamayı başlatırsınız (`node server.js`)| `CMD ["node", "server.js"]` | Konteyner ayağa kalktığında çalışan ana süreç |
 
+### 💡 Konsept Kartı: Node.js, Express ve npm Docker'da Nasıl Çalışır?
+Go gibi diller tek bir çalıştırılabilir ikili dosya (static binary) üretip `scratch` tabanında bile tek başına çalışabilirken; **Node.js yorumlanan (JIT)** bir dildir ve hem çalışma motoruna (`node`) hem de dış modül klasörüne (`node_modules`) ihtiyaç duyar.
+
+| Kavram | Gerçek Hayat Rolü | Konteyner İçindeki Karşılığı |
+| :--- | :--- | :--- |
+| **JavaScript** | Proje Planı | Yazdığınız kaynak kod dosyalarıdır (`server.js`). |
+| **Node.js** | Arabanın Motoru | V8 motoru; JS kodunu Linux işletim sisteminde çalıştıran ortamdır (`FROM node:20-alpine`). |
+| **npm** | Yedek Parça Kamyonu | Bağımlılıkları (`package.json`) internetten `node_modules` klasörüne indiren paket yöneticisidir. |
+| **Express** | Hazır Gövde / Şasi | Sıfırdan socket yazmak yerine REST API ve HTTP endpoint kurmayı sağlayan npm paketidir. |
+
+> [!TIP]
+> **Üretim Standartlarında 3 Altın Kural:**
+> 1. **`.dockerignore` Şarttır:** Ana makinedeki (Mac/Windows) `node_modules` asla konteynere kopyalanmamalıdır; işletim sistemi uyuşmazlığı nedeniyle uygulamayı çökertir.
+> 2. **`npm ci` Tercih Edilir:** İmaj derlerken `npm install` yerine `npm ci --only=production` kullanılır. `package-lock.json` dosyasına birebir sadık kalarak deterministik ve temiz kurulum sağlar.
+> 3. **`npm start` Yerine Doğrudan `node server.js`:** `npm start` süreci Linux sinyallerini (SIGTERM) içeri iletmez, konteyner `docker stop` yapıldığında 10 saniye takılıp zorla öldürülür (`SIGKILL`). Doğrudan `node` çağırmak zarif kapanma (graceful shutdown) sağlar.
+
 ---
 
 ## 📋 Ön Koşullar & Portlar

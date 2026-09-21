@@ -88,11 +88,10 @@ cat .dockerignore
 
 ## 🚀 2. BÖLÜM: Çok Aşamalı İmaj Derleme (Multi-Stage Build)
 
-### 💡 Zihinsel Model: Neden Derleyiciyi Taşımayalım?
-Go, Java, C#, Rust veya React uygulamalarında:
-- Kodu derlemek için ağır bir SDK gerekir (Go SDK ~800 MB).
-- Ancak derleme bittiğinde geriye sadece tek bir ikili dosya (binary) veya HTML/JS paketi kalır!
-- **Multi-Stage Build**, ilk aşamada (`AS builder`) derleme yapar; ikinci aşamada (`FROM alpine`) sadece üretilen dosyayı alıp derleyiciyi çöpe atar.
+### 💡 Zihinsel Model: Neden Derleyiciyi Taşımayalım? (Derlenen vs Yorumlanan Diller)
+- **Yorumlanan Diller (Node.js, Python, PHP):** Çalışmak için çalışma zamanına (`runtime`) ve harici kütüphane klasörüne (`node_modules`) bağımlıdır.
+- **Derlenen Diller (Go, Rust, C):** Kodu derlemek için ağır bir SDK gerekir (Go SDK ~800 MB). Ancak derleme bittiğinde geriye tüm kütüphaneleri içine gömmüş **tek bir statik ikili dosya (binary)** kalır!
+- **Multi-Stage Build Mantığı:** İlk aşamada (`AS builder`) devasa SDK içinde derleme yapılır; ikinci aşamada (`FROM alpine` veya `FROM scratch`) sadece üretilen küçücük binary taşınır ve 800 MB'lık derleyici çöpe atılır.
 
 ```text
 [AŞAMA 1: Builder] FROM golang:1.23-alpine (800 MB) ──> go build ile binary üret
