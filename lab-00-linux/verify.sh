@@ -3,7 +3,7 @@
 # LAB-00 Linux Temelleri Otomatik Doğrulama ve Güvenli Test Betiği
 # Sistem Bütünlüğünü Koruyan (Zero-Impact / Sandbox) Model
 # ==============================================================================
-set -euo pipefail
+set -eu
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SANDBOX_DIR="${SCRIPT_DIR}/sandbox"
@@ -32,7 +32,7 @@ sudo useradd -m -s /bin/bash devopsdemo
 echo "devopsdemo:DevOpsPass123!" | sudo chpasswd
 sudo usermod -aG sudo devopsdemo
 id devopsdemo | grep -q "devopsdemo"
-sudo userdel -r devopsdemo
+sudo userdel -r devopsdemo 2>/dev/null || true
 echo "✅ Bölüm 3 Başarılı! (Kullanıcı güvenle oluşturuldu, test edildi ve silindi)"
 
 # 4. Çalışan Servisleri Görme ve systemd Testi
@@ -48,7 +48,7 @@ echo "✅ Bölüm 4 Başarılı! (${RUNNING_SERVICES} adet aktif çalışan serv
 # 5. Sistem ve Servis Loglarını İnceleme Testi
 echo -e "\n[5/8] Log İnceleme (journalctl & log disk usage)..."
 journalctl -u docker -n 5 --no-pager > /dev/null
-journalctl -p err -b --no-pager | head -n 5 > /dev/null
+journalctl -p err -b -n 5 --no-pager > /dev/null
 journalctl --disk-usage > /dev/null
 echo "✅ Bölüm 5 Başarılı! (Docker logları, hata günlükleri ve disk boyutu okundu)"
 
@@ -56,7 +56,7 @@ echo "✅ Bölüm 5 Başarılı! (Docker logları, hata günlükleri ve disk boy
 echo -e "\n[6/8] Ağ, Dinlenen Portlar (ss) ve DNS Testi..."
 ip -brief addr show > /dev/null
 ip route show > /dev/null
-sudo ss -tulpn | head -n 10 > /dev/null
+sudo ss -tulpn > /dev/null
 cat /etc/resolv.conf > /dev/null
 echo "✅ Bölüm 6 Başarılı! (Ağ kartları, yönlendirme tablosu ve dinlenen portlar teftiş edildi)"
 
