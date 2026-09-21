@@ -58,7 +58,7 @@ cd ~/docker-labs/lab-15-polyglot-application-packaging/02-python
 docker build -t app-python:1.0 .
 
 # 3. Adım: Konteyneri App1 slotundan (19001) başlatın:
-docker run -d --name test-py -p 19001:5000 app-python:1.0
+docker run -d --name test-py -p 19001:8000 app-python:1.0
 
 # 4. Adım: Tarayıcıdan veya curl ile test edin:
 curl http://localhost:19001
