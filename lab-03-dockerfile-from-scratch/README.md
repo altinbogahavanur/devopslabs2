@@ -7,7 +7,7 @@ Geleneksel bir Linux sunucusuna SSH ile bağlanıp elle çalıştırdığımız 
 
 ## 💡 Temel Zihinsel Model: Linux Sunucusu vs Dockerfile
 
-Dockerfile uzaydan gelen sihirli bir yapı değildir; **normal bir Linux sunucusuna terminalden yazdığınız komutların satır satır otomasyonudur:**
+**Dockerfile, normal bir Linux sunucusuna terminalden yazdığınız komutların satır satır kod olarak altyapı (IaC) prensibiyle otomasyonudur:**
 
 | Normal Linux Sunucusunda (Elle Yapılan) | Dockerfile Direktifi (Konteyner - IaC) | Açıklama |
 |---|---|---|
@@ -18,21 +18,34 @@ Dockerfile uzaydan gelen sihirli bir yapı değildir; **normal bir Linux sunucus
 | 5. Güvenlik duvarından port açarsınız (`ufw allow 3000`) | `EXPOSE 3000` | Konteynerin dinlediği port belgelemesi |
 | 6. Terminalden uygulamayı başlatırsınız (`node server.js`)| `CMD ["node", "server.js"]` | Konteyner ayağa kalktığında çalışan ana süreç |
 
-### 💡 Konsept Kartı: Node.js, Express ve npm Docker'da Nasıl Çalışır?
-Go gibi diller tek bir çalıştırılabilir ikili dosya (static binary) üretip `scratch` tabanında bile tek başına çalışabilirken; **Node.js yorumlanan (JIT)** bir dildir ve hem çalışma motoruna (`node`) hem de dış modül klasörüne (`node_modules`) ihtiyaç duyar.
+---
 
-| Kavram | Gerçek Hayat Rolü | Konteyner İçindeki Karşılığı |
+### 1. Kavramların Rolleri ve Aralarındaki Farklar
+
+JavaScript, Node.js ve Express üçlüsünün Docker üzerindeki çalışma prensibi, Go gibi derlenen dillerden tamamen farklıdır. Go tek bir çalıştırılabilir ikili dosya (static binary) üretirken; Node.js yorumlanan (interpreted/JIT) bir dildir ve uygulamanın çalışması için kaynak kodların yanı sıra çalıştırma ortamına (runtime) ve kütüphane klasörüne (`node_modules`) ihtiyaç duyar.
+
+| Bileşen | Görevi | Konteyner İçindeki Rolü |
 | :--- | :--- | :--- |
-| **JavaScript** | Proje Planı | Yazdığınız kaynak kod dosyalarıdır (`server.js`). |
-| **Node.js** | Arabanın Motoru | V8 motoru; JS kodunu Linux işletim sisteminde çalıştıran ortamdır (`FROM node:20-alpine`). |
-| **npm** | Yedek Parça Kamyonu | Bağımlılıkları (`package.json`) internetten `node_modules` klasörüne indiren paket yöneticisidir. |
-| **Express** | Hazır Gövde / Şasi | Sıfırdan socket yazmak yerine REST API ve HTTP endpoint kurmayı sağlayan npm paketidir. |
+| **JavaScript** | Programlama dili | Yazdığınız mantık, fonksiyonlar ve dosyalardır (`server.js`). |
+| **Node.js** | Çalışma ortamı (Runtime Environment) | Konteyner içine kurulan V8 motorudur (`FROM node:20-alpine`). JS kodunu işletim sistemi üzerinde çalıştırır. |
+| **npm** | Paket yöneticisi (Node Package Manager) | Docker imajı derlenirken (`docker build`) dış kütüphaneleri (`node_modules`) indiren araçtır. |
+| **Express** | Web çatısı (Framework) | HTTP sunucusu kurmayı, route/endpoint yönetmeyi ve middleware kullanımını sağlayan npm paketidir. |
 
-> [!TIP]
-> **Üretim Standartlarında 3 Altın Kural:**
-> 1. **`.dockerignore` Şarttır:** Ana makinedeki (Mac/Windows) `node_modules` asla konteynere kopyalanmamalıdır; işletim sistemi uyuşmazlığı nedeniyle uygulamayı çökertir.
-> 2. **`npm ci` Tercih Edilir:** İmaj derlerken `npm install` yerine `npm ci --only=production` kullanılır. `package-lock.json` dosyasına birebir sadık kalarak deterministik ve temiz kurulum sağlar.
-> 3. **`npm start` Yerine Doğrudan `node server.js`:** `npm start` süreci Linux sinyallerini (SIGTERM) içeri iletmez, konteyner `docker stop` yapıldığında 10 saniye takılıp zorla öldürülür (`SIGKILL`). Doğrudan `node` çağırmak zarif kapanma (graceful shutdown) sağlar.
+---
+
+### 2. Node.js ve Express'in Docker Mimarisi
+Bir Node.js uygulaması Docker'da çalıştırılırken mimari şu sırayla işler:
+1. **Katmanlı İmaj (Base Image):** Temel olarak hafif bir Linux ve kurulu bir Node.js içeren imaj (`node:20-alpine`) kullanılır.
+2. **Bağımlılık İndirme (package.json):** `npm` kullanılarak Express ve diğer modüller konteyner katmanına (`node_modules`) indirilir.
+3. **Konteyner Süreci (Process):** `CMD ["node", "server.js"]` çağrıldığında, Node.js tek iş parçacıklı (single-threaded event loop) yapısıyla Linux çekirdeğinden bir port (örneğin 3000) dinlemeye başlar.
+4. **Port Yönlendirme:** Gelen HTTP istekleri Docker köprü ağı üzerinden Express uygulamasının dinlediği porta aktarılır.
+
+---
+
+### 3. Docker'da Node.js Çalıştırırken Bilinmesi Gereken Kritik Noktalar
+- **`.dockerignore` Şarttır:** Ana makinedeki `node_modules` klasörü asla Docker içine kopyalanmamalıdır. Çünkü Mac veya Windows üzerinde derlenen yerel C++ modülleri Linux konteynerinde çalışmaz. `.dockerignore` dosyasına mutlaka `node_modules` yazılmalıdır.
+- **`npm ci` vs `npm install`:** Konteyner derlerken `npm install` yerine `npm ci --only=production` kullanılır. Bu, `package-lock.json` dosyasına birebir sadık kalarak deterministik ve tutarlı sürümler yükler.
+- **`npm start` Yerine Doğrudan `node server.js`:** `CMD ["npm", "start"]` kullanıldığında, npm süreci sinyalleri (SIGTERM, SIGINT) düzgün iletmez. Konteyneri `docker stop` ile durdurmak istediğinizde 10 saniye bekleyip zorla öldürür (`SIGKILL`). Doğrudan `node server.js` çağırmak zarif kapanmayı (graceful shutdown) sağlar.
 
 ---
 
@@ -82,6 +95,12 @@ curl http://localhost:3001
 
 ### 5. Adım: CMD vs ENTRYPOINT Farkını Uygulamalı Olarak Kavrayın
 
+> 🎙️ **Slayt 42 & 43: CMD vs ENTRYPOINT Analizi:**
+> *"Mülakatların bir numaralı sorusu: 'CMD ile ENTRYPOINT arasındaki fark nedir?'  
+> Çok basit! **ENTRYPOINT** konteynerin sabit kimliğidir, ne yapacağını kesinleştirir.  
+> **CMD** ise ona verilen varsayılan parametredir; dışarıdan kolayca ezilebilir.  
+> Örneğin ENTRYPOINT'e `ping` yazarsanız, CMD'ye `google.com` dersiniz. Kullanıcı konteyneri çalıştırırken sonuna `yahoo.com` yazarsa CMD ezilir ama konteyner yine ping atmaya devam eder. ENTRYPOINT amiraldir, CMD emir eri!"*
+
 Docker'da en çok karıştırılan iki direktif arasındaki fark şudur:
 * **`CMD` (Varsayılan Komut):** Konteyner çalışırken ne yapılacağını söyler. Ancak kullanıcı `docker run` komutunun sonuna herhangi bir şey yazarsa, **CMD tamamen çöpe atılır** ve kullanıcının yazdığı yeni komut çalışır.
 * **`ENTRYPOINT` (Sabit Ana Program):** Konteyneri tek bir amaca hizmet eden bağımsız bir CLI aracına (örneğin `ping`, `python`, `node`) dönüştürür. Kullanıcı `docker run` sonuna ne yazarsa yazsın, ana komut **asla değişmez**, yazılanlar ana komutun arkasına **parametre** olarak eklenir.
@@ -102,16 +121,16 @@ docker run --rm my-node-api:1.0 echo 'CMD ezildi, Node yerine echo calisti'
 
 ---
 
-#### 🧪 Deney B: ENTRYPOINT + CMD Birlikte (Kurumsal Standart Kalıp)
+#### 🧪 Deney B: ENTRYPOINT + CMD Birlikte (Sabit Program + Değişebilir Parametre)
 Dizindeki `app/Dockerfile.entrypoint` dosyasını inceleyin:
 ```dockerfile
 FROM alpine:3.20
 ENTRYPOINT ["ping", "-c", "2"]
-CMD ["127.0.0.1"]
+CMD ["google.com"]
 ```
 Burada:
 - **Sabit Program (`ENTRYPOINT`):** `ping -c 2` (Konteyner her zaman ping atacaktır).
-- **Varsayılan Argüman (`CMD`):** `127.0.0.1` (Kullanıcı hedef belirtmezse yerel loopback pinglenir).
+- **Varsayılan Argüman (`CMD`):** `google.com` (Kullanıcı hedef belirtmezse varsayılan olarak google.com pinglenir).
 
 İmajı derleyip 2 farklı şekilde çalıştırarak farkı görün:
 
@@ -119,13 +138,14 @@ Burada:
 # 1. Adım: Entrypoint test imajını derleyin:
 docker build -f app/Dockerfile.entrypoint -t my-ping-tool:1.0 ./app
 
-# 2. Adım: Parametresiz çalıştırın (CMD devreye girer -> 127.0.0.1 pinglenir):
+# 2. Adım: Parametresiz çalıştırın (CMD devreye girer -> google.com pinglenir):
 docker run --rm my-ping-tool:1.0
-# Çıktı: PING 127.0.0.1 (127.0.0.1): 56 data bytes
+# Çıktı: PING google.com (142.250.x.x): 56 data bytes
 
-# 3. Adım: Sona hedef yazarak çalıştırın (CMD ezilir, ENTRYPOINT'e parametre olur):
-docker run --rm my-ping-tool:1.0 localhost
-# Çıktı: PING localhost (127.0.0.1): 56 data bytes
+# 3. Adım: Sona hedef yazarak çalıştırın (CMD ezilir, ENTRYPOINT sabit kalır):
+docker run --rm my-ping-tool:1.0 yahoo.com
+# Çıktı: PING yahoo.com (98.137.x.x): 56 data bytes
+# (Gözlem: CMD ezildi, ancak ENTRYPOINT amiral gibi sabit kalarak ping atmaya devam etti!)
 
 # 4. Adım: Peki ENTRYPOINT zorla ezilmek istenirse ne yapılır?
 # '--entrypoint' bayrağı ile ana program geçici olarak değiştirilebilir:

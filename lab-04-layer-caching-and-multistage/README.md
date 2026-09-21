@@ -70,7 +70,7 @@ docker build -f Dockerfile.optimized -t cache-demo:opt-v1 .
 echo '// Baska bir ozellik eklendi' >> server.js
 ```
 
-### Adım 7: Doğru Sıralı İmajı Tekrar Derleyin (Mucizevi Hızı Görün!)
+### Adım 7: Doğru Sıralı İmajı Tekrar Derleyin (Önbellekleme Hızını Gözlemleyin)
 ```bash
 docker build -f Dockerfile.optimized -t cache-demo:opt-v2 .
 ```

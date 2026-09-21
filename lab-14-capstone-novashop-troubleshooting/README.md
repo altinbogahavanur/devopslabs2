@@ -1,7 +1,7 @@
 # * LAB-14: NovaShop Capstone ve Gerçek Hayat Sorun Giderme
 
 ## 🎯 Labın Amacı
-Gerçekçi bir kurumsal mikroservis mimarisi olan **NovaShop** (Nginx Gateway -> Node.js Backend -> PostgreSQL DB + Docker Secrets) stack'ini çalıştırmak ve üretimde en sık karşılaşılan **3 kritik arıza senaryosunu** (Veritabanı bağlantı kopması, 502 Bad Gateway / Port uyuşmazlığı ve OOMKilled çökmesi) terminal başında dedektif gibi teşhis edip çözmek.
+Gerçekçi bir kurumsal mikroservis mimarisi olan **NovaShop** (Nginx Gateway -> Node.js Backend -> PostgreSQL DB + Docker Secrets) stack'ini çalıştırmak ve üretimde en sık karşılaşılan **3 kritik arıza senaryosunu** (Veritabanı bağlantı kopması, 502 Bad Gateway / Port uyuşmazlığı ve OOMKilled çökmesi) terminal başında adım adım teşhis edip çözmek.
 
 ## 📋 Ön Koşullar & Portlar
 - Docker Engine ve Docker Compose v2 kurulu olmalıdır.

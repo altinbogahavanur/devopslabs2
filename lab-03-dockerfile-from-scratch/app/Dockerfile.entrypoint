@@ -6,5 +6,5 @@ FROM alpine:3.20
 # 1. Sabit ana program: Kullanıcı dışarıdan ne yazarsa yazsın 'ping -c 2' sabit kalır
 ENTRYPOINT ["ping", "-c", "2"]
 
-# 2. Varsayılan argüman: Kullanıcı bir hedef belirtmezse varsayılan olarak '127.0.0.1' pinglenir
-CMD ["127.0.0.1"]
+# 2. Varsayılan argüman: Kullanıcı bir hedef belirtmezse varsayılan olarak 'google.com' pinglenir
+CMD ["google.com"]
