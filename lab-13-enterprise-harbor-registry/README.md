@@ -36,22 +36,30 @@ Kurumsal ortamlarda konteyner depolama standardı olan **Harbor Enterprise OCI R
 
 ## 🚀 Adım Adım Uygulama
 
-### Adım 1: Docker Daemon'ı Yerel HTTP Registry İçin Yapılandırın
-Harbor yerel HTTP modunda çalışırken Docker Daemon'ın güvenli olmayan yerel registry'ye izin vermesi gerekir:
+### Adım 1: Docker Daemon ve Alan Adı (FQDN) Yapılandırması
+
+> [!IMPORTANT]
+> **Harbor Hostname Kuralı:**  
+> Harbor'ın `prepare` doğrulama motoru `hostname` alanında `127.0.0.1` veya `localhost` kullanımına izin vermez (`ERROR:root:127.0.0.1 can not be the hostname`). Bu nedenle kurumsal alan adı (`harbor.devopsatolyesi.com`) tanımlanır ve yerel çözümleme için `/etc/hosts` içine eklenir.
 
 ```bash
-# Lab çalışma dizinine geçin:
+# 1. Lab çalışma dizinine geçin:
 cd ~/docker-labs/lab-13-enterprise-harbor-registry
 
-# /etc/docker/daemon.json dosyasını yapılandırın:
+# 2. Yerel alan adını /etc/hosts dosyasına ekleyin (eğer yoksa):
+if ! grep -q "harbor.devopsatolyesi.com" /etc/hosts; then
+  echo "127.0.0.1 harbor.devopsatolyesi.com" | sudo tee -a /etc/hosts
+fi
+
+# 3. /etc/docker/daemon.json dosyasını yapılandırın:
 sudo mkdir -p /etc/docker
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
-  "insecure-registries": ["127.0.0.1:18444", "localhost:18444"]
+  "insecure-registries": ["harbor.devopsatolyesi.com:18444", "127.0.0.1:18444", "localhost:18444"]
 }
 EOF
 
-# Değişikliğin geçerli olması için Docker'ı yeniden yükleyin:
+# 4. Değişikliğin geçerli olması için Docker'ı yeniden yükleyin:
 sudo systemctl reload docker 2>/dev/null || true
 ```
 

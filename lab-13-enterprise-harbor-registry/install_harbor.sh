@@ -38,23 +38,27 @@ echo "===> harbor.yml hazırlanıyor (HTTP Port: ${HARBOR_PORT})..."
 cd "${INSTALL_DIR}"
 sudo cp harbor.yml.tmpl harbor.yml
 
-# Hostname ve HTTP port ayarı
-sudo sed -i "s|reg.mydomain.com|127.0.0.1|g" harbor.yml
+# Hostname ayarı (Harbor prepare IP kullanımına izin vermez, FQDN gereklidir)
+HARBOR_DOMAIN="harbor.devopsatolyesi.com"
+sudo sed -i "s|^hostname: .*|hostname: ${HARBOR_DOMAIN}|g" harbor.yml
 sudo sed -i "s|port: 80|port: ${HARBOR_PORT}|g" harbor.yml
 sudo sed -i "s|harbor_admin_password: .*|harbor_admin_password: Harbor12345|g" harbor.yml
 
-# HTTPS bloğunu devre dışı bırakma (Yerel HTTP kullanımı için)
-sudo sed -i 's|^https:|#https:|' harbor.yml
-sudo sed -i 's|^  port: 443|#  port: 443|' harbor.yml
-sudo sed -i 's|^  certificate:|#  certificate:|' harbor.yml
+# HTTPS bloğunu devre dışı bırakma (SSL sonlandırma yerel veya Nginx tarafından yapılır)
+sudo sed -i '/^https:/,/^  certificate:/ s/^/#/' harbor.yml
 sudo sed -i 's|^  private_key:|#  private_key:|' harbor.yml
+
+# /etc/hosts içine yerel alan adı çözümlemesini ekleyin
+if ! grep -q "${HARBOR_DOMAIN}" /etc/hosts; then
+    echo "127.0.0.1 ${HARBOR_DOMAIN}" | sudo tee -a /etc/hosts
+fi
 
 # 4. Docker Daemon Insecure Registry Tanımlama
 echo "===> /etc/docker/daemon.json güncelleniyor..."
 sudo mkdir -p /etc/docker
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
-  "insecure-registries": ["127.0.0.1:${HARBOR_PORT}", "localhost:${HARBOR_PORT}"]
+  "insecure-registries": ["${HARBOR_DOMAIN}:${HARBOR_PORT}", "127.0.0.1:${HARBOR_PORT}", "localhost:${HARBOR_PORT}"]
 }
 EOF
 sudo systemctl reload docker 2>/dev/null || true
