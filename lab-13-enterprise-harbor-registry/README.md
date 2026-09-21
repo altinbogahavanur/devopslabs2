@@ -30,7 +30,7 @@ Kurumsal ortamlarda konteyner depolama standardı olan **Harbor Enterprise OCI R
 > **Neden Web için Domain, CLI Push için Lokal Port (18444)?**  
 > Cloudflare ücretsiz/standart proxy katmanında **maksimum HTTP request body boyutu 100 MB** ile sınırlıdır. Docker katmanları (`layer`) 150 MB veya 500 MB boyutlarına ulaştığında Cloudflare `413 Request Entity Too Large` hatası verir.  
 > **Kurumsal Çözüm:**  
-> - 🌐 **Web Arayüzü Erişimi (Tarayıcı):** `https://student100-harbor.devopsatolyesi.com/` (veya `https://studentXX-harbor.devopsatolyesi.com/` ya da `http://<SUNUCU-IP>:18444`). Cloudflare Wildcard SSL sertifikası ve Nginx ters proxy arkasından güvenle kullanılır.  
+> - 🌐 **Web Arayüzü Erişimi (Tarayıcı):** `https://student101-harbor.devopsatolyesi.com/` (veya `https://studentXX-harbor.devopsatolyesi.com/` ya da `http://<SUNUCU-IP>:18444`). Cloudflare Wildcard SSL sertifikası ve Nginx ters proxy arkasından güvenle kullanılır.  
 > - 🐳 **Docker CLI Push / Pull Erişimi (Terminal):** Sunucu içindeki yerel port olan `127.0.0.1:18444` üzerinden yürütülür. Böylece hiçbir proxy/boyut kısıtına takılmadan devasa imajlar dahi doğrudan depoya aktarılır.
 
 ---
@@ -99,7 +99,7 @@ docker ps --filter "name=harbor" --format "table {{.Names}}\t{{.Status}}\t{{.Por
 
 ### Adım 3: Harbor Web Arayüzüne Giriş ve Projeleri Açma
 
-1. Tarayıcınızdan **`https://student100-harbor.devopsatolyesi.com/`** (veya yerel test için `http://<SUNUCU-IP>:18444`) adresine gidin.
+1. Tarayıcınızdan **`https://student101-harbor.devopsatolyesi.com/`** (veya `https://studentXX-harbor.devopsatolyesi.com/` ya da yerel test için `http://<SUNUCU-IP>:18444`) adresine gidin.
 2. Giriş yapın:
    - **Kullanıcı:** `admin`
    - **Parola:** `Harbor12345`
