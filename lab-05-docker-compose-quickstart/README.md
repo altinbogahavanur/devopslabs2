@@ -37,11 +37,10 @@ Konteynerlerin çalıştığını ve portların eşlendiğini kontrol edin:
 docker compose ps
 ```
 
-### 5. Adım: Canlı Logları Takip Edin
-Veritabanının hazır hale geldiğini ve WordPress'in bağlandığını izleyin:
+### 5. Adım: Veritabanı ve Servis Loglarını İnceleyin
+Veritabanının hazır hale geldiğini ve bağlantıları kabul ettiğini loglardan denetleyin:
 ```bash
-docker compose logs -f db &
-sleep 8 && kill %1
+docker compose logs --tail 30 db
 ```
 
 ### 6. Adım: Web Arayüzünü Test Edin

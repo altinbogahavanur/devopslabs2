@@ -1,155 +1,206 @@
-# LAB-09: İmaj Etiketleme, Docker Hub (Public/Private) ve Yerel Registry
+# LAB-09: İmaj Etiketleme ve Docker Hub (Public ve Private) Yayını
 
 ## 🎯 Labın Amacı
-Docker imajlarını semantik versiyonlama ile etiketlemek (`docker tag`); **Docker Hub** üzerinde hem **Public** (herkese açık) hem de **Private** (gizli/yetkili) imaj yayınlamak, yetkisiz çekme hatasını (`access denied`) gözlemlemek, token ile giriş yaparak imajı çekip çalıştırmak ve kurumsal yerel registry (`registry:2`) mantığını kavramak.
+Docker imajlarını semantik versiyonlama kurallarıyla etiketlemek (`docker tag`); **Docker Hub** üzerinde hem **Public (Herkese Açık)** hem de **Private (Gizli / Yetkili)** iki ayrı repository oluşturmak, imajları yüklemek (`docker push`), oturumsuz (anonim) ve oturumlu çekme (`docker pull`) farklarını uygulamalı olarak gözlemlemek ve yetkisiz çekme hatasını (`pull access denied`) doğrulamak.
+
+---
 
 ## 📋 Ön Koşullar & Portlar
 - Docker Engine çalışır durumda olmalıdır.
-- Ücretsiz bir Docker Hub hesabı (veya yerel test için port 5000).
+- Ücretsiz bir [Docker Hub](https://hub.docker.com) hesabı.
+- Docker Hub hesabınızda oluşturulmuş `Read & Write` yetkili bir **Personal Access Token (PAT)** (veya hesap şifreniz).
+- Host üzerinde **8085** ve **8086** portları test için boşta olmalıdır.
+
+---
+
+## 🏛️ Mimari ve Çalışma Modeli
+
+```text
+[starter/Dockerfile + index.html]
+              │
+              ▼
+  docker build: dockerhub-access-lab:1.0.0
+              │
+              ├───────────────────────────────────────────┐
+              ▼                                           ▼
+  <kullanici>/dockerhub-access-lab-public      <kullanici>/dockerhub-access-lab-private
+              │                                           │
+      [HERKESE AÇIK]                              [GİZLİ / KORUMALI]
+              │                                           │
+  - docker logout                             - docker logout
+  - docker pull: ✅ BAŞARILI                   - docker pull: 🛑 ACCESS DENIED!
+                                              - docker login
+                                              - docker pull: ✅ BAŞARILI
+```
 
 ---
 
 ## 🚀 Adım Adım Uygulama
 
-### 1. Basit Bir Test Uygulaması ve İmaj Derleme
-Önce yayınlayacağımız hafif bir test imajı oluşturalım:
+### Adım 1: Çalışma Dizinine Geçin ve İmajı Derleyin
+Lab dizinine geçip `starter` klasöründeki dosyalarla yerel bir test imajı derleyin:
 
 ```bash
-mkdir -p /tmp/registry-demo && cd /tmp/registry-demo
+cd lab-09-image-tagging-and-registry
 
-# 1. Basit bir HTML sayfası hazırlayın:
-echo "<h1>DevOps Registry Egitimi - v1.0.0</h1>" > index.html
+# 1. Başlangıç dosyalarını inceleyin:
+cat starter/Dockerfile
+cat starter/index.html
 
-# 2. Minimal Nginx Dockerfile oluşturun:
-cat <<'EOF' > Dockerfile
-FROM nginx:alpine
-COPY index.html /usr/share/nginx/html/index.html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-EOF
+# 2. Yerel imajı derleyin:
+docker build -t dockerhub-access-lab:1.0.0 starter/
 
-# 3. İmajı yerelde derleyin:
-docker build -t hello-registry:1.0.0 .
+# 3. İmajın çalıştığını hızlıca test edin:
+docker run --rm dockerhub-access-lab:1.0.0 cat /usr/share/nginx/html/index.html
+```
+*(Son komutta HTML içeriğini görüyorsanız imajınız yayına hazırdır).*
+
+---
+
+### Adım 2: Docker Hub'da Public ve Private Repository Açın
+1. Tarayıcınızdan [hub.docker.com](https://hub.docker.com) adresine gidin ve giriş yapın.
+2. Sağ üstteki **Repositories → Create repository** butonuna tıklayın.
+3. **1. Repository:**
+   - Adı: `dockerhub-access-lab-public`
+   - Görünürlük: **Public** (Herkese Açık) seçin ve **Create** butonuna basın.
+4. Tekrar **Create repository** butonuna tıklayın:
+   - Adı: `dockerhub-access-lab-private`
+   - Görünürlük: **Private** (Gizli) seçin ve **Create** butonuna basın.
+
+---
+
+### Adım 3: Docker Hub'a Güvenli Giriş Yapın
+Terminalde kullanıcı adınızı ve erişim token'ınızı belirleyerek giriş yapın:
+
+```bash
+# Kullanıcı adınızı değişkene atayın:
+DOCKERHUB_USERNAME="<DOCKERHUB_KULLANICI_ADINIZ>"
+
+# Docker Hub'a oturum açın (Token veya şifrenizi girin):
+docker login --username "${DOCKERHUB_USERNAME}"
+```
+*Beklenen Çıktı: `Login Succeeded`*
+
+---
+
+### Adım 4: Public ve Private İmajları Etiketleyin
+Docker Hub'a imaj gönderebilmek için imaj adı `<kullanici_adi>/<repo_adi>:<etiket>` formatında olmalıdır:
+
+```bash
+# 1. Public imajı etiketleyin:
+docker tag dockerhub-access-lab:1.0.0 "${DOCKERHUB_USERNAME}/dockerhub-access-lab-public:1.0.0"
+
+# 2. Private imajı etiketleyin:
+docker tag dockerhub-access-lab:1.0.0 "${DOCKERHUB_USERNAME}/dockerhub-access-lab-private:1.0.0"
+
+# 3. Etiketleri listeleyin:
+docker images | grep dockerhub-access-lab
 ```
 
 ---
 
-### 2. AŞAMA: Docker Hub Public İmaj Yayını (Herkese Açık)
-
-#### Adım 1: Docker Hub Kullanıcı Adınızla Etiketleme
-Docker Hub'a imaj yüklemek için imaj adı `kullanici_adiniz/imaj_adi:etiket` formatında olmalıdır:
-
+### Adım 5: İmajları Docker Hub'a Gönderin (Push)
 ```bash
-DOCKERHUB_USER="<DOCKERHUB_KULLANICI_ADINIZ>"
+# 1. Public imajı gönderin:
+docker push "${DOCKERHUB_USERNAME}/dockerhub-access-lab-public:1.0.0"
 
-# İmajı etiketleyin:
-docker tag hello-registry:1.0.0 ${DOCKERHUB_USER}/hello-public:1.0.0
+# 2. Private imajı gönderin:
+docker push "${DOCKERHUB_USERNAME}/dockerhub-access-lab-private:1.0.0"
 ```
-
-#### Adım 2: Docker Hub'a Giriş ve Push
-```bash
-# Docker Hub'a oturum açın (Şifre veya Personal Access Token girin):
-docker login -u ${DOCKERHUB_USER}
-
-# Public imajı Docker Hub'a gönderin:
-docker push ${DOCKERHUB_USER}/hello-public:1.0.0
-```
-
-#### Adım 3: Şifresiz / Anonim Pull ve Çalıştırma
-Public repository'ler oturum açmadan herkes tarafından indirilebilir:
-```bash
-# 1. Yereldeki imajı tamamen silin:
-docker rmi ${DOCKERHUB_USER}/hello-public:1.0.0 hello-registry:1.0.0
-
-# 2. Docker oturumunu kapatın (Anonim duruma geçin):
-docker logout
-
-# 3. Şifresiz olarak Docker Hub'dan çekin ve çalıştırın:
-docker run -d --name public-app -p 8085:80 ${DOCKERHUB_USER}/hello-public:1.0.0
-
-# 4. Test edin:
-curl http://localhost:8085
-docker rm -f public-app
-```
+*(Her iki komutun sonunda katmanların yüklendiğini ve digest değerinin basıldığını görün).*
 
 ---
 
-### 3. AŞAMA: Docker Hub Private İmaj Yayını (Gizli / Yetkili)
+### Adım 6: Yetkili Olarak Private İmajı Çekme Testi
+Oturumunuz açıkken yerel private imajı silip Docker Hub'dan çekmeyi deneyin:
 
-#### Adım 1: Docker Hub Arayüzünde Private Repo Açma
-1. Tarayıcıdan [hub.docker.com](https://hub.docker.com) adresine gidin.
-2. **Create Repository** butonuna tıklayın.
-3. Repository adını `hello-private` yapın ve görünürlüğü **Private** seçip kaydedin.
-
-#### Adım 2: İmajı Private Repo Adresine Etiketleyip Push Etme
-```bash
-# 1. Tekrar giriş yapın:
-docker login -u ${DOCKERHUB_USER}
-
-# 2. İmajı private repoya göre etiketleyin:
-docker tag ${DOCKERHUB_USER}/hello-public:1.0.0 ${DOCKERHUB_USER}/hello-private:1.0.0 2>/dev/null || \
-docker build -t ${DOCKERHUB_USER}/hello-private:1.0.0 .
-
-# 3. Push edin:
-docker push ${DOCKERHUB_USER}/hello-private:1.0.0
-```
-
-#### Adım 3: Yetkisiz İndirme Deneyi (Hata Alma)
 ```bash
 # 1. Yerel kopyayı silin:
-docker rmi ${DOCKERHUB_USER}/hello-private:1.0.0
+docker rmi "${DOCKERHUB_USERNAME}/dockerhub-access-lab-private:1.0.0"
 
-# 2. Oturumu kapatın:
+# 2. Yetkili oturum açıkken indirin:
+docker pull "${DOCKERHUB_USERNAME}/dockerhub-access-lab-private:1.0.0"
+```
+*Sonuç: Başarıyla indirilir.*
+
+---
+
+### Adım 7: Oturumu Kapatıp Anonim Public vs Private Farkını Kanıtlayın
+Burası laboratuvarın en kritik deneyidir:
+
+```bash
+# 1. Docker Hub oturumunu tamamen kapatın:
 docker logout
 
-# 3. Giriş yapmadan private imajı çekmeyi deneyin:
-docker pull ${DOCKERHUB_USER}/hello-private:1.0.0
-# BEKLENEN HATA: "pull access denied, repository does not exist or may require 'docker login'"
+# 2. Yereldeki her iki imajı da tamamen silin:
+docker rmi "${DOCKERHUB_USERNAME}/dockerhub-access-lab-public:1.0.0"
+docker rmi "${DOCKERHUB_USERNAME}/dockerhub-access-lab-private:1.0.0"
+
+# 3. Şifresiz / Anonim olarak PUBLIC imajı çekin:
+docker pull "${DOCKERHUB_USERNAME}/dockerhub-access-lab-public:1.0.0"
+# (SONUÇ: BAŞARILI! Public imajlar için login gerekmez).
+
+# 4. Şifresiz / Anonim olarak PRIVATE imajı çekmeyi deneyin:
+docker pull "${DOCKERHUB_USERNAME}/dockerhub-access-lab-private:1.0.0"
 ```
 
-#### Adım 4: Kimlik Doğrulama ile Çekme ve Çalıştırma
-```bash
-# Yetkili token ile giriş yapın:
-docker login -u ${DOCKERHUB_USER}
+🛑 **BEKLENEN GÜVENLİK ENGELİ:**
+```text
+Error response from daemon: pull access denied for <kullanici>/dockerhub-access-lab-private, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+```
+Docker Hub, private repository için kimlik doğrulama yapılmadığını görerek işlemi anında reddeder!
 
-# Şimdi çekin (Başarılı olacaktır):
-docker pull ${DOCKERHUB_USER}/hello-private:1.0.0
+---
+
+### Adım 8: Tekrar Giriş Yapıp Private İmajı Başlatın
+```bash
+# Tekrar giriş yapın:
+docker login --username "${DOCKERHUB_USERNAME}"
+
+# Şimdi private imajı başarıyla indirin:
+docker pull "${DOCKERHUB_USERNAME}/dockerhub-access-lab-private:1.0.0"
 
 # Konteyneri başlatıp test edin:
-docker run -d --name private-app -p 8086:80 ${DOCKERHUB_USER}/hello-private:1.0.0
+docker run -d --name private-test -p 8086:80 "${DOCKERHUB_USERNAME}/dockerhub-access-lab-private:1.0.0"
 curl http://localhost:8086
-docker rm -f private-app
 ```
 
 ---
 
-### 4. AŞAMA: Yerel Bağımsız Registry (registry:2) Mantığı
-İnternet veya Docker Hub kotasına takılmadan yerel ağda `localhost:5000` üzerinden hızlı imaj deposu:
+### Adım 9: (Opsiyonel) Yerel Bağımsız Registry (`registry:2`)
+Kurumsal ortamlarda Docker Hub kotasına takılmadan veya internet yokken yerel ağda imaj tutmak için standart `registry:2` kullanılır:
 
 ```bash
-# 1. Yerel hafif registry başlatın:
-docker run -d -p 5000:5000 --name local-reg registry:2
+# 1. Yerel registry konteynerini başlatın:
+docker run -d -p 5000:5000 --name local-registry registry:2
 
-# 2. İmajı yerel porta etiketleyip push edin:
-docker tag ${DOCKERHUB_USER}/hello-private:1.0.0 localhost:5000/my-app:1.0.0
-docker push localhost:5000/my-app:1.0.0
+# 2. İmajı localhost:5000 için etiketleyin:
+docker tag dockerhub-access-lab:1.0.0 localhost:5000/my-company-app:1.0.0
 
-# 3. Registry kataloğunu HTTP API ile sorgulayın:
+# 3. Yerel registry'ye yükleyin:
+docker push localhost:5000/my-company-app:1.0.0
+
+# 4. HTTP API ile registry kataloğunu sorgulayın:
 curl http://localhost:5000/v2/_catalog
-# Yanıt: {"repositories":["my-app"]}
+# Yanıt: {"repositories":["my-company-app"]}
 ```
 
 ---
 
 ## ✅ Doğrulama (Verification)
-- Public imajın `docker logout` sonrasında dahi çekilip çalıştığını görün.
-- Private imajın `docker logout` sonrasında `access denied` hatası verdiğini, `docker login` sonrasında başarıyla çekildiğini teyit edin.
+- `docker logout` yapıldığında `public` imajın sorunsuz indiğini, `private` imajın `access denied` hatası verdiğini bizzat test ettiniz.
+- `docker login` sonrasında private imajın başarıyla indirilip çalıştığını doğruladınız.
 
 ---
 
 ## 🧹 Temizlik
 ```bash
-docker rm -f local-reg 2>/dev/null || true
-docker rmi localhost:5000/my-app:1.0.0 2>/dev/null || true
-rm -rf /tmp/registry-demo
+# Çalışan test konteynerlerini durdurup silin:
+docker rm -f private-test local-registry 2>/dev/null || true
+
+# Yerel etiketleri silin:
+docker rmi "${DOCKERHUB_USERNAME}/dockerhub-access-lab-public:1.0.0" \
+  "${DOCKERHUB_USERNAME}/dockerhub-access-lab-private:1.0.0" \
+  localhost:5000/my-company-app:1.0.0 \
+  dockerhub-access-lab:1.0.0 2>/dev/null || true
 ```

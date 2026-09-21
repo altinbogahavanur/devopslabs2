@@ -52,15 +52,12 @@ docker diff debug-web
 
 ### 5. Canlı ve Zaman Damgalı Log İzleme
 ```bash
-# Son 20 satırı zaman damgalarıyla canlı akış modunda izleyin:
-docker logs -f --tail 20 -t debug-web &
-LOG_PID=$!
-
-# Ana makineden istek göndererek logların akışını gözlemleyin:
+# 1. Ana makineden istekler göndererek log üretin:
 curl -s http://localhost:8081 > /dev/null
+curl -s http://localhost:8081/test-sayfasi > /dev/null
 
-# Arka plandaki log takibini sonlandırın:
-kill $LOG_PID
+# 2. Son logları zaman damgalarıyla inceleyin:
+docker logs --tail 20 -t debug-web
 ```
 
 ### 6. Proses ve Kaynak Analizi (top & stats)

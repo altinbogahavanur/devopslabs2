@@ -20,7 +20,7 @@ docker run --name temp-container alpine sh -c "echo 'Kritik DB Verisi' > /data.t
 docker rm temp-container
 
 # 3. Yeni bir konteyner başlatıp dosyayı arayın:
-docker run --rm alpine cat /data.txt || echo "VERİ KAYBOLDU! (Volumesiz yazılan veriler konteynerle birlikte silinir)"
+docker run --rm alpine cat /data.txt || echo 'VERİ KAYBOLDU: Volumesiz yazılan veriler konteynerle birlikte silinir'
 ```
 
 ### 2. Canlı Geliştirme İçin Bind Mount
