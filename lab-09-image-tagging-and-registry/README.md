@@ -1,7 +1,7 @@
 # * LAB-09: İmaj Etiketleme ve Docker Hub (Public ve Private) Yayını
 
 ## 🎯 Labın Amacı
-Docker imajlarını kısa ve standart kurallarla etiketlemek (`docker tag`); **Docker Hub** üzerinde hem **Public (Herkese Açık)** hem de **Private (Gizli / Yetkili)** iki ayrı repository oluşturmak; imajları sırayla göndermek (`docker push`), çalıştırmak, lokalden silip tekrar çekmek (`docker pull`) ve yetkisiz çekme hatasını (`pull access denied`) uygulamalı olarak doğrulamak.
+Docker imajlarını ürün ve versiyon standartlarına uygun etiketlemek (`docker tag`); **Docker Hub** üzerinde hem **Public (Herkese Açık)** hem de **Private (Gizli / Yetkili)** iki ayrı repository oluşturmak; imajları sırayla göndermek (`docker push`), çalıştırmak, lokalden silip tekrar çekmek (`docker pull`) ve yetkisiz çekme hatasını (`pull access denied`) uygulamalı olarak doğrulamak.
 
 ---
 
@@ -17,19 +17,19 @@ Docker imajlarını kısa ve standart kurallarla etiketlemek (`docker tag`); **D
 
 | Repository Türü | Docker Hub Depo Adı | Örnek Tam İmaj Adı | Erişim Kuralı |
 | :--- | :--- | :--- | :--- |
-| **Public (Açık)** | `devops-app-pub` | `hbayraktar/devops-app-pub:1.0` | Herkes çekebilir (`docker logout` olsa bile). |
-| **Private (Gizli)** | `devops-app` | `hbayraktar/devops-app:1.0` | Sadece `docker login` yapmış yetkili hesap çekebilir. |
+| **Public (Açık)** | `devops-app-pub` | `hbayraktar/devops-app-pub:nginx-1.0` | Herkes çekebilir (`docker logout` olsa bile). |
+| **Private (Gizli)** | `devops-app` | `hbayraktar/devops-app:nginx-1.0` | Sadece `docker login` yapmış yetkili hesap çekebilir. |
 
 ```text
 [starter/Dockerfile + index.html]
               │
               ▼
-       devops-app:1.0
+    devops-app:nginx-1.0
               │
    ┌──────────┴─────────────────────────┐
    ▼                                    ▼
 1. BÖLÜM: PUBLIC                     2. BÖLÜM: PRIVATE
-hbayraktar/devops-app-pub:1.0        hbayraktar/devops-app:1.0
+hbayraktar/devops-app-pub:nginx-1.0  hbayraktar/devops-app:nginx-1.0
    │                                    │
    ├─ Push                              ├─ Push
    ├─ Run & Curl (8085)                 ├─ Run & Curl (8086)
@@ -55,8 +55,8 @@ cd ~/docker-labs/lab-09-image-tagging-and-registry
 cat starter/Dockerfile
 cat starter/index.html
 
-# 3. Adım: Yerel imajı derleyin:
-docker build -t devops-app:1.0 starter/
+# 3. Adım: Yerel imajı ürün ve sürüm etiketiyle derleyin:
+docker build -t devops-app:nginx-1.0 starter/
 
 # 4. Adım: İmajın derlendiğini teyit edin:
 docker images | grep devops-app
@@ -97,17 +97,17 @@ docker login --username "${DOCKERHUB_USERNAME}"
 ### Adım 4: Public İmajı Etiketleyin ve Docker Hub'a Gönderin (Push)
 ```bash
 # 1. Yerel imajı public repository için etiketleyin:
-docker tag devops-app:1.0 "${DOCKERHUB_USERNAME}/devops-app-pub:1.0"
+docker tag devops-app:nginx-1.0 "${DOCKERHUB_USERNAME}/devops-app-pub:nginx-1.0"
 
 # 2. Docker Hub'a gönderin:
-docker push "${DOCKERHUB_USERNAME}/devops-app-pub:1.0"
+docker push "${DOCKERHUB_USERNAME}/devops-app-pub:nginx-1.0"
 ```
-*(Docker Hub arayüzünde `devops-app-pub` reposuna gidip `1.0` etiketini görüntüleyin).*
+*(Docker Hub arayüzünde `devops-app-pub` reposuna gidip `nginx-1.0` etiketini görüntüleyin).*
 
 ### Adım 5: Konteyneri Çalıştırıp Test Edin
 ```bash
 # 1. Konteyneri 8085 portundan başlatın:
-docker run -d --name test-pub -p 8085:80 "${DOCKERHUB_USERNAME}/devops-app-pub:1.0"
+docker run -d --name test-pub -p 8085:80 "${DOCKERHUB_USERNAME}/devops-app-pub:nginx-1.0"
 
 # 2. HTTP yanıtını test edin:
 curl http://localhost:8085
@@ -119,13 +119,13 @@ curl http://localhost:8085
 docker rm -f test-pub
 
 # 2. Lokal imajı tamamen silin:
-docker rmi "${DOCKERHUB_USERNAME}/devops-app-pub:1.0"
+docker rmi "${DOCKERHUB_USERNAME}/devops-app-pub:nginx-1.0"
 
 # 3. İmajı doğrudan Docker Hub'dan tekrar çekin:
-docker pull "${DOCKERHUB_USERNAME}/devops-app-pub:1.0"
+docker pull "${DOCKERHUB_USERNAME}/devops-app-pub:nginx-1.0"
 
 # 4. İndirilen imajı çalıştırıp doğrulayın:
-docker run -d --name test-pub-pulled -p 8085:80 "${DOCKERHUB_USERNAME}/devops-app-pub:1.0"
+docker run -d --name test-pub-pulled -p 8085:80 "${DOCKERHUB_USERNAME}/devops-app-pub:nginx-1.0"
 curl http://localhost:8085
 
 # 5. Konteyneri temizleyin:
@@ -140,16 +140,16 @@ docker rm -f test-pub-pulled
 ### Adım 7: Private İmajı Etiketleyin ve Docker Hub'a Gönderin (Push)
 ```bash
 # 1. Yerel imajı private repository için etiketleyin:
-docker tag devops-app:1.0 "${DOCKERHUB_USERNAME}/devops-app:1.0"
+docker tag devops-app:nginx-1.0 "${DOCKERHUB_USERNAME}/devops-app:nginx-1.0"
 
 # 2. Docker Hub'a gönderin (Oturumunuz açık olduğu için yetkiyle yüklenir):
-docker push "${DOCKERHUB_USERNAME}/devops-app:1.0"
+docker push "${DOCKERHUB_USERNAME}/devops-app:nginx-1.0"
 ```
 
 ### Adım 8: Konteyneri Çalıştırıp Test Edin
 ```bash
 # 1. Konteyneri 8086 portundan başlatın:
-docker run -d --name test-priv -p 8086:80 "${DOCKERHUB_USERNAME}/devops-app:1.0"
+docker run -d --name test-priv -p 8086:80 "${DOCKERHUB_USERNAME}/devops-app:nginx-1.0"
 
 # 2. HTTP yanıtını test edin:
 curl http://localhost:8086
@@ -160,8 +160,8 @@ curl http://localhost:8086
 # 1. Test konteynerini silin:
 docker rm -f test-priv
 
-# 2. Lokal private imajı tamamen silin:
-docker rmi "${DOCKERHUB_USERNAME}/devops-app:1.0"
+# 2. Lokal private imajları tamamen silin:
+docker rmi "${DOCKERHUB_USERNAME}/devops-app:nginx-1.0" devops-app:nginx-1.0
 
 # 3. Docker Hub oturumunu tamamen kapatın:
 docker logout
@@ -172,14 +172,14 @@ docker logout
 Oturum kapalıyken gizli depodan imaj indirmeye çalışın:
 
 ```bash
-docker pull "${DOCKERHUB_USERNAME}/devops-app:1.0"
+docker pull "${DOCKERHUB_USERNAME}/devops-app:nginx-1.0"
 ```
 
 🛑 **BEKLENEN GÜVENLİK ENGELİ:**
 ```text
 Error response from daemon: pull access denied for hbayraktar/devops-app, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
 ```
-*(Gözlem: Repository gizli olduğu için Docker Hub indirmeye izin vermedi).*
+*(Gözlem: Repository gizli olduğu için Docker Hub anonim indirmeye izin vermedi).*
 
 ### Adım 11: Tekrar Giriş Yapın, Private İmajı İndirin ve Çalıştırın
 ```bash
@@ -187,10 +187,10 @@ Error response from daemon: pull access denied for hbayraktar/devops-app, reposi
 docker login --username "${DOCKERHUB_USERNAME}"
 
 # 2. Şimdi private imajı sorunsuz indirin:
-docker pull "${DOCKERHUB_USERNAME}/devops-app:1.0"
+docker pull "${DOCKERHUB_USERNAME}/devops-app:nginx-1.0"
 
 # 3. Konteyneri başlatıp çalıştığını teyit edin:
-docker run -d --name test-priv-pulled -p 8086:80 "${DOCKERHUB_USERNAME}/devops-app:1.0"
+docker run -d --name test-priv-pulled -p 8086:80 "${DOCKERHUB_USERNAME}/devops-app:nginx-1.0"
 curl http://localhost:8086
 ```
 
@@ -208,7 +208,6 @@ curl http://localhost:8086
 docker rm -f test-priv-pulled 2>/dev/null || true
 
 # Yerel test imajlarını temizleyin:
-docker rmi "${DOCKERHUB_USERNAME}/devops-app-pub:1.0" \
-  "${DOCKERHUB_USERNAME}/devops-app:1.0" \
-  devops-app:1.0 2>/dev/null || true
+docker rmi "${DOCKERHUB_USERNAME}/devops-app-pub:nginx-1.0" \
+  "${DOCKERHUB_USERNAME}/devops-app:nginx-1.0" 2>/dev/null || true
 ```
