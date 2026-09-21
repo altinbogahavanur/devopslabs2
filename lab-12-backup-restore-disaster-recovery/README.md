@@ -12,6 +12,9 @@
 
 ### 1. İmajları Arşivleme ve Geri Yükleme (save / load)
 ```bash
+# Lab çalışma dizinine geçin:
+cd ~/docker-labs/lab-12-backup-restore-disaster-recovery
+
 # 1. Mevcut bir imajı diske tar arşivi olarak kaydedin:
 docker pull alpine:3.20
 docker save -o /tmp/alpine-backup.tar alpine:3.20

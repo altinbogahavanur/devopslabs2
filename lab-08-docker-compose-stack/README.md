@@ -50,7 +50,8 @@ Bu laboratuvarda kurulan sistem 4 konteyner, 2 izole ağ ve 1 kalıcı disk biri
 
 ### 1. Çalışma Dizinine Geçiş ve Dosyaları İnceleme
 ```bash
-cd lab-08-docker-compose-stack/03-3tier-web-api-db
+# Lab çalışma dizinine geçin:
+cd ~/docker-labs/lab-08-docker-compose-stack/03-3tier-web-api-db
 
 # docker-compose.yaml dosyasındaki services, networks ve volumes bloklarını inceleyin:
 cat docker-compose.yaml

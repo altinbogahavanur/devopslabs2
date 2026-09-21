@@ -13,7 +13,8 @@ Gerçekçi bir kurumsal mikroservis mimarisi olan **NovaShop** (Nginx Gateway ->
 
 ### 1. Stack Mimarisi ve Başlatma
 ```bash
-cd lab-14-capstone-novashop-troubleshooting
+# Lab çalışma dizinine geçin:
+cd ~/docker-labs/lab-14-capstone-novashop-troubleshooting
 
 # Stack'i derleyip arka planda başlatın:
 docker compose up -d --build

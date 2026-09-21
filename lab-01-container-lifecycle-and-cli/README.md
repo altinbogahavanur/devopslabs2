@@ -13,13 +13,16 @@ Docker Engine mimarisini doğrulamak ve konteynerlerin yaşam döngüsünü (`cr
 
 ### 1. Docker Motoru ve Kurulumu Doğrulama
 ```bash
-# Docker istemci ve sunucu sürümlerini kontrol edin
+# 1. Adım: Çalışma dizinine geçin:
+cd ~/docker-labs/lab-01-container-lifecycle-and-cli
+
+# Docker istemci ve sunucu sürümlerini kontrol edin:
 docker version
 
-# Docker Daemon bilgilerini (Depolama sürücüsü, cgroup sürümü) inceleyin
+# Docker Daemon bilgilerini (Depolama sürücüsü, cgroup sürümü) inceleyin:
 docker info | grep -E "Server Version|Storage Driver|Cgroup"
 
-# Non-root yetkinizi test edin (sudo yazmadan çalışmalıdır)
+# Non-root yetkinizi test edin (sudo yazmadan çalışmalıdır):
 docker ps
 ```
 

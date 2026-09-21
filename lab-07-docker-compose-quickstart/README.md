@@ -15,7 +15,7 @@ Tek tek uzun `docker run` komutları yazmak yerine; bir web uygulaması (WordPre
 ### 1. Adım: Çalışma Dizinine Geçin
 Laboratuvar dizinine geçip mevcut konfigürasyon dosyalarını listeleyin:
 ```bash
-cd lab-07-docker-compose-quickstart
+cd ~/docker-labs/lab-07-docker-compose-quickstart
 ls -la
 ```
 

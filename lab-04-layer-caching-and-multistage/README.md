@@ -34,7 +34,8 @@ COPY . .                  ──> Sadece değişen kaynak kod kopyalanır (0.2 s
 
 ### Adım 1: Caching Dizinine Geçin
 ```bash
-cd lab-04-layer-caching-and-multistage/caching
+# Lab caching dizinine geçin:
+cd ~/docker-labs/lab-04-layer-caching-and-multistage/caching
 ```
 
 ### Adım 2: Kötü Sıralı İmajı İlk Kez Derleyin
@@ -104,7 +105,8 @@ Go, Java, C#, Rust veya React uygulamalarında:
 
 ### Adım 9: Go Uygulama Dizinine Geçin
 ```bash
-cd ../go-app
+# Go uygulama dizinine geçin:
+cd ~/docker-labs/lab-04-layer-caching-and-multistage/go-app
 ```
 
 ### Adım 10: Tek Aşamalı (Single-Stage) Ağır İmajı Derleyin

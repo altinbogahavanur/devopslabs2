@@ -40,6 +40,9 @@ Kurumsal ortamlarda konteyner depolama standardı olan **Harbor Enterprise OCI R
 Harbor yerel HTTP modunda çalışırken Docker Daemon'ın güvenli olmayan yerel registry'ye izin vermesi gerekir:
 
 ```bash
+# Lab çalışma dizinine geçin:
+cd ~/docker-labs/lab-13-enterprise-harbor-registry
+
 # /etc/docker/daemon.json dosyasını yapılandırın:
 sudo mkdir -p /etc/docker
 cat <<EOF | sudo tee /etc/docker/daemon.json
@@ -66,7 +69,7 @@ curl -I http://127.0.0.1:18444
 #### Seçenek B: Sıfırdan Harbor Kurulumu (Kendi Sunucunuzda)
 Dizindeki hazır kurulum betiğini çalıştırarak Harbor ve Trivy bileşenlerini tek adımda kurabilirsiniz:
 ```bash
-cd lab-13-enterprise-harbor-registry
+cd ~/docker-labs/lab-13-enterprise-harbor-registry
 sudo bash ./install_harbor.sh
 ```
 

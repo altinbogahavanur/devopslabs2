@@ -13,6 +13,9 @@ Konteynerlerin geçici (ephemeral) yapısından kaynaklanan veri kaybı riskini 
 
 ### 1. Ephemeral Katman: Volumesiz Konteynerde Veri Kaybı
 ```bash
+# Lab çalışma dizinine geçin:
+cd ~/docker-labs/lab-06-storage-bind-mount-vs-volume
+
 # 1. Volume bağlamadan geçici bir Alpine konteyneri başlatın ve içine dosya yazın:
 docker run --name temp-container alpine sh -c "echo 'Kritik DB Verisi' > /data.txt && cat /data.txt"
 

@@ -13,6 +13,10 @@
 
 ### 1. Test Konteynerını Başlatma
 ```bash
+# 1. Adım: Çalışma dizinine geçin:
+cd ~/docker-labs/lab-02-live-debugging-and-logging
+
+# 2. Adım: Hata ayıklama yapacağımız Nginx konteynerini başlatın:
 docker run -d --name debug-web -p 8081:80 nginx:alpine
 ```
 

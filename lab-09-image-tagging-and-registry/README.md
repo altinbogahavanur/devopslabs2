@@ -41,7 +41,8 @@ Docker imajlarını semantik versiyonlama kurallarıyla etiketlemek (`docker tag
 Lab dizinine geçip `starter` klasöründeki dosyalarla yerel bir test imajı derleyin:
 
 ```bash
-cd lab-09-image-tagging-and-registry
+# Lab çalışma dizinine geçin:
+cd ~/docker-labs/lab-09-image-tagging-and-registry
 
 # 1. Başlangıç dosyalarını inceleyin:
 cat starter/Dockerfile

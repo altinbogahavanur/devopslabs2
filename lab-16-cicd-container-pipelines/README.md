@@ -14,7 +14,7 @@ Yazılım geliştirme yaşam döngüsünde Docker imajlarının derlenmesi (`bui
 `01-github-actions/` dizini altındaki workflow dosyasını inceleyin:
 
 ```bash
-cd lab-16-cicd-container-pipelines/01-github-actions
+cd ~/docker-labs/lab-16-cicd-container-pipelines/01-github-actions
 cat .github/workflows/docker-build-push.yml
 ```
 
@@ -29,7 +29,7 @@ cat .github/workflows/docker-build-push.yml
 `02-gitlab-ci/` dizini altındaki konfigürasyonu inceleyin:
 
 ```bash
-cd ../02-gitlab-ci
+cd ~/docker-labs/lab-16-cicd-container-pipelines/02-gitlab-ci
 cat .gitlab-ci.yml
 ```
 

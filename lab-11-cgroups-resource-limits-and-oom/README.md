@@ -12,6 +12,9 @@
 
 ### 1. CPU ve Bellek Kotalarını Belirleme
 ```bash
+# Lab çalışma dizinine geçin:
+cd ~/docker-labs/lab-11-cgroups-resource-limits-and-oom
+
 # Konteyneri maksimum 128 MB RAM ve 0.5 CPU (Yarım çekirdek) ile sınırlandırın:
 docker run -d --name limited-nginx \
   --memory=128m \
@@ -27,7 +30,8 @@ docker stats --no-stream limited-nginx
 Lab dizinindeki Python uygulaması belleğe sürekli veri basarak kotayı aşmaya çalışır:
 
 ```bash
-cd lab-11-cgroups-resource-limits-and-oom/stress-app
+# stress-app dizinine geçin:
+cd ~/docker-labs/lab-11-cgroups-resource-limits-and-oom/stress-app
 cat stress.py
 ```
 

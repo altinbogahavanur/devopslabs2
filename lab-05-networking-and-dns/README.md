@@ -14,6 +14,9 @@ Varsayılan `bridge` ağının kısıtlarını görmek, özel bir köprü ağı 
 Docker'ın varsayılan `bridge` ağı konteyner isimlerini DNS üzerinden çözümleyemez:
 
 ```bash
+# 1. Adım: Çalışma dizinine geçin:
+cd ~/docker-labs/lab-05-networking-and-dns
+
 # Varsayılan ağda iki konteyner başlatın:
 docker run -d --name default-c1 alpine sleep 3600
 docker run -d --name default-c2 alpine sleep 3600

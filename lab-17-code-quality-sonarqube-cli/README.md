@@ -23,7 +23,7 @@ Ana makineye veya sunucuya Java, Maven veya yerel Sonar Scanner kurma zahmetine 
 Lab dizinindeki örnek JavaScript kodunu ve SonarQube ayarlarını inceleyin:
 
 ```bash
-cd lab-17-code-quality-sonarqube-cli
+cd ~/docker-labs/lab-17-code-quality-sonarqube-cli
 
 # Konfigürasyon dosyasını görüntüleyin:
 cat sonar-project.properties

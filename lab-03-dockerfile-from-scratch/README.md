@@ -30,7 +30,10 @@ Dockerfile uzaydan gelen sihirli bir yapı değildir; **normal bir Linux sunucus
 
 ### 1. Adım: Çalışma Dizinine Geçin ve Dosyaları İnceleyin
 ```bash
-cd lab-03-dockerfile-from-scratch
+# Lab çalışma dizinine geçin:
+cd ~/docker-labs/lab-03-dockerfile-from-scratch
+
+# Dockerfile dosyasını inceleyin:
 cat app/Dockerfile
 ```
 

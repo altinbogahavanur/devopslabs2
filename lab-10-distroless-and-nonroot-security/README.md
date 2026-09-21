@@ -17,7 +17,8 @@
 Varsayılan olarak Dockerfile'lar `root` (UID 0) yetkisiyle çalışır:
 
 ```bash
-cd lab-10-distroless-and-nonroot-security/app
+# Lab çalışma dizinine geçin:
+cd ~/docker-labs/lab-10-distroless-and-nonroot-security/app
 
 # 1. Güvensiz imajı derleyin:
 docker build -f Dockerfile.bad -t sec-demo:root .
