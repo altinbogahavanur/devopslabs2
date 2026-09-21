@@ -1,7 +1,5 @@
 # * LAB-05: Konteyner Ağları ve Dahili DNS İletişimi
 
-> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 58 (LAB — Docker Networking)** sonrasında sınıfla birlikte uygulanır.
-
 ## 🎯 Labın Amacı
 Varsayılan `bridge` ağının kısıtlarını görmek, özel bir köprü ağı (`docker network create`) oluşturmak, dahili Docker DNS (`127.0.0.11`) motorunu kullanarak iki konteyneri sabit IP adresi bilmeden isimleriyle konuşturmak ve ağ izolasyonu sağlamak.
 

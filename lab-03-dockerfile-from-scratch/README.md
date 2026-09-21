@@ -1,7 +1,5 @@
 # * LAB-03: Sıfırdan Dockerfile Hazırlama ve İmaj Derleme
 
-> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 50 (LAB — Image Build & Optimization)** ilk aşamasında sınıfla birlikte uygulanır.
-
 ## 🎯 Labın Amacı
 Geleneksel bir Linux sunucusuna SSH ile bağlanıp elle çalıştırdığımız komutları (`mkdir`, `cd`, `scp`, `apt/npm install`, `export ENV`, servis başlatma) kod olarak altyapı (IaC) prensibiyle bir `Dockerfile` haline getirmek; temel direktifleri (`FROM`, `WORKDIR`, `COPY`, `ENV`, `EXPOSE`, `CMD`, `ENTRYPOINT`) uygulamak ve yerel imaj derlemek.
 

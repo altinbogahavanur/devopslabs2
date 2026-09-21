@@ -1,7 +1,5 @@
 # LAB-16: CI/CD Konteyner Pipeline'ları (GitHub Actions & GitLab CI)
 
-> 📌 **Atölye / Pekiştirme:** Bu laboratuvar, Docker imajlarının derlenmesi ve registry'ye yüklenmesi adımlarını GitHub Actions ve GitLab CI ile otomatize etmek isteyen öğrenciler için tamamlayıcı CI/CD atölyesidir.
-
 ## 🎯 Labın Amacı
 Yazılım geliştirme yaşam döngüsünde Docker imajlarının derlenmesi (`build`), güvenlik taramasından geçirilmesi (`scan`) ve kayıt defterlerine (`registry`) yüklenmesi süreçlerini **GitHub Actions** ve **GitLab CI** otomasyon araçlarıyla üretime hazır hale getirmek.
 

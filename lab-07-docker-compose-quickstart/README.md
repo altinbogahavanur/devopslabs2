@@ -1,7 +1,5 @@
 # * LAB-07: Docker Compose Hızlı Başlangıç (WordPress + MariaDB)
 
-> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 76 (LAB — Docker Compose)** ilk aşamasında sınıfla birlikte uygulanır.
-
 ## 🎯 Labın Amacı
 Tek tek uzun `docker run` komutları yazmak yerine; bir web uygulaması (WordPress) ile ilişkisel veritabanını (MariaDB) deklaratif bir `docker-compose.yaml` dosyasıyla tek komutta ayağa kaldırmak ve tarayıcıdan test etmek.
 

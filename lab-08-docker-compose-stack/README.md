@@ -1,7 +1,5 @@
 # * LAB-08: Docker Compose ile 3-Tier Mimari: Frontend, Backend, Database, Network ve Volume
 
-> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 76 (LAB — Docker Compose)** ileri aşamasında (Slayt 73 Healthcheck dahil) sınıfla birlikte uygulanır.
-
 ## 🎯 Labın Amacı
 Docker Compose ile modern bir kurumsal mikroservis yığınını (Stack) tek bir deklaratif dosya üzerinden ayağa kaldırmak; **Frontend**, **Backend**, **Database**, **İzole Ağlar (Network Segregation)** ve **Kalıcı Depolama (Named Volume)** bileşenlerini uygulamalı olarak kavramak.
 

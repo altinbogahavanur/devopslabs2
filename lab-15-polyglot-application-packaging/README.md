@@ -1,7 +1,5 @@
 # LAB-15: Polyglot Uygulama Paketleme Atölyesi (7 Farklı Yazılım Dili)
 
-> 📌 **Atölye / Pekiştirme:** Bu laboratuvar, temel Dockerfile ve çok aşamalı derleme mantığını farklı yazılım dillerinde (Go, Python, Node, React, Java, .NET, PHP) derinleştirmek için tamamlayıcı atölye olarak tasarlanmıştır.
-
 ## 🎯 Labın Amacı
 Farklı programlama dillerindeki uygulamaların **normal bir Linux sunucusunda elle nasıl kurulup çalıştırıldığını** ve bu geleneksel Linux adımlarının **Dockerfile direktiflerine satır satır nasıl uyarlandığını** kavramak; 7 popüler dili ana makineye tek bir kütüphane bile kurmadan izole şekilde paketlemek.
 

@@ -1,7 +1,5 @@
 # * LAB-04: Dockerfile Optimizasyonu: Katman Önbellekleme (Layer Caching) ve Multi-Stage Build
 
-> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 50 (LAB — Image Build & Optimization)** optimizasyon aşamasında sınıfla birlikte uygulanır.
-
 ## 🎯 Labın Amacı
 Docker imaj derleme sürecini hızlandırmak ve nihai imaj boyutunu küçültmek;
 1. **Katman Önbellekleme (Layer Caching):** Doğru `COPY` ve `RUN` sıralaması ile derleme süresini dakikalardan saniyelere indirmek.

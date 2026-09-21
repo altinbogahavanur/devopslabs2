@@ -1,7 +1,5 @@
 # * LAB-06: Depolama Temelleri: Bind Mount vs Named Volume
 
-> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 67 (LAB — Docker Storage)** sonrasında sınıfla birlikte uygulanır.
-
 ## 🎯 Labın Amacı
 Konteynerlerin geçici (ephemeral) yapısından kaynaklanan veri kaybı riskini gözlemlemek, geliştirme ortamları için **Bind Mount**, üretim ve veritabanı kalıcılığı için **Named Volume** ve hassas veriler için **tmpfs (RAM)** depolama yöntemlerini uygulamak.
 

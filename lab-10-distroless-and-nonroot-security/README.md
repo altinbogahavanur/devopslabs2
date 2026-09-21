@@ -1,7 +1,5 @@
 # * LAB-10: Konteyner Güvenliği: Non-Root, Distroless ve Trivy Zafiyet Taraması
 
-> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 79 (Runtime Hardening)** sonrasında sınıfla birlikte uygulanır.
-
 ## 🎯 Labın Amacı
 Üretim ortamlarında konteynerleri `root` olarak çalıştırmanın getirdiği güvenlik risklerini önlemek, `USER nonroot` direktifiyle en az ayrıcalık (least privilege) ilkesini uygulamak, Google **Distroless** imajları ile saldırı yüzeyini sıfırlamak (kabuksuz çalışma) ve **Trivy** güvenlik tarayıcısı ile imajlardaki CVE zafiyetlerini denetleyip CI/CD güvenlik kapısı (`--exit-code 1`) simülasyonu yapmak.
 

@@ -1,7 +1,5 @@
 # * LAB-11: Kaynak Sınırlandırma (cgroups v2) ve OOMKilled Teşhisi
 
-> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 79 (Runtime Resource Limits)** sonrasında sınıfla birlikte uygulanır.
-
 ## 🎯 Labın Amacı
 Üretim ortamında bir konteynerin kontrolsüz CPU ve bellek (RAM) tüketerek tüm sunucuyu kilitlemesini engellemek; Linux Kernel **Control Groups (cgroups v2)** ile kaynak kotaları koymak, kasıtlı bellek sızıntısı ile **Exit Code 137 (OOMKilled)** durumunu tetiklemek ve adli bilişim (forensic) teftişi yapmak.
 

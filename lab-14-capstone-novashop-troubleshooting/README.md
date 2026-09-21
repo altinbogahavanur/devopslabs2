@@ -1,7 +1,5 @@
 # * LAB-14: NovaShop Capstone ve Gerçek Hayat Sorun Giderme
 
-> 📌 **Sunum Eşleşmesi:** Bu laboratuvar, **Slayt 84 (Production Troubleshooting & Incidents)** ve eğitim günü kapanışında capstone projesi olarak sınıfla birlikte uygulanır.
-
 ## 🎯 Labın Amacı
 Gerçekçi bir kurumsal mikroservis mimarisi olan **NovaShop** (Nginx Gateway -> Node.js Backend -> PostgreSQL DB + Docker Secrets) stack'ini çalıştırmak ve üretimde en sık karşılaşılan **3 kritik arıza senaryosunu** (Veritabanı bağlantı kopması, 502 Bad Gateway / Port uyuşmazlığı ve OOMKilled çökmesi) terminal başında dedektif gibi teşhis edip çözmek.
 
