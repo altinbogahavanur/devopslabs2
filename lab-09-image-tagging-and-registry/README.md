@@ -1,4 +1,4 @@
-# * LAB-09: İmaj Etiketleme ve Docker Hub (Public ve Private) Yayını
+# LAB-09: İmaj Etiketleme ve Docker Hub (Public ve Private) Yayını
 
 ## 🎯 Labın Amacı
 Docker imajlarını ürün ve versiyon standartlarına uygun etiketlemek (`docker tag`); **Docker Hub** üzerinde hem **Public (Herkese Açık)** hem de **Private (Gizli / Yetkili)** iki ayrı repository oluşturmak; imajları sırayla göndermek (`docker push`), çalıştırmak, lokalden silip tekrar çekmek (`docker pull`) ve yetkisiz çekme hatasını (`pull access denied`) uygulamalı olarak doğrulamak.
