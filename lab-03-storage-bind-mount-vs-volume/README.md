@@ -38,7 +38,7 @@ docker run -d --name web-bind -p 8082:80 -v "$(pwd)/html:/usr/share/nginx/html:r
 curl http://localhost:8082
 
 # 4. Konteyneri yeniden başlatmadan host üzerindeki dosyayı değiştirin:
-echo "<h1>Hot-Reload: Kod Degisti!</h1>" > ./html/index.html
+echo '<h1>Hot-Reload: Kod Degisti</h1>' > ./html/index.html
 
 # 5. Anında güncellendiğini doğrulayın:
 curl http://localhost:8082
@@ -74,7 +74,7 @@ docker exec ram-app df -h /ramdisk
 ---
 
 ## ✅ Doğrulama (Verification)
-- Bind mount testinde `curl http://localhost:8082` çıktısında `Hot-Reload: Kod Degisti!` görülmelidir.
+- Bind mount testinde `curl http://localhost:8082` çıktısında `Hot-Reload: Kod Degisti` görülmelidir.
 - Named volume testinde ikinci konteynerden `Kurtarilan Veri: 2026-09` başarıyla okunmalıdır.
 
 ---

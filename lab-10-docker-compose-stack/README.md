@@ -106,7 +106,7 @@ Frontend konteynerinin doğrudan veritabanına ulaşamadığını test edin:
 
 ```bash
 # Gateway (Nginx) içinden DB konteynerine ping atmayı deneyin:
-docker compose exec gateway ping -c 2 compose-postgres || echo "GÜVENLİK KANITI: Gateway veritabanına erişemez, ağlar izoledir!"
+docker compose exec gateway ping -c 2 compose-postgres || echo 'GÜVENLİK KANITI: Gateway veritabanına erişemez, ağlar izoledir'
 ```
 
 ---

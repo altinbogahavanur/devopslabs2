@@ -124,14 +124,14 @@ docker rmi 127.0.0.1:18444/devops-labs/micro-app:1.0.0
 docker pull 127.0.0.1:18444/devops-labs/micro-app:1.0.0
 
 # 3. Çalıştırıp test edin:
-docker run --rm 127.0.0.1:18444/devops-labs/micro-app:1.0.0 echo "Harbor OCI Registry basariyla calisti!"
+docker run --rm 127.0.0.1:18444/devops-labs/micro-app:1.0.0 echo 'Harbor OCI Registry basariyla calisti'
 ```
 
 ---
 
 ## ✅ Doğrulama (Verification)
 - Harbor Web Arayüzünde (`http://<IP>:18444`) `devops-labs/micro-app` imajının listelendiğini ve katmanlarının görüntülendiğini teyit edin.
-- `docker run` çıktısında `Harbor OCI Registry basariyla calisti!` mesajını görün.
+- `docker run` çıktısında `Harbor OCI Registry basariyla calisti` mesajını görün.
 
 ---
 

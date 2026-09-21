@@ -19,7 +19,7 @@ docker run -d --name default-c1 alpine sleep 3600
 docker run -d --name default-c2 alpine sleep 3600
 
 # c2 konteynerinden c1 konteynerine ismiyle ping atmayı deneyin:
-docker exec default-c2 ping -c 2 default-c1 || echo "BAŞARISIZ: Varsayılan bridge ağında dahili DNS çözümü yoktur!"
+docker exec default-c2 ping -c 2 default-c1 || echo 'BAŞARISIZ: Varsayılan bridge ağında dahili DNS çözümü yoktur'
 
 # Temizleyin:
 docker rm -f default-c1 default-c2

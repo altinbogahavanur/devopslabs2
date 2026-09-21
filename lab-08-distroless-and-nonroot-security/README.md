@@ -58,7 +58,7 @@ Bir saldırgan bu konteynere sızmaya çalışsa bile komut çalıştıracak bir
 
 ```bash
 # Konteyner içine sh veya bash ile girmeyi deneyin:
-docker exec -it test-distroless sh || echo "GÜVENLİK KANITI: Konteyner içinde sh veya bash bulunmuyor!"
+docker exec -it test-distroless sh || echo 'GÜVENLİK KANITI: Konteyner içinde sh veya bash bulunmuyor'
 ```
 
 ### 5. Trivy ile Zafiyet (CVE) Taraması

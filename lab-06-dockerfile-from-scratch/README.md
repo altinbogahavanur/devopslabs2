@@ -61,14 +61,68 @@ curl http://localhost:3001
 # Çıktıda '"environment":"staging"' dönecektir.
 ```
 
-### 5. Adım: CMD vs ENTRYPOINT Farkını Deneyimleyin
-- `CMD`: Konteyner çalıştırılırken dışarıdan verilen argümanlarla **tamamen ezilebilir** (Linux'taki varsayılan komut).
-- `ENTRYPOINT`: Konteynerin sabit yürütülebilir dosyasıdır (Linux'taki binary alias).
+### 5. Adım: CMD vs ENTRYPOINT Farkını Uygulamalı Olarak Kavrayın
+
+Docker'da en çok karıştırılan iki direktif arasındaki fark şudur:
+* **`CMD` (Varsayılan Komut):** Konteyner çalışırken ne yapılacağını söyler. Ancak kullanıcı `docker run` komutunun sonuna herhangi bir şey yazarsa, **CMD tamamen çöpe atılır** ve kullanıcının yazdığı yeni komut çalışır.
+* **`ENTRYPOINT` (Sabit Ana Program):** Konteyneri tek bir amaca hizmet eden bağımsız bir CLI aracına (örneğin `ping`, `python`, `node`) dönüştürür. Kullanıcı `docker run` sonuna ne yazarsa yazsın, ana komut **asla değişmez**, yazılanlar ana komutun arkasına **parametre** olarak eklenir.
+
+---
+
+#### 🧪 Deney A: Yalnızca CMD Varken (Varsayılanı Tamamen Ezme)
+Mevcut imajımızda `CMD ["node", "server.js"]` tanımlıdır:
 
 ```bash
-# CMD ezme deneyi: 'node server.js' yerine 'echo' çalıştırın:
-docker run --rm my-node-api:1.0 echo "CMD ezildi ve bu metin ekrana basildi!"
+# 1. Komut vermeden çalıştırırsanız varsayılan CMD çalışır (Node.js API başlar):
+# docker run my-node-api:1.0  --> 'node server.js' çalışır.
+
+# 2. Sona başka bir komut yazarsanız, CMD tamamen ezilir ve Node yerine o komut çalışır:
+docker run --rm my-node-api:1.0 echo 'CMD ezildi, Node yerine echo calisti'
+# Gözlem: Node.js hiç başlamadı; ekrana sadece echo çıktısı basıldı!
 ```
+
+---
+
+#### 🧪 Deney B: ENTRYPOINT + CMD Birlikte (Kurumsal Standart Kalıp)
+Dizindeki `app/Dockerfile.entrypoint` dosyasını inceleyin:
+```dockerfile
+FROM alpine:3.20
+ENTRYPOINT ["ping", "-c", "2"]
+CMD ["127.0.0.1"]
+```
+Burada:
+- **Sabit Program (`ENTRYPOINT`):** `ping -c 2` (Konteyner her zaman ping atacaktır).
+- **Varsayılan Argüman (`CMD`):** `127.0.0.1` (Kullanıcı hedef belirtmezse yerel loopback pinglenir).
+
+İmajı derleyip 2 farklı şekilde çalıştırarak farkı görün:
+
+```bash
+# 1. Adım: Entrypoint test imajını derleyin:
+docker build -f app/Dockerfile.entrypoint -t my-ping-tool:1.0 ./app
+
+# 2. Adım: Parametresiz çalıştırın (CMD devreye girer -> 127.0.0.1 pinglenir):
+docker run --rm my-ping-tool:1.0
+# Çıktı: PING 127.0.0.1 (127.0.0.1): 56 data bytes
+
+# 3. Adım: Sona hedef yazarak çalıştırın (CMD ezilir, ENTRYPOINT'e parametre olur):
+docker run --rm my-ping-tool:1.0 localhost
+# Çıktı: PING localhost (127.0.0.1): 56 data bytes
+
+# 4. Adım: Peki ENTRYPOINT zorla ezilmek istenirse ne yapılır?
+# '--entrypoint' bayrağı ile ana program geçici olarak değiştirilebilir:
+docker run --rm --entrypoint echo my-ping-tool:1.0 'Entrypoint bayrak ile zorla ezildi'
+```
+
+---
+
+#### 📊 Özet Karşılaştırma Tablosu
+
+| Özellik | `CMD` | `ENTRYPOINT` | `ENTRYPOINT` + `CMD` (Birlikte) |
+|---|---|---|---|
+| **Temel Görevi** | Varsayılan komut belirler | Konteynerin ana programını sabitler | Sabit programa varsayılan argüman verir |
+| **`docker run <imaj>`** | CMD çalışır | ENTRYPOINT çalışır | ENTRYPOINT + CMD birleşip çalışır |
+| **`docker run <imaj> <arg>`**| CMD tamamen çöpe atılır, `<arg>` çalışır | ENTRYPOINT'in arkasına `<arg>` eklenir | CMD ezilir, yerine `<arg>` eklenir |
+| **Kullanım Amacı** | Web servisi, DB (esnek başlatma) | CLI araçları (`trivy`, `curl`, `ping`) | Esnek ve profesyonel üretim imajları |
 
 ---
 
@@ -83,5 +137,5 @@ JSON yanıtında `status: success` ve başarı mesajının dönmesi imajın doğ
 ## 🧹 Temizlik
 ```bash
 docker rm -f node-api node-staging 2>/dev/null || true
-docker rmi my-node-api:1.0 2>/dev/null || true
+docker rmi my-node-api:1.0 my-ping-tool:1.0 2>/dev/null || true
 ```

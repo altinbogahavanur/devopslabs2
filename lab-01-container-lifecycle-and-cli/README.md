@@ -55,7 +55,7 @@ docker restart web-life
 docker pause web-life
 
 # Test edin (İstek askıda kalacak, yanıt dönmeyecektir):
-curl --max-time 2 http://localhost:8080 || echo "Konteyner donduruldu, yanit vermiyor!"
+curl --max-time 2 http://localhost:8080 || echo 'Konteyner donduruldu, yanit vermiyor'
 
 # Konteyneri uyandırın (SIGCONT):
 docker unpause web-life

@@ -31,6 +31,9 @@ Tüm servisleri tek bir hamleyle başlatmak için:
 cd devops-arcade-and-tools
 docker compose up -d
 docker compose ps
+
+# FileBrowser şifresini 'admin' olarak sabitlemek için:
+docker compose exec filebrowser filebrowser users update admin --password admin
 ```
 
 ### Durdurmak ve Temizlemek İçin:
@@ -47,13 +50,22 @@ docker compose down
 ### 1. 📂 Web Tabanlı Dosya Yöneticisi (FileBrowser)
 Öğrencinin kendi sanal makinesindeki dosyalara tarayıcıdan masaüstü gibi erişmesini sağlar:
 ```bash
+# 1. Adım: Konteyneri başlatın:
 docker run -d --name lab-filebrowser \
   -p 19005:80 \
   -v /home/student:/srv \
   --restart unless-stopped \
   filebrowser/filebrowser:latest
+
+# 2. Adım: FileBrowser modern sürümlerde ilk açılışta rastgele parola üretir.
+# Parolayı doğrudan 'admin' yapmak için tek komut:
+docker exec lab-filebrowser filebrowser users update admin --password admin
 ```
-* **Erişim:** `http://<IP>:19005` (Varsayılan kullanıcı: `admin` / `admin`).
+* **Web Erişimi:** `http://<IP>:19005` (veya `http://<IP>/app5`)
+* **Giriş Bilgileri:**
+  * **Kullanıcı:** `admin`
+  * **Parola:** `admin` (yukarıdaki komutla güncellendikten sonra)
+* **İpucu:** Eğer yukarıdaki güncelleme komutunu çalıştırmazsanız, üretilen rastgele parolayı şu komutla öğrenebilirsiniz: `docker logs lab-filebrowser | grep password`
 
 ---
 
