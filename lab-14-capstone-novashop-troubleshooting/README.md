@@ -42,22 +42,22 @@ curl http://localhost:19001/api/products
   1. Backend loglarını inceleyin: `docker compose logs backend`
   2. Backend konteynerinin veritabanı konteynerine DNS ile erişip erişemediğini test edin:
      ```bash
-     docker compose exec backend ping -c 2 novashop-db
+     docker compose exec backend ping -c 2 postgres
      ```
   3. Parola veya secret dosyasını denetleyin:
      ```bash
      cat secrets/db_password.txt
      ```
-- **Çözüm:** `backend` ve `novashop-db` konteynerlerinin aynı `backend-net` ağında olduğunu ve `DATABASE_URL` değişkeninin doğru şifreyi okuduğunu teyit edin.
+- **Çözüm:** `backend` ve `postgres` servislerinin aynı `internal-net` ağında olduğunu ve `DB_HOST=postgres` tanımının doğru olduğunu teyit edin.
 
 ---
 
 ### ⚡ Senaryo 2: Gateway 502 Bad Gateway (Port Uyuşmazlığı)
 - **Belirti:** Tarayıcıdan veya curl ile `502 Bad Gateway` alıyorsunuz ancak `docker compose ps` çıktısında tüm konteynerler `Up` görünüyor!
 - **Teşhis Adımları:**
-  1. Nginx hata loglarını canlı teftiş edin:
+  1. Nginx Gateway hata loglarını canlı teftiş edin:
      ```bash
-     docker compose logs nginx | grep error
+     docker compose logs gateway | grep error
      # Hata: "connect() failed (111: Connection refused) while connecting to upstream"
      ```
   2. Nginx'in yönlendirdiği port ile backend'in gerçekten dinlediği portu kıyaslayın:
@@ -65,9 +65,9 @@ curl http://localhost:19001/api/products
      # Nginx konfigürasyonunu kontrol edin:
      cat nginx/nginx.conf | grep proxy_pass
      # Backend'in dinlediği portu kontrol edin:
-     docker compose exec backend netstat -tlpn 2>/dev/null || docker compose exec backend ps aux
+     docker compose exec backend ps aux
      ```
-- **Çözüm:** Nginx `upstream` bloğundaki port ile Node.js backend'in `PORT` çevre değişkenini eşitleyin.
+- **Çözüm:** Nginx `upstream` bloğundaki port ile Node.js backend'in `PORT=3000` çevre değişkenini eşitleyin.
 
 ---
 
@@ -76,9 +76,9 @@ curl http://localhost:19001/api/products
 - **Teşhis Adımları:**
   1. Konteynerin çıkış kodunu sorgulayın:
      ```bash
-     docker inspect -f 'ExitCode: {{.State.ExitCode}}, OOMKilled: {{.State.OOMKilled}}' novashop-backend
+     docker inspect -f 'ExitCode: {{.State.ExitCode}}, OOMKilled: {{.State.OOMKilled}}' capstone-backend
      ```
-  2. Eğer `ExitCode: 137` ve `OOMKilled: true` ise, konteyner `docker-compose.yaml` içindeki bellek kotasını (`mem_limit`) aşmıştır.
+  2. Eğer `ExitCode: 137` ve `OOMKilled: true` ise, konteyner `docker-compose.yaml` içindeki bellek kotasını (`memory: 256M`) aşmıştır.
 - **Çözüm:** Ya uygulamadaki bellek sızıntısını giderin ya da `docker-compose.yaml` dosyasındaki `deploy.resources.limits.memory` kotasını artırın.
 
 ---
