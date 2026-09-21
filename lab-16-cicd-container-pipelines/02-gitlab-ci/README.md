@@ -1,4 +1,4 @@
-# LAB-10-02 — GitLab CI ile Docker-in-Docker (dind) ve Harbor/Registry Entegrasyonu
+# LAB-16-02: GitLab CI ile Docker-in-Docker (dind) ve Harbor/Registry Entegrasyonu
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |

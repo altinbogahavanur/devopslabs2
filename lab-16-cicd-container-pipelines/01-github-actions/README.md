@@ -1,4 +1,4 @@
-# LAB-10-01 — GitHub Actions ile Docker İmaj Derleme, Güvenlik Taraması ve Push
+# LAB-16-01: GitHub Actions ile Docker İmaj Derleme, Güvenlik Taraması ve Push
 
 | Seviye | Profil / Araçlar | Açık Portlar |
 | --- | --- | --- |
