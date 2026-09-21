@@ -1,0 +1,13 @@
+# --- BUILDER ASAMASI ---
+FROM golang:1.23-alpine AS builder
+WORKDIR /src
+RUN echo 'package main; import ("fmt"; "net/http"); func main() { http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) { fmt.Fprintf(w, "Distroless Guvenli Konteyner Calisiyor!\\n") }); http.ListenAndServe(":8080", nil) }' > main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o /bin/server main.go
+
+# --- RUNTIME ASAMASI: GOOGLE DISTROLESS ---
+# Bu imajda sh, bash, apt, apk, curl bulunmaz!
+# Saldirgan konteynere sizsa bile calistirabilecegi bir kabuk yoktur.
+FROM gcr.io/distroless/static-debian12:nonroot
+COPY --from=builder /bin/server /server
+EXPOSE 8080
+ENTRYPOINT ["/server"]

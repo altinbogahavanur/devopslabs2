@@ -1,0 +1,14 @@
+🔍 [SCEN-04 İpucu — Konteynerlar Arası DNS İletişim Hatası]
+
+1. Test edin:
+   docker exec srv-app ping -c 1 srv-db
+   (Hata: bad address 'srv-db')
+
+2. Teşhis:
+   Docker varsayılan 'bridge' ağında Dahili DNS (127.0.0.11) sunucusu sağlamaz.
+   DNS çözünürlüğü için kullanıcı tanımlı özel bir köprü (user-defined bridge) ağı gereklidir.
+
+3. Çözüm Metodu:
+   docker network create custom-net
+   docker network connect custom-net srv-db
+   docker network connect custom-net srv-app

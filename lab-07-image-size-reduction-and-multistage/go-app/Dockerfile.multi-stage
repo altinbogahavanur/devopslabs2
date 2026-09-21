@@ -1,0 +1,15 @@
+# --- 1. ASAMA: BUILDER (Derleyici ortami) ---
+FROM golang:1.23-alpine AS builder
+WORKDIR /src
+COPY main.go .
+# Statik binary derleme (CGO kapali, debug sembolleri silinmis)
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o /bin/server main.go
+
+# --- 2. ASAMA: RUNTIME (Sadece calisma ortami) ---
+FROM alpine:3.20
+WORKDIR /app
+# 1. Asamadan sadece derlenen ikili dosyayi kopyala
+COPY --from=builder /bin/server /app/server
+EXPOSE 8080
+USER 10001:10001
+CMD ["/app/server"]

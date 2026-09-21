@@ -15,5 +15,5 @@ __pycache__/
 *.pyc
 target/
 
-# Bonus labs (temporary private / unpublished)
-bonus-labs/
+# Legacy untracked folders
+pratik-lablar/

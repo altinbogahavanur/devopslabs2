@@ -1,0 +1,18 @@
+const http = require('http');
+
+const PORT = process.env.PORT || 3000;
+const APP_ENV = process.env.APP_ENV || 'development';
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({
+    status: 'success',
+    message: 'Dockerfile direktifleri basariyla calisti!',
+    environment: APP_ENV,
+    timestamp: new Date().toISOString()
+  }));
+});
+
+server.listen(PORT, () => {
+  console.log(`Sunucu http://0.0.0.0:${PORT} adresinde dinliyor (Ortam: ${APP_ENV})`);
+});

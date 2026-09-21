@@ -1,0 +1,5 @@
+FROM python:3.12-alpine
+WORKDIR /app
+COPY signal_app.py .
+ENV PYTHONUNBUFFERED=1
+CMD ["python", "signal_app.py"]

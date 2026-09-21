@@ -1,0 +1,36 @@
+services:
+  wordpress:
+    image: wordpress:6-apache
+    container_name: beginner-wordpress
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-19001}:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+    depends_on:
+      - db
+    networks:
+      - wp-network
+
+  db:
+    image: mariadb:10.11
+    container_name: beginner-mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - wp_db_data:/var/lib/mysql
+    networks:
+      - wp-network
+
+volumes:
+  wp_db_data:
+
+networks:
+  wp-network:

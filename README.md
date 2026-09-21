@@ -1,75 +1,101 @@
-# Docker ve Konteyner Teknolojileri Eğitim Laboratuvarı
+# 🐳 Docker ve Konteyner Teknolojileri Eğitim Laboratuvarı
+
+Bu depo, sıfırdan ileri seviyeye kadar modern DevOps ve konteyner mühendisliği becerilerini uygulamalı olarak kazandırmak üzere tasarlanmış, **kademeli (Tiered)** ve **gerçek hayat kurumsal altyapı standartlarıyla tam uyumlu** 17 modüllük bir laboratuvar serisidir.
 
 ---
 
-## Docker Teorisi ve Mimarisi
+## 🗺️ Laboratuvar Müfredatı ve Seviye Haritası
 
-Docker, uygulamaları bağımlılıklarıyla birlikte işletim sistemi seviyesinde izole eden (containerization) açık kaynaklı bir konteyner platformudur.
-
-### Temel Mimari Kavramlar:
-
-1. **Client / Server (Daemon) Mimarisi:**
-   - **Docker Client (CLI):** Komutları (`docker run`, `docker build`) Unix Domain Socket (`/var/run/docker.sock`) üzerinden Docker Daemon'a (`dockerd`) iletir.
-   - **containerd & runc:** `dockerd` iş yükünü OCI uyumlu `containerd` çalışma zamanına aktarır; `runc` ise Linux Namespaces ve Cgroups yapılarını kurarak konteyneri başlatır.
-
-2. **İmaj Katmanları ve UnionFS (overlay2):**
-   - Docker imajları salt-okunur (read-only) katmanlardan oluşur.
-   - Konteyner başlatıldığında en üste ince bir yazılabilir katman (Container Read-Write Layer) eklenir; dosya değişiklikleri Copy-on-Write (CoW) stratejisiyle yönetilir.
-
-3. **İzolasyon Mekanizmaları:**
-   - **Namespaces:** Konteynerler için süreç (PID), ağ (NET), dosya sistemi (MNT) ve kullanıcı (USER) soyutlaması sağlar.
-   - **Control Groups (cgroups v2):** Konteynerin tüketebileceği CPU, bellek (RAM) ve I/O kotalarını belirler. Sınır aşıldığında Linux kernel tarafından `Exit Code 137 (OOMKilled)` tetiklenir.
-
----
-
-## 🧪 Pratik Isınma ve Canlı Teftiş Laboratuvarları (pratik-lablar)
-
-Konteyner dünyasında cerrahi müdahale ve sorun giderme refleksleri kazandıran pratik laboratuvarlar:
-
-| Modül | Dizin | Konu ve Kapsam | Seviye | Temel Odak |
-|---|---|---|---|---|
-| [**PRATİK-DOC-01**](pratik-lablar/01-exec-ve-dosya-transferi/README.md) | [`pratik-lablar/01-exec-ve-dosya-transferi`](pratik-lablar/01-exec-ve-dosya-transferi/README.md) | `exec` ve `cp` İle Canlı Konteyner Teftişi ve Dosya Transferi | Başlangıç | `exec`, `cp-in`, `cp-out`, `hotfix` |
-| [**PRATİK-DOC-02**](pratik-lablar/02-log-ve-canli-teftis/README.md) | [`pratik-lablar/02-log-ve-canli-teftis`](pratik-lablar/02-log-ve-canli-teftis/README.md) | Log İnceleme (`-f`, `--tail`), Proses Dedektifliği (`top`) ve `inspect` | Temel | `logs`, `top`, `stats`, `inspect` |
-| [**PRATİK-DOC-03**](pratik-lablar/03-volume-ve-network-kontrol/README.md) | [`pratik-lablar/03-volume-ve-network-kontrol`](pratik-lablar/03-volume-ve-network-kontrol/README.md) | Volume ve Network İnceleme, Ağ İzolasyonu ve Dahili DNS İletişimi | Temel - Orta | `volumes`, `networks`, `dns-ping` |
-| [**PRATİK-DOC-04**](pratik-lablar/04-veri-kaliciligi-ve-volume-kurtarma/README.md) | [`pratik-lablar/04-veri-kaliciligi-ve-volume-kurtarma`](pratik-lablar/04-veri-kaliciligi-ve-volume-kurtarma/README.md) | Veri Kalıcılığı: Ephemeral vs Named Volume ile MySQL Kurtarma | Orta | `mysql`, `volume`, `data-recovery` |
-
-👉 **[Tüm Docker Pratik Lablar İndeksi](./pratik-lablar/README.md)**
+```text
+docker-labs/
+├── lab-01-container-lifecycle-and-cli/       # Yaşam döngüsü (run, pause, stop, kill, rm, prune)
+├── lab-02-live-debugging-and-logging/        # Canlı teftiş (exec, cp ile hotfix, logs -f, top, inspect)
+├── lab-03-storage-bind-mount-vs-volume/      # Bind Mount vs Named Volume vs tmpfs
+├── lab-04-networking-and-dns/                # Custom Bridge, Dahili DNS (127.0.0.11), İzolasyon
+├── lab-05-docker-compose-quickstart/         # Docker Compose: WordPress + MariaDB (Port 19001 /app1)
+├── lab-06-dockerfile-from-scratch/           # Sıfırdan Dockerfile: FROM, WORKDIR, COPY, ENV, CMD vs ENTRYPOINT
+├── lab-07-image-size-reduction-and-multistage/ # 850 MB -> 12 MB Go Multi-Stage, Cache & .dockerignore
+├── lab-08-distroless-and-nonroot-security/   # USER nonroot, Google Distroless & Trivy CLI zafiyet taraması
+├── lab-09-image-tagging-and-registry/        # Docker Hub (Public/Private) imaj yayını & yerel registry:2 (Port 5000)
+├── lab-10-docker-compose-stack/              # 3-Tier Compose: Frontend + Backend + DB + Redis + Çift Ağ + Volume
+├── lab-11-polyglot-application-packaging/    # 7 Dil Atölyesi: Go Scratch, Python, Node, React, Java, .NET, PHP
+├── lab-12-cgroups-resource-limits-and-oom/   # Linux cgroups v2 kotaları, bellek sızıntısı, Exit 137 OOMKilled
+├── lab-13-backup-restore-disaster-recovery/  # Helper Pattern ile Named Volume .tar.gz yedekleme ve geri yükleme
+├── lab-14-enterprise-harbor-registry/        # Harbor (Port 18444), Cloudflare Bypass (127.0.0.1), Robot Account, Dahili Trivy
+├── lab-15-capstone-novashop-troubleshooting/ # NovaShop Capstone (Port 19001): 3 arıza vakası (DB, 502, OOM)
+├── lab-16-cicd-container-pipelines/          # GitHub Actions (Buildx+Cache) & GitLab CI (dind)
+├── lab-17-code-quality-sonarqube-cli/        # Docker ile SonarQube (Port 19000): SAST taraması ve Quality Gate
+├── devops-arcade-and-tools/                  # Web Tetris, 2048, Excalidraw, IT-Tools, FileBrowser
+└── troubleshooting-simulator/                # troubleshoot-menu.sh terminal arıza bulma simülatörü
+```
 
 ---
 
-## Çekirdek Laboratuvarlar (lab-01 - lab-08)
+### 🟢 1. Bölüm: Başlangıç Seviyesi — Temel Konteyner Refleksleri
 
-| Modül | Dizin | Konu ve Kapsam | Seviye | Temel Araçlar |
-|---|---|---|---|---|
-| [**LAB-DOC-01**](lab-01-docker-engine-and-warmup/README.md) | [`lab-01-docker-engine-and-warmup`](lab-01-docker-engine-and-warmup/README.md) | Docker Engine Mimarisi, Doğrulama ve 8 Aşamalı CLI Isınma Akışı | Başlangıç | `docker`, `cli-warmup`, `inspect`, `logs` |
-| [**LAB-DOC-02**](lab-02-dockerfile-and-caching/README.md) | [`lab-02-dockerfile-and-caching`](lab-02-dockerfile-and-caching/README.md) | Dockerfile Mimarisi, BuildKit Katman Önbellekleme ve Multi-Stage Build | Temel - Orta | `dockerfile`, `buildkit`, `multi-stage` |
-| [**LAB-DOC-03**](lab-03-polyglot-app-dockerization/README.md) | [`lab-03-polyglot-app-dockerization`](lab-03-polyglot-app-dockerization/README.md) | Çok Dilli Paketleme: Node.js, Go (Scratch 8MB), Python, Java, .NET, PHP, React | Orta | `polyglot`, `scratch`, `nodejs`, `golang` |
-| [**LAB-DOC-04**](lab-04-storage-volumes-bind-mounts/README.md) | [`lab-04-storage-volumes-bind-mounts`](lab-04-storage-volumes-bind-mounts/README.md) | Kalıcı Depolama: Named Volume, Bind Mounts, `tmpfs` ve İzin Yönetimi | Orta | `volumes`, `bind-mount`, `postgres`, `tmpfs` |
-| [**LAB-DOC-05**](lab-05-docker-networking-and-dns/README.md) | [`lab-05-docker-networking-and-dns`](lab-05-docker-networking-and-dns/README.md) | Konteyner Ağları: Özel Bridge, Dahili DNS (127.0.0.11) ve DMZ Çift Ağ İzolasyonu | Orta | `network`, `dns`, `bridge`, `dmz-isolation` |
-| [**LAB-DOC-06**](lab-06-harbor-registry-and-images/README.md) | [`lab-06-harbor-registry-and-images`](lab-06-harbor-registry-and-images/README.md) | İmaj Yaşam Döngüsü, Yerel Registry:2 ve Kurumsal Harbor OCI Registry (18444) | Orta - İleri | `harbor`, `registry:2`, `tag-immutability` |
-| [**LAB-DOC-07**](lab-07-docker-compose-orchestration/README.md) | [`lab-07-docker-compose-orchestration`](lab-07-docker-compose-orchestration/README.md) | Docker Compose V2 Orkestrasyonu: .env, Healthcheck Zinciri ve 3-Tier Stack | Orta - İleri | `compose-v2`, `service_healthy`, `voting-app` |
-| [**LAB-DOC-08**](lab-08-capstone-and-troubleshooting/README.md) | [`lab-08-capstone-and-troubleshooting`](lab-08-capstone-and-troubleshooting/README.md) | NovaShop Capstone (Port 19001) ve 3 Kritik Gerçek Hayat Sorun Giderme Senaryosu | İleri / Bitirme | `novashop`, `gateway`, `oomkilled`, `ss` |
-| [**Eğlence & Araç Merkezi**](eglence-merkezi/README.md) | [`eglence-merkezi`](eglence-merkezi/README.md) | Docker Arcade & DevOps Toolbox (Tetris, IT-Tools, Excalidraw, 2048, FileBrowser) | Başlangıç / Pratik | `compose`, `cli-tools`, `excalidraw`, `tetris` |
-
----
-
-## Platform Port Haritası
-
-| Servis Adı | Port | Erişim Yolu / URL | Açıklama |
+| Lab | Dizin | Odak Konusu | Öğrenilen Refleks |
 |---|---|---|---|
-| **Nginx Master Reverse Proxy** | `80`, `443` | `http://<IP>`, `https://<IP>` | Sunucu ana giriş noktası ve SSL sonlandırma |
-| **Cockpit Web Terminal** | `9090` | `https://<IP>:9090` | Tarayıcı tabanlı Linux terminali |
-| **NovaShop Capstone (Lab 08)** | `19001` | `http://<IP>:19001` | App1 Slotu (Gateway -> Backend -> DB) |
-| **Harbor OCI Registry (Lab 06)**| `18444` | `http://<IP>:18444/harbor` | Kurumsal Harbor OCI Registry arayüzü ve API |
-| **Yerel Docker Registry (Lab 06)**| `5000` | `http://127.0.0.1:5000` | Hafif `registry:2` konteyneri |
-| **Jenkins CI/CD** | `18080` | `http://<IP>:18080/jenkins` | Jenkins otomasyon sunucusu |
-| **SonarQube** | `19000` | `http://<IP>:19000/sonar` | Statik kod analizi ve Quality Gate |
-| **GitLab CE** | `18929` | `http://<IP>:18929/gitlab` | Kaynak kod repository'si |
-| **KinD K8s API** | `6443` | `https://172.18.0.1:6443` | Yerel Kubernetes Control Plane API |
+| **LAB-01** | [`lab-01-container-lifecycle-and-cli/`](lab-01-container-lifecycle-and-cli/README.md) | Konteyner Yaşam Döngüsü & CLI | `run`, `stop`, `start`, `restart`, `pause`/`unpause` (CPU dondurma), `kill`, `rm`, `prune` |
+| **LAB-02** | [`lab-02-live-debugging-and-logging/`](lab-02-live-debugging-and-logging/README.md) | Canlı Teftiş, Exec & Log Yönetimi | `exec -it`, `logs -f -t`, `docker cp` ile canlı hotfix, `docker diff`, `top`, `stats`, `inspect` |
+| **LAB-03** | [`lab-03-storage-bind-mount-vs-volume/`](lab-03-storage-bind-mount-vs-volume/README.md) | Depolama: Bind Mount vs Named Volume | Ephemeral veri kaybı deneyi, Bind Mount ile canlı kod geliştirme, Named Volume veri kurtarma, `tmpfs` |
+| **LAB-04** | [`lab-04-networking-and-dns/`](lab-04-networking-and-dns/README.md) | Konteyner Ağları ve Dahili DNS | Özel `bridge` ağı, gömülü DNS (`127.0.0.11`) ile isimle ping, `connect`/`disconnect`, `host` ve `none` ağları |
+| **LAB-05** | [`lab-05-docker-compose-quickstart/`](lab-05-docker-compose-quickstart/README.md) | Docker Compose Hızlı Başlangıç | WordPress + MariaDB stack'i, tek komutla ayağa kaldırma, App1 slotu (`/app1`, Port 19001) |
 
 ---
 
-## Hızlı Başlangıç
+### 🟡 2. Bölüm: Orta Seviye — Paketleme, Optimizasyon & Orkestrasyon
+
+| Lab | Dizin | Odak Konusu | Öğrenilen Refleks |
+|---|---|---|---|
+| **LAB-06** | [`lab-06-dockerfile-from-scratch/`](lab-06-dockerfile-from-scratch/README.md) | Sıfırdan Dockerfile Hazırlama | **Linux Terminali vs Dockerfile** mantığı, `FROM`, `WORKDIR`, `COPY`, `ENV`, `EXPOSE`, `CMD` vs `ENTRYPOINT` |
+| **LAB-07** | [`lab-07-image-size-reduction-and-multistage/`](lab-07-image-size-reduction-and-multistage/README.md) | İmaj Boyutu Küçültme & Multi-Stage | Katman önbellekleme (`CACHED`), `.dockerignore`, Go ile 850 MB'tan 12 MB'a boyut düşürme |
+| **LAB-08** | [`lab-08-distroless-and-nonroot-security/`](lab-08-distroless-and-nonroot-security/README.md) | Konteyner Güvenliği & Bağımsız Trivy | `USER 10001`, Google Distroless (sıfır saldırı yüzeyi / kabuksuz), `docker run` ile Trivy CVE taraması |
+| **LAB-09** | [`lab-09-image-tagging-and-registry/`](lab-09-image-tagging-and-registry/README.md) | Docker Hub (Public/Private) & Registry | Public imaj push/anonim pull, Private imaj yetkilendirme (`access denied`), yerel `registry:2` (Port 5000) |
+| **LAB-10** | [`lab-10-docker-compose-stack/`](lab-10-docker-compose-stack/README.md) | 3-Tier Compose Orkestrasyonu | **Frontend + Backend + Database + Redis + Dual Networks + Named Volume + Healthcheck** zinciri |
+| **LAB-11** | [`lab-11-polyglot-application-packaging/`](lab-11-polyglot-application-packaging/README.md) | 7 Farklı Yazılım Dili Paketleme Atölyesi | **Sıfır Host Kirliliği**: Go Scratch (8MB), Python, Node, React SPA, Java Maven, .NET Core, PHP Apache |
+
+---
+
+### 🔴 3. Bölüm: İleri Seviye — Üretim, Performans & Sorun Giderme
+
+| Lab | Dizin | Odak Konusu | Öğrenilen Refleks |
+|---|---|---|---|
+| **LAB-12** | [`lab-12-cgroups-resource-limits-and-oom/`](lab-12-cgroups-resource-limits-and-oom/README.md) | Kaynak Kısıtları & OOMKilled Teşhisi | cgroups v2, bellek sızıntısı simülasyonu, Linux OOM-Killer tetiklenmesi, `Exit Code 137` adli teftişi |
+| **LAB-13** | [`lab-13-backup-restore-disaster-recovery/`](lab-13-backup-restore-disaster-recovery/README.md) | Felaket Kurtarma & Volume Yedekleme | `docker save`/`load` (air-gap), Helper Pattern ile Named Volume `.tar.gz` yedekleme ve sıfırdan geri yükleme |
+| **LAB-14** | [`lab-14-enterprise-harbor-registry/`](lab-14-enterprise-harbor-registry/README.md) | Kurumsal Harbor OCI Registry (Port 18444) | **Cloudflare Bypass (127.0.0.1:18444 push/pull)**, Proje & Robot Account, Harbor dahili Trivy taraması |
+| **LAB-15** | [`lab-15-capstone-novashop-troubleshooting/`](lab-15-capstone-novashop-troubleshooting/README.md) | NovaShop Capstone & Gerçek Hayat Arızaları | Mikroservis stack'i (Gateway->Backend->DB), 3 kritik arıza senaryosu: DB kopması, 502 Bad Gateway, OOM |
+| **LAB-16** | [`lab-16-cicd-container-pipelines/`](lab-16-cicd-container-pipelines/README.md) | Konteyner CI/CD Pipeline Otomasyonu | GitHub Actions (Buildx & gha cache) ve GitLab CI (Docker-in-Docker `dind`) iş akışları |
+| **LAB-17** | [`lab-17-code-quality-sonarqube-cli/`](lab-17-code-quality-sonarqube-cli/README.md) | Docker ile SonarQube Kod Analizi (Port 19000) | Host kurulumsuz `sonarsource/sonar-scanner-cli` ile SAST statik kod analizi ve Quality Gate raporu |
+
+---
+
+### 🎮 4. Bölüm: Oyun Alanı ve DevOps Araçları
+
+| Modül | Dizin | Açıklama |
+|---|---|---|
+| **Troubleshooting Simulator** | [`troubleshooting-simulator/`](troubleshooting-simulator/README.md) | Terminal tabanlı interaktif menü (`troubleshoot-menu.sh`): Port çakışması, PID 1, OOMKilled ve DNS arızalarını canlı bozup onarma oyunu |
+| **DevOps Arcade** | [`devops-arcade-and-tools/`](devops-arcade-and-tools/README.md) | Tek komutla ayağa kalkan web araçları: Tetris, 2048, Excalidraw, IT-Tools, FileBrowser |
+
+---
+
+## 🏛️ Platform Port Haritası ve Web Erişim Slotları
+
+Laboratuvarlarımız sunucunuzdaki çekirdek DevOps servisleriyle tam uyumludur ve port çakışması yaşatmaz:
+
+| Servis / Lab | Port | Web Tarayıcı Erişimi | Açıklama |
+|---|:---:|---|---|
+| **Harbor OCI Registry (Lab 14)** | `18444` | `http://<IP>:18444` veya `http://<IP>/harbor` | Docker push/pull için Cloudflare bypass yerel portu (`127.0.0.1:18444`) |
+| **SonarQube (Lab 17)** | `19000` | `http://<IP>:19000/sonar` veya `http://<IP>/sonar` | Statik kod analizi ve Quality Gate paneli |
+| **NovaShop Capstone (Lab 15)** | `19001` | `http://<IP>/app1` veya `https://student.app1.<domain>` | App1 Slotu (Nginx Gateway -> Backend -> PostgreSQL) |
+| **3-Tier Compose Stack (Lab 10)**| `19001` | `http://<IP>/app1` veya `https://student.app1.<domain>` | App1 Slotu (Nginx -> FastAPI -> Redis -> PostgreSQL) |
+| **WordPress Compose (Lab 05)** | `19001` | `http://<IP>/app1` veya `https://student.app1.<domain>` | App1 Slotu (WordPress + MariaDB) |
+| **Polyglot Web App (Lab 11)** | `19001` | `http://<IP>/app1` veya `https://student.app1.<domain>` | React SPA, Go, Node, Python, Java, .NET veya PHP uygulaması |
+| **Yerel Docker Registry (Lab 09)**| `5000` | `http://127.0.0.1:5000` | Bağımsız hafif `registry:2` konteyneri |
+| **Temel Isınma Labları (Lab 01-08)**| `8080-8086` | `http://localhost:<PORT>` | Öğrencinin bağımsız test konteynerleri |
+
+---
+
+## ⚡ Hızlı Başlangıç
 
 ### 1. Docker Motor Durumunu Denetleme
 ```bash
@@ -77,17 +103,17 @@ docker version
 docker compose version
 ```
 
-### 2. Çekirdek Laboratuvarlara Başlama
+### 2. İlk Laboratuvara Başlama
 ```bash
-cd lab-01-docker-engine-and-warmup
+cd lab-01-container-lifecycle-and-cli
 cat README.md
 ```
 
-### 3. Temizlik
+### 3. Genel Temizlik
 ```bash
-# Compose kullanılan laboratuvarlar için:
-docker compose down -v
+# Çalışan tüm test konteynerlerini durdurup silmek için:
+docker rm -f $(docker ps -aq) 2>/dev/null || true
 
-# Bağımsız konteynerler için:
-docker rm -f <konteyner-adi>
+# Kullanılmayan ağları ve diskleri temizlemek için:
+docker system prune -f
 ```
