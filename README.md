@@ -85,6 +85,7 @@ Eğitim veya üretim sunucusunda laboratuvarların sorunsuz çalışması ve web
 | **App1 Slotu (Ana Stackler)** | `19001` | TCP | `http://<SUNUCU-IP>:19001` veya `/app1` | WordPress (Lab-07), 3-Tier Stack (Lab-08), NovaShop (Lab-14), Polyglot App (Lab-15) |
 | **App2 - App8 Slotları (Arcade & Araçlar)** | `19002 - 19008` | TCP | `http://<SUNUCU-IP>:<PORT>` | IT-Tools (19002), Excalidraw (19003), 2048 (19004), FileBrowser (19005), WhoAmI (19006), Speedtest (19007), draw.io (19008) |
 | **Temel CLI & Test Portları** | `8080 - 8086` | TCP | `http://<SUNUCU-IP>:<PORT>` | Lab-01 (8080), Lab-02 (8081), Lab-04 (8080), Lab-06 (8082), Lab-09 (8085-8086), Lab-10 (8080) test konteynerleri |
+| **LocalStack AWS Gateway** | `4566` | TCP | `http://<SUNUCU-IP>:4566` | LocalStack emülatörü AWS CLI ve SDK bağlantı noktası |
 | **Node.js Uygulama Portları** | `3000, 3001` | TCP | `http://<SUNUCU-IP>:<PORT>` | Lab-03 Dockerfile ve ortam değişkeni testleri |
 | **Python / Fundamentals API Portu** | `8000` | TCP | `http://<SUNUCU-IP>:8000` | Lab-08 Fundamentals ve Lab-15 Python test konteyneri |
 
@@ -99,6 +100,7 @@ sudo ufw allow 443/tcp comment 'HTTPS Web'
 # Kurumsal Servisler ve App Slotları
 sudo ufw allow 18444/tcp comment 'Harbor Enterprise OCI Registry'
 sudo ufw allow 19000:19008/tcp comment 'SonarQube ve DevOps Uygulama Slotlari'
+sudo ufw allow 4566/tcp comment 'LocalStack AWS Gateway'
 
 # Test ve Bireysel Konteyner Portlari
 sudo ufw allow 8080:8086/tcp comment 'Docker Lab Standalone Portlar'
@@ -143,6 +145,7 @@ Laboratuvar serisini destekleyen pratik araçlar ve simülatörler:
 
 | Modül | Dizin / Geçiş Komutu | Açık Portlar | Açıklama |
 |---|---|:---:|---|
+| **LocalStack AWS S3 Workshop** | `cd ~/docker-labs/workshop-localstack-aws-s3` | `4566, 19001` | Sıfır maliyetle Docker üzerinde LocalStack (AWS S3) emülatörü, AWS CLI işlemleri ve Python FastAPI/boto3 nesne depolama entegrasyonu. |
 | **DevOps Arcade & Tools** | `cd ~/docker-labs/devops-arcade-and-tools` | `19001 - 19008` | Tetris, IT-Tools, Excalidraw, 2048, FileBrowser, WhoAmI, Speedtest ve draw.io servislerini tek komutla veya tekil ayağa kaldırma. |
 | **Troubleshooting Simulator** | `cd ~/docker-labs/troubleshooting-simulator` | Dinamik (`80, 8080`) | 5 interaktif arıza senaryosu: Port çakışması, PID 1 kapanması, OOMKilled, köprü DNS hatası ve disk izin sorunlarını terminal menüsünden çözme (`./troubleshoot-menu.sh`). |
 | **Docker Cheatsheet** | `cd ~/docker-labs/docker-cheatsheet` | — | 7 kategoride derlenmiş modüler Docker komut başvuru kütüphanesi (Konteynerler, İmajlar, Depolama, Ağ, Compose, Temizlik ve Güvenlik). |

@@ -1,0 +1,49 @@
+services:
+  localstack:
+    image: localstack/localstack:3.8
+    container_name: localstack-aws
+    restart: unless-stopped
+    ports:
+      - "${LOCALSTACK_PORT:-4566}:4566"
+    environment:
+      - SERVICES=s3
+      - AWS_DEFAULT_REGION=us-east-1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f -s http://localhost:4566/_localstack/health | grep -q '\"s3\": \"available\"' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    networks:
+      - localstack-net
+
+  backend:
+    build:
+      context: ./backend
+    container_name: localstack-s3-backend
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-19001}:8000"
+    environment:
+      - AWS_ENDPOINT_URL=http://localstack:4566
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - S3_BUCKET=${S3_BUCKET:-devops-training-bucket}
+    depends_on:
+      localstack:
+        condition: service_healthy
+    networks:
+      - localstack-net
+
+networks:
+  localstack-net:
+    name: localstack-aws-net
+
+volumes:
+  localstack_data:
+    name: localstack-data
