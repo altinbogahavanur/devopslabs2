@@ -24,7 +24,7 @@ Laboratuvar dizinindeki simülatörü çalıştırarak arızaları canlı olarak
 
 ```bash
 # 1. Laboratuvar dizinine gidin
-cd troubleshooting-simulator
+cd ~/docker-labs/troubleshooting-simulator
 
 # 2. İnteraktif menüyü başlatın
 ./troubleshoot-menu.sh

@@ -28,7 +28,7 @@ Tüm servisler eğitim platformumuzun **`KURUMSAL_PORT_VE_GÜVENLİK_MATRİSİ`*
 Tüm servisleri tek bir hamleyle başlatmak için:
 
 ```bash
-cd devops-arcade-and-tools
+cd ~/docker-labs/devops-arcade-and-tools
 docker compose up -d
 docker compose ps
 

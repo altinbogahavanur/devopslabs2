@@ -6,6 +6,17 @@
 # ==============================================================================
 set -euo pipefail
 
+# Idempotency Kontrolu: Docker zaten kurulu mu?
+if command -v docker >/dev/null 2>&1 && docker --version >/dev/null 2>&1; then
+    echo "=========================================================="
+    echo ">>> [BILGI] Docker zaten sistemde kurulu:"
+    docker --version
+    docker compose version 2>/dev/null || true
+    echo ">>> Kurulum adimlari atlandi (Hata vermeden basariyla sonlandirildi)."
+    echo "=========================================================="
+    exit 0
+fi
+
 echo "=========================================================="
 echo ">>> [1/6] Eski ve Cakisan Paketler Temizleniyor..."
 echo "=========================================================="
