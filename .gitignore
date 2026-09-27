@@ -17,3 +17,8 @@ target/
 
 # Legacy untracked folders
 pratik-lablar/
+
+# AI & Agent internal files
+.agents/
+.codex/
+AGENTS.md
