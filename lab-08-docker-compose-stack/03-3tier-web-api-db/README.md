@@ -32,32 +32,7 @@ Kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katmanlı) Güvenli Mikroservis
 
 ## Mimari ve Çalışma Modeli
 
-```text
-                           İNTERNET / WEB TARAYICI
-                                     │
-                                Port: 19001
-                                     ▼
-+─────────────────────────────────────────────────────────────────────────────+
-| PUBLIC NETWORK (Dışa Açık Ağ: public-net)                                   |
-|                                                                             |
-|  [ NGINX GATEWAY: compose-gateway ] (Port 19001)                            |
-|                   │                                                         |
-|                   │ proxy_pass http://api:8000/                             |
-|                   ▼                                                         |
-|  [ FASTAPI MİKROSERVİSİ: compose-api ]                                      |
-+─────────────────────────────────────────────────────────────────────────────+
-                    │
-                    ▼ (İki Ağa da Bağlı Köprü)
-+─────────────────────────────────────────────────────────────────────────────+
-| INTERNAL NETWORK (İzole İç Ağ: internal-net - DIŞ DÜNYAYA TAMAMEN KAPALI!)   |
-|                                                                             |
-|                   │                                 │                       |
-|                   ▼                                 ▼                       |
-|  [ REDIS 7 ÖNBELLEK: compose-redis ]   [ POSTGRESQL 16: compose-postgres ]  |
-|  - Sadece iç ağdan erişilebilir       - Sadece iç ağdan erişilebilir        |
-|  - Healthcheck: redis-cli ping         - Healthcheck: pg_isready            |
-+─────────────────────────────────────────────────────────────────────────────+
-```
+![Nginx, FastAPI, Redis ve PostgreSQL servislerinden oluşan güvenli üç katmanlı ağ mimarisi](images/three-tier-network.svg)
 
 ---
 

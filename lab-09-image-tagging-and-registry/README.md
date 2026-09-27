@@ -20,25 +20,7 @@ Docker imajlarını ürün ve versiyon standartlarına uygun etiketlemek (`docke
 | **Public (Açık)** | `devops-app-pub` | `hbayraktar/devops-app-pub:nginx-1.0` | Herkes çekebilir (`docker logout` olsa bile). |
 | **Private (Gizli)** | `devops-app` | `hbayraktar/devops-app:nginx-1.0` | Sadece `docker login` yapmış yetkili hesap çekebilir. |
 
-```text
-[starter/Dockerfile + index.html]
-              │
-              ▼
-    devops-app:nginx-1.0
-              │
-   ┌──────────┴─────────────────────────┐
-   ▼                                    ▼
-1. BÖLÜM: PUBLIC                     2. BÖLÜM: PRIVATE
-hbayraktar/devops-app-pub:nginx-1.0  hbayraktar/devops-app:nginx-1.0
-   │                                    │
-   ├─ Push                              ├─ Push
-   ├─ Run & Curl (8085)                 ├─ Run & Curl (8086)
-   ├─ Lokalden Sil (rmi)                ├─ Lokalden Sil (rmi)
-   ├─ Hub'dan Geri Çek (pull)           ├─ Oturumu Kapat (logout)
-   └─ Çalıştır ve Doğrula               ├─ Çekmeyi Dene 🛑 (Access Denied!)
-                                        ├─ Tekrar Giriş Yap (login)
-                                        └─ Çek (pull) ve Doğrula ✅
-```
+![Yerel Docker imajını public ve private registry depolarına etiketleme, gönderme ve doğrulama akışı](images/image-tagging-flow.svg)
 
 ---
 

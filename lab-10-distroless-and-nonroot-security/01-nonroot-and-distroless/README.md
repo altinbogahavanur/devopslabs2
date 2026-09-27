@@ -23,16 +23,7 @@
 
 ## Mimari ve Shell-less Güvenlik Modeli
 
-```text
-GELENEKSEL İMAJ (Ubuntu/Debian):
-- Bash, Apt, Curl, Sudo VARDIR.
-- Saldırgan reverse shell açabilir! ⚠️
-
-GOOGLE DISTROLESS İMAJ (gcr.io/distroless/nodejs20-debian12):
-- Sadece Node.js çalışma zamanı ve uygulamanız bulunur.
-- 'sh' veya 'bash' YOKTUR! 🛡️
-- Non-root kullanıcı (nonroot:nonroot - UID: 65532) ile çalışır.
-```
+![Geleneksel Ubuntu veya Debian imajı ile minimal ve non-root Distroless imajın güvenlik karşılaştırması](images/distroless-comparison.svg)
 
 ---
 

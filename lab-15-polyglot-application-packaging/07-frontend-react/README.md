@@ -60,24 +60,7 @@ sudo systemctl restart nginx
 
 ## 4. SPA Mimarisi ve Nginx `try_files` Kuralı
 
-```text
-+─────────────────────────────────────────────────────────────+
-| 1. AŞAMA (BUILDER): node:20-alpine                          |
-| - React JSX kodları Vite ile optimize edilir                |
-| - npm run build ➔ /app/dist (HTML, CSS, JS)                |
-| - Aşama Boyutu: ~350 MB                                     |
-+─────────────────────────────────────────────────────────────+
-                               │
-            SADECE DERLENMİŞ /dist DOSYALARI AKTARILIR
-                               ▼
-+─────────────────────────────────────────────────────────────+
-| 2. AŞAMA (RUNTIME): nginx:1.25-alpine                       |
-| - Node.js veya npm YOKTUR.                                  |
-| - Gzip sıkıştırma aktif.                                    |
-| - try_files $uri $uri/ /index.html; (SPA 404 engelleme)     |
-| - Nihai İmaj Boyutu: ~25 MB! 🚀                             |
-+─────────────────────────────────────────────────────────────+
-```
+![React uygulamasını Node ve Vite ile derleyip yalnızca dist dosyalarını Nginx runtime imajına aktarma akışı](images/react-multistage-build.svg)
 
 ---
 

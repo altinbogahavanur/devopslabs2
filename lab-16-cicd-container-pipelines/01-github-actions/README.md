@@ -27,21 +27,7 @@ Bu laboratuvarda, eldeki bir Dockerfile'ın manuel olarak derlenip yüklenmesi y
 
 ## 3. CI/CD Boru Hattı Mimarisi
 
-```text
-[ GIT PUSH (main / tag) ]
-          │
-          ▼
-+─────────────────────────────────────────────────────────────+
-| GITHUB ACTIONS RUNNER                                       |
-|  1. Checkout Kaynak Kodlar                                  |
-|  2. Setup Docker Buildx                                     |
-|  3. Login Docker Hub (GitHub Secrets)                       |
-|  4. Docker Build (GHA Cache ile 10 kat hızlı)               |
-|  5. TRIVY ZAFİYET TARAMASI (CRITICAL & HIGH CVE)            |
-|     - Açık varsa pipeline kırılır (Quality Gate) ❌         |
-|  6. DOCKER PUSH ➔ Docker Hub / Harbor Registry ✅           |
-+─────────────────────────────────────────────────────────────+
-```
+![Git push sonrası checkout, Buildx, registry login, Docker build, Trivy taraması ve push adımlarını çalıştıran GitHub Actions pipeline](images/github-actions-pipeline.svg)
 
 ---
 

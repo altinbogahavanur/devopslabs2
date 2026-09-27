@@ -13,31 +13,7 @@ Docker Compose ile modern bir kurumsal mikroservis yığınını (Stack) tek bir
 
 Bu laboratuvarda kurulan sistem 4 konteyner, 2 izole ağ ve 1 kalıcı disk biriminden oluşur:
 
-```text
-[İNTERNET / KULLANICI]
-         │ (HTTP İstekleri: Port 19001)
-         ▼
- ┌────────────────────────────────────────────────────────┐
- │ PUBLIC-NET (compose_public_net)                        │
- │                                                        │
- │  ┌──────────────────────┐    ┌──────────────────────┐  │
- │  │ FRONTEND (Nginx)     │───>│ BACKEND (FastAPI/API)│  │
- │  │ Port: 19001:80       │    │ Port: İzole          │  │
- │  └──────────────────────┘    └──────────┬───────────┘  │
- └─────────────────────────────────────────┼──────────────┘
-                                           │ (İç Veri Trafiği)
- ┌─────────────────────────────────────────┼──────────────┐
- │ INTERNAL-NET (compose_internal_net)     ▼              │
- │                              ┌──────────────────────┐  │
- │                              │ CACHE (Redis:7.4)    │  │
- │                              └──────────────────────┘  │
- │                              ┌──────────────────────┐  │
- │                              │ DATABASE (Postgres)  │  │
- │                              │  [NAMED VOLUME]      │  │
- │                              │  compose_product_data│  │
- │                              └──────────────────────┘  │
- └────────────────────────────────────────────────────────┘
-```
+![Docker Compose ağ mimarisi: public ve internal ağlardaki frontend, backend, cache ve database servisleri](lab8.jpeg)
 
 ### 🛡️ Güvenlik Kuralı (Ağ Segmentasyonu):
 - **Frontend** sadece `public-net` üzerindedir. Veritabanına doğrudan ASLA erişemez (erişim denendiğinde engellenir).

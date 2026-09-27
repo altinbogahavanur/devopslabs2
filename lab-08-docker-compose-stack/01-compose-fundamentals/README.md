@@ -23,24 +23,7 @@
 
 ## Mimari ve Çalışma Modeli
 
-```text
-                             1. docker compose up -d
-                                        │
-                                        ▼
-+─────────────────────────────────────────────────────────────────────────────+
-| [1. ADIM] DATABASE BAŞLATILIR (postgres:16-alpine)                          |
-| - Healthcheck: pg_isready -U devopsuser -d devopsdb                         |
-| - Durum: starting ➔ [HEALTHY]                                               |
-+─────────────────────────────────────────────────────────────────────────────+
-                                        │
-                       depends_on: condition: service_healthy
-                                        ▼
-+─────────────────────────────────────────────────────────────────────────────+
-| [2. ADIM] WEB-API BAŞLATILIR (python:3.12-alpine)                           |
-| - Veritabanı hazır olmadan başlamaz (Bağlantı hatası yaşanmaz)              |
-| - Port: 8000 (Dış dünyaya açık)                                             |
-+─────────────────────────────────────────────────────────────────────────────+
-```
+![Docker Compose healthcheck ve depends_on ile sağlıklı servis başlatma sırası](images/compose-startup-order.svg)
 
 ---
 

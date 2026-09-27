@@ -55,26 +55,7 @@ java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -jar target/petclinic-de
 
 ## 4. Spring Boot Katmanlı JAR (Layered JAR) Mimarisi
 
-```text
-+─────────────────────────────────────────────────────────────+
-| 1. AŞAMA: maven:3.9-eclipse-temurin-17 AS builder           |
-| - pom.xml ve kaynak kodlar derlenir (mvn clean package)     |
-| - java -Djarmode=layertools -jar app.jar extract            |
-|   1. dependencies/          (Spring, Jackson, Logback vb.)  |
-|   2. spring-boot-loader/    (JarLauncher sınıfları)         |
-|   3. snapshot-dependencies/ (Dahili kütüphaneler)           |
-|   4. application/           (Sizin Controller & Kodlarınız) |
-+─────────────────────────────────────────────────────────────+
-                               │
-            SADECE AYRIŞTIRILMIŞ KATMANLAR AKTARILIR
-                               ▼
-+─────────────────────────────────────────────────────────────+
-| 2. AŞAMA: eclipse-temurin:17-jre-alpine (Non-root)          |
-| - Sık değişmeyen 'dependencies' her build'de CACHED kalır!  |
-| - Sadece kod değiştiğinde 'application' katmanı yenilenir.  |
-| - Boyut: ~600 MB ➔ ~180 MB'a düşer.                         |
-+─────────────────────────────────────────────────────────────+
-```
+![Spring Boot uygulamasını Maven builder ile katmanlara ayırıp non-root JRE runtime imajına aktarma akışı](images/java-layered-build.svg)
 
 ---
 

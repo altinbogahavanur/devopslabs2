@@ -27,13 +27,7 @@ Bu laboratuvarda, kurumsal ortamlarda en sık kullanılan CI/CD motorlarından b
 
 ## 3. GitLab CI Pipeline Aşamaları
 
-```text
-+─────────────+     +──────────────+     +──────────────────+     +────────────────+
-| 1. LINT     | ──> | 2. BUILD     | ──> | 3. SECURITY-SCAN | ──> | 4. PUSH        |
-|  (Hadolint) |     |  (docker:dind|     |  (Trivy CVE Scan)|     |  (GitLab/Harbor|
-|             |     |   image.tar) |     |   image.tar)     |     |   Registry)    |
-+─────────────+     +──────────────+     +──────────────────+     +────────────────+
-```
+![Hadolint, Docker build, Trivy güvenlik taraması ve registry push aşamalarından oluşan GitLab CI pipeline](images/gitlab-ci-pipeline.svg)
 
 ---
 

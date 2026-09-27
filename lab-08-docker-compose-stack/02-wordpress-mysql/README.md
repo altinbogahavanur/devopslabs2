@@ -27,18 +27,7 @@ Saf Docker CLI komutlarıyla (network oluşturma, volume oluşturma, uzun `docke
 
 ## Mimari ve Çalışma Modeli
 
-```text
-MANUEL CLI (15 Ayrı Komut):
-[docker network create] ➔ [docker volume create x2] ➔ [docker run mysql] ➔ [docker run wp]
-
-DOCKER COMPOSE (Tek Bildirimsel Komut):
-docker compose up -d
-     │
-     ├──> compose-wp-net (Bridge Ağı)
-     ├──> compose-wp-db-data & compose-wp-site-data (Kalıcı Volumeler)
-     ├──> compose-wp-db (MySQL 8.0 - Healthcheck: mysqladmin ping)
-     └──> compose-wp-app (WordPress 6 - db:healthy bekler)
-```
+![WordPress ve MySQL ortamını tek Docker Compose komutuyla kurma akışı](images/wordpress-compose-automation.svg)
 
 ---
 

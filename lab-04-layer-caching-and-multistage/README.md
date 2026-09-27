@@ -19,16 +19,7 @@ Docker imajları bir Dockerfile'ı yukarıdan aşağıya satır satır derler:
 - Eğer bir satırda ve kopyalanan dosyalarda **hiçbir değişiklik yoksa**, Docker o adımı çalıştırmaz; önbellekten alır (`---> CACHED`).
 - Ancak bir satırda değişiklik olursa, **o satır ve altındaki TÜM adımlar geçersiz kalır (Cache Invalidation / Cache Bust)** ve sıfırdan çalıştırılır.
 
-```text
-❌ KÖTÜ SIRALAMA (Dockerfile.slow):
-COPY . .                  ──> Kodda tek bir harf değişti! (Cache patlar)
-RUN npm install           ──> Paketler DEĞİŞMEDİĞİ HALDE sıfırdan indirilir! (45 saniye sürer)
-
-✅ DOĞRU SIRALAMA (Dockerfile.optimized):
-COPY package*.json ./     ──> Paket tanımı değişmedi! (---> CACHED ⚡ 0.0 saniye)
-RUN npm install           ──> Önbellekten gelir! (Hiç internete çıkmaz)
-COPY . .                  ──> Sadece değişen kaynak kod kopyalanır (0.2 saniyede biter)
-```
+![Docker katman önbelleğinde kötü ve doğru komut sıralaması](images/layer-cache-comparison.svg)
 
 ---
 
@@ -93,12 +84,7 @@ cat .dockerignore
 - **Derlenen Diller (Go, Rust, C):** Kodu derlemek için ağır bir SDK gerekir (Go SDK ~800 MB). Ancak derleme bittiğinde geriye tüm kütüphaneleri içine gömmüş **tek bir statik ikili dosya (binary)** kalır!
 - **Multi-Stage Build Mantığı:** İlk aşamada (`AS builder`) devasa SDK içinde derleme yapılır; ikinci aşamada (`FROM alpine` veya `FROM scratch`) sadece üretilen küçücük binary taşınır ve 800 MB'lık derleyici çöpe atılır.
 
-```text
-[AŞAMA 1: Builder] FROM golang:1.23-alpine (800 MB) ──> go build ile binary üret
-                                                               │ (Sadece binary taşınır)
-                                                               ▼
-[AŞAMA 2: Runtime] FROM alpine:3.20 (5 MB)          ──> Binary'yi çalıştır! (Toplam: 12 MB)
-```
+![Go multi-stage build: builder imajından minimal runtime imajına yalnızca binary aktarımı](images/multi-stage-build.svg)
 
 ---
 
