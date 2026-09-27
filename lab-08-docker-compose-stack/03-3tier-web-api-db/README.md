@@ -32,7 +32,7 @@ Kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katmanlı) Güvenli Mikroservis
 
 ## Mimari ve Çalışma Modeli
 
-![Nginx, FastAPI, Redis ve PostgreSQL servislerinden oluşan güvenli üç katmanlı ağ mimarisi](images/three-tier-network.svg)
+![Nginx, FastAPI, Redis ve PostgreSQL servislerinden oluşan güvenli üç katmanlı ağ mimarisi](images/three-tier-network.png)
 
 ---
 

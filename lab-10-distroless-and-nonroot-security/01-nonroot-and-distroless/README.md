@@ -23,7 +23,7 @@
 
 ## Mimari ve Shell-less Güvenlik Modeli
 
-![Geleneksel Ubuntu veya Debian imajı ile minimal ve non-root Distroless imajın güvenlik karşılaştırması](images/distroless-comparison.svg)
+![Geleneksel Ubuntu veya Debian imajı ile minimal ve non-root Distroless imajın güvenlik karşılaştırması](images/distroless-comparison.png)
 
 ---
 

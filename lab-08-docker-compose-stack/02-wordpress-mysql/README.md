@@ -27,7 +27,7 @@ Saf Docker CLI komutlarıyla (network oluşturma, volume oluşturma, uzun `docke
 
 ## Mimari ve Çalışma Modeli
 
-![WordPress ve MySQL ortamını tek Docker Compose komutuyla kurma akışı](images/wordpress-compose-automation.svg)
+![WordPress ve MySQL ortamını tek Docker Compose komutuyla kurma akışı](images/wordpress-compose-automation.png)
 
 ---
 

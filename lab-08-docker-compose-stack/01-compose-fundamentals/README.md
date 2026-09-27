@@ -23,7 +23,7 @@
 
 ## Mimari ve Çalışma Modeli
 
-![Docker Compose healthcheck ve depends_on ile sağlıklı servis başlatma sırası](images/compose-startup-order.svg)
+![Docker Compose healthcheck ve depends_on ile sağlıklı servis başlatma sırası](images/compose-startup-order.png)
 
 ---
 

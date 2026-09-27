@@ -20,7 +20,7 @@ Docker imajlarını ürün ve versiyon standartlarına uygun etiketlemek (`docke
 | **Public (Açık)** | `devops-app-pub` | `hbayraktar/devops-app-pub:nginx-1.0` | Herkes çekebilir (`docker logout` olsa bile). |
 | **Private (Gizli)** | `devops-app` | `hbayraktar/devops-app:nginx-1.0` | Sadece `docker login` yapmış yetkili hesap çekebilir. |
 
-![Yerel Docker imajını public ve private registry depolarına etiketleme, gönderme ve doğrulama akışı](images/image-tagging-flow.svg)
+![Yerel Docker imajını public ve private registry depolarına etiketleme, gönderme ve doğrulama akışı](images/image-tagging-flow.png)
 
 ---
 

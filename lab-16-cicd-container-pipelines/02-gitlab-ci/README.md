@@ -27,7 +27,7 @@ Bu laboratuvarda, kurumsal ortamlarda en sık kullanılan CI/CD motorlarından b
 
 ## 3. GitLab CI Pipeline Aşamaları
 
-![Hadolint, Docker build, Trivy güvenlik taraması ve registry push aşamalarından oluşan GitLab CI pipeline](images/gitlab-ci-pipeline.svg)
+![Hadolint, Docker build, Trivy güvenlik taraması ve registry push aşamalarından oluşan GitLab CI pipeline](images/gitlab-ci-pipeline.png)
 
 ---
 

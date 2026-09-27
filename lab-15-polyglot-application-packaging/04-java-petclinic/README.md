@@ -55,7 +55,7 @@ java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -jar target/petclinic-de
 
 ## 4. Spring Boot Katmanlı JAR (Layered JAR) Mimarisi
 
-![Spring Boot uygulamasını Maven builder ile katmanlara ayırıp non-root JRE runtime imajına aktarma akışı](images/java-layered-build.svg)
+![Spring Boot uygulamasını Maven builder ile katmanlara ayırıp non-root JRE runtime imajına aktarma akışı](images/java-layered-build.png)
 
 ---
 

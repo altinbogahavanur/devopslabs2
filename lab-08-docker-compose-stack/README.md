@@ -13,7 +13,7 @@ Docker Compose ile modern bir kurumsal mikroservis yığınını (Stack) tek bir
 
 Bu laboratuvarda kurulan sistem 4 konteyner, 2 izole ağ ve 1 kalıcı disk biriminden oluşur:
 
-![Docker Compose ağ mimarisi: public ve internal ağlardaki frontend, backend, cache ve database servisleri](lab8.jpeg)
+![Docker Compose ağ mimarisi: public ve internal ağlardaki frontend, backend, cache ve database servisleri](lab8.png)
 
 ### 🛡️ Güvenlik Kuralı (Ağ Segmentasyonu):
 - **Frontend** sadece `public-net` üzerindedir. Veritabanına doğrudan ASLA erişemez (erişim denendiğinde engellenir).

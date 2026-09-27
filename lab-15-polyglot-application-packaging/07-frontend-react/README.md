@@ -60,7 +60,7 @@ sudo systemctl restart nginx
 
 ## 4. SPA Mimarisi ve Nginx `try_files` Kuralı
 
-![React uygulamasını Node ve Vite ile derleyip yalnızca dist dosyalarını Nginx runtime imajına aktarma akışı](images/react-multistage-build.svg)
+![React uygulamasını Node ve Vite ile derleyip yalnızca dist dosyalarını Nginx runtime imajına aktarma akışı](images/react-multistage-build.png)
 
 ---
 

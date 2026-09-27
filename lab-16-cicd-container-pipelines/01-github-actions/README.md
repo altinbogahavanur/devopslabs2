@@ -27,7 +27,7 @@ Bu laboratuvarda, eldeki bir Dockerfile'ın manuel olarak derlenip yüklenmesi y
 
 ## 3. CI/CD Boru Hattı Mimarisi
 
-![Git push sonrası checkout, Buildx, registry login, Docker build, Trivy taraması ve push adımlarını çalıştıran GitHub Actions pipeline](images/github-actions-pipeline.svg)
+![Git push sonrası checkout, Buildx, registry login, Docker build, Trivy taraması ve push adımlarını çalıştıran GitHub Actions pipeline](images/github-actions-pipeline.png)
 
 ---
 

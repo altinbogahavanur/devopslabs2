@@ -19,7 +19,7 @@ Docker imajları bir Dockerfile'ı yukarıdan aşağıya satır satır derler:
 - Eğer bir satırda ve kopyalanan dosyalarda **hiçbir değişiklik yoksa**, Docker o adımı çalıştırmaz; önbellekten alır (`---> CACHED`).
 - Ancak bir satırda değişiklik olursa, **o satır ve altındaki TÜM adımlar geçersiz kalır (Cache Invalidation / Cache Bust)** ve sıfırdan çalıştırılır.
 
-![Docker katman önbelleğinde kötü ve doğru komut sıralaması](images/layer-cache-comparison.svg)
+![Docker katman önbelleğinde kötü ve doğru komut sıralaması](images/layer-cache-comparison.png)
 
 ---
 
@@ -84,7 +84,7 @@ cat .dockerignore
 - **Derlenen Diller (Go, Rust, C):** Kodu derlemek için ağır bir SDK gerekir (Go SDK ~800 MB). Ancak derleme bittiğinde geriye tüm kütüphaneleri içine gömmüş **tek bir statik ikili dosya (binary)** kalır!
 - **Multi-Stage Build Mantığı:** İlk aşamada (`AS builder`) devasa SDK içinde derleme yapılır; ikinci aşamada (`FROM alpine` veya `FROM scratch`) sadece üretilen küçücük binary taşınır ve 800 MB'lık derleyici çöpe atılır.
 
-![Go multi-stage build: builder imajından minimal runtime imajına yalnızca binary aktarımı](images/multi-stage-build.svg)
+![Go multi-stage build: builder imajından minimal runtime imajına yalnızca binary aktarımı](images/multi-stage-build.png)
 
 ---
 
