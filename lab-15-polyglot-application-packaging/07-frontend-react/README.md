@@ -22,7 +22,7 @@ Modern web geliştirmede React, Vue veya Angular gibi Tek Sayfa Uygulamaları (S
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Kurulum ve Çalıştırma
 
-Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
+Dockerfile direktiflerini kurgulamak için referans Linux akışı:
 
 ```bash
 # 1. Derleme makinesinde Node.js ile statik dosyaların üretilmesi

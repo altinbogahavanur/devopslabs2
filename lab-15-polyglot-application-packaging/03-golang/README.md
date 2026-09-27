@@ -18,7 +18,7 @@ Eğer Go uygulamasını tek aşamalı (`golang:1.23`) imaj içinde çalıştır�
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Derleme ve Çalıştırma
 
-Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
+Dockerfile direktiflerini kurgulamak için referans Linux akışı:
 
 ```bash
 # 1. Ubuntu'ya Go SDK kurulması (Geliştirme / Derleme Aşaması)

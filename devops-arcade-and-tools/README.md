@@ -2,20 +2,20 @@
 
 > **Bu Modülün Amacı:** Docker ve konteyner teknolojisini sadece soyut sunucu komutlarıyla değil; **tarayıcıda çalışan oyunlar (Tetris, 2048), yerel mimari çizim araçları (Excalidraw, draw.io), web dosya yöneticisi (FileBrowser), ağ teşhis araçları (WhoAmI) ve hız testleriyle (Speedtest)** eğlenceli ve pratik şekilde öğrenmek!
 
-Bu laboratuvar, hem **Docker Compose** ile toplu orkestrasyonu hem de **bağımsız `docker run`** komutlarıyla tekil konteyner yönetimini öğretir.
+Bu laboratuvar, hem **Docker Compose** ile toplu orkestrasyonu hem de **bağımsız `docker run`** komutlarıyla tekil konteyner yönetimini pratik olarak ele alır.
 
 ---
 
 ## 📑 Servis Kataloğu ve Kurumsal Port Listesi
 
-Tüm servisler eğitim platformumuzun **`KURUMSAL_PORT_VE_GÜVENLİK_MATRİSİ`** standartlarına göre `19001 - 19008` port aralığına ve Nginx ters vekiline (`/appX`) bağlanmıştır:
+Tüm servisler **`KURUMSAL_PORT_VE_GÜVENLİK_MATRİSİ`** standartlarına göre `19001 - 19008` port aralığına ve Nginx ters vekiline (`/appX`) bağlanmıştır:
 
 | Servis Adı | Açıklama | Port | Doğrudan IP:Port | Nginx Kısayolu | Çalıştırma Yöntemi |
 |---|---|:---:|---|---|:---:|
 | 🧱 **Web Tetris** | Ok tuşlarıyla oynanan nostaljik web Tetris oyunu. | `19001` | `http://<IP>:19001` | `http://<IP>/app1` | Compose / `docker run` |
 | 🧰 **IT-Tools** | 50+ araç (Base64, Cron, Regex, JWT, JSON/YAML çevirici). | `19002` | `http://<IP>:19002` | `http://<IP>/app2` | Compose / `docker run` |
 | ✏️ **Excalidraw** | %100 yerel ve internetsiz çalışan serbest mimari tahtası. | `19003` | `http://<IP>:19003` | `http://<IP>/app3` | Compose / `docker run` |
-| 🔢 **2048 Oyunu** | Sınıf içi turnuvalar için klasik 2048 zeka oyunu. | `19004` | `http://<IP>:19004` | `http://<IP>/app4` | Compose / `docker run` |
+| 🔢 **2048 Oyunu** | Klasik 2048 zeka oyunu. | `19004` | `http://<IP>:19004` | `http://<IP>/app4` | Compose / `docker run` |
 | 📂 **FileBrowser** | Sunucudaki dosyaları tarayıcıdan Google Drive gibi yönetme. | `19005` | `http://<IP>:19005` | `http://<IP>/app5` | Compose / `docker run` |
 | 🕵️ **Traefik WhoAmI**| HTTP request header'larını ve konteyner IP'sini basan test aracı. | `19006` | `http://<IP>:19006` | — | Compose / `docker run` |
 | 🚀 **Speedtest** | Web üzerinden tek tıkla ağ hızını ve ping'i ölçme aracı. | `19007` | `http://<IP>:19007` | — | Compose / `docker run` |
@@ -45,10 +45,10 @@ docker compose down
 
 ## 🛠️ YÖNTEM 2: Doğrudan `docker run` (CLI) ile Tekil Çalıştırma
 
-Öğrencilere her bir parametrenin (`-d`, `-p`, `-v`, `--name`, `--restart`) ne işe yaradığını tekil komutlarla kavratın:
+Her bir parametrenin (`-d`, `-p`, `-v`, `--name`, `--restart`) ne işe yaradığını tekil komutlarla inceleyebilirsiniz:
 
 ### 1. 📂 Web Tabanlı Dosya Yöneticisi (FileBrowser)
-Öğrencinin kendi sanal makinesindeki dosyalara tarayıcıdan masaüstü gibi erişmesini sağlar:
+Sanal makinedeki dosyalara web tarayıcısından dosya yöneticisi arayüzüyle erişmeyi sağlar:
 ```bash
 # 1. Adım: Konteyneri başlatın:
 docker run -d --name lab-filebrowser \
@@ -124,9 +124,9 @@ docker run --rm curlimages/curl -s "wttr.in/Istanbul?format=3"
 
 ---
 
-## ⚡ Canlı Sınıf Deneyi: "Konteyneri Boğalım (cgroups Limiti)"
+## ⚡ Uygulamalı Deney: "Konteyneri Boğalım (cgroups Limiti)"
 
-Öğrencilere Linux cgroups mekanizmasının gücünü göstermek için:
+Linux cgroups mekanizmasının kaynak sınırlandırma gücünü test etmek için:
 
 ```bash
 # Tetris oyununu aşırı düşük kaynakla (16 MB RAM, %10 CPU) başlatın:
@@ -136,7 +136,7 @@ docker run -d --name bogulmus-tetris \
   --cpus="0.1" \
   bsord/tetris:latest
 
-# Canlı olarak sınırları izleyin:
+# Sınırları izleyin:
 docker stats bogulmus-tetris
 ```
-* Ekranda `16MiB` limitini ve cgroups tavan sınırını öğrencinin bizzat görmesini sağlayın!
+* Ekranda `16MiB` limitini ve cgroups tavan sınırını `docker stats` çıktısında gözlemleyin.

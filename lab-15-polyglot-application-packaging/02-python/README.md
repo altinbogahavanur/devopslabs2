@@ -20,7 +20,7 @@ Python uygulamalarını Dockerize ederken en sık yapılan hatalar:
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Kurulum ve Çalıştırma
 
-Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
+Dockerfile direktiflerini kurgulamak için referans Linux akışı:
 
 ```bash
 # 1. Python 3 ve pip ortamının kurulması

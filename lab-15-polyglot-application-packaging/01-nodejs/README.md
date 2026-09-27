@@ -18,7 +18,7 @@ Uygulamanın çalışması için yalnızca Node.js runtime ortamına ve `package
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Kurulum ve Çalıştırma
 
-Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
+Dockerfile direktiflerini kurgulamak için referans Linux akışı:
 
 ```bash
 # 1. Node.js ve npm paket yöneticisinin kurulması
@@ -69,7 +69,7 @@ node server.js
 <details>
 <summary>💡 İpucu 1: Neden Önce package.json Kopyalanır?</summary>
 
-Eğer doğrudan `COPY . .` yapıp ardından `RUN npm install` derseniz, `server.js` dosyasında yapacağınız en ufak 1 harflik değişiklikte bile Docker tüm paketleri internetten baştan indirmek zorunda kalır. `package*.json` dosyasını önce kopyalamak derleme süresini 30 saniyeden 0.5 saniyeye düşürür.
+Eğer doğrudan `COPY . .` yapıp ardından `RUN npm install` yazarsanız, `server.js` dosyasında yapacağınız en ufak 1 harflik değişiklikte bile Docker tüm paketleri internetten baştan indirmek zorunda kalır. `package*.json` dosyasını önce kopyalamak derleme süresini 30 saniyeden 0.5 saniyeye düşürür.
 </details>
 
 <details>

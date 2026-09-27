@@ -19,7 +19,7 @@ Java uygulamalarını Dockerize ederken karşılaşılan 3 büyük problem vard�
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Derleme ve Çalıştırma
 
-Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
+Dockerfile direktiflerini kurgulamak için referans Linux akışı:
 
 ```bash
 # 1. Ubuntu'ya OpenJDK 17 ve Maven kurulması

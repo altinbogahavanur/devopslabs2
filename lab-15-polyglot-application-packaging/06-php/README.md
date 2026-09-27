@@ -20,7 +20,7 @@ PHP'yi Dockerize ederken:
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Kurulum ve Çalıştırma
 
-Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
+Dockerfile direktiflerini kurgulamak için referans Linux akışı:
 
 ```bash
 # 1. PHP 8.3 ve Composer kurulumu

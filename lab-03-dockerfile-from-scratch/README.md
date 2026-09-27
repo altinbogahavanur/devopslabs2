@@ -95,14 +95,14 @@ curl http://localhost:3001
 
 ### 5. Adım: CMD vs ENTRYPOINT Farkını Uygulamalı Olarak Kavrayın
 
-> 🎙️ **Slayt 42 & 43: CMD vs ENTRYPOINT Analizi:**
-> *"Mülakatların bir numaralı sorusu: 'CMD ile ENTRYPOINT arasındaki fark nedir?'  
-> Çok basit! **ENTRYPOINT** konteynerin sabit kimliğidir, ne yapacağını kesinleştirir.  
-> **CMD** ise ona verilen varsayılan parametredir; dışarıdan kolayca ezilebilir.  
-> Örneğin ENTRYPOINT'e `ping` yazarsanız, CMD'ye `google.com` dersiniz. Kullanıcı konteyneri çalıştırırken sonuna `yahoo.com` yazarsa CMD ezilir ama konteyner yine ping atmaya devam eder. ENTRYPOINT amiraldir, CMD emir eri!"*
+> [!NOTE]
+> **CMD ve ENTRYPOINT Direktiflerinin Rolü:**  
+> - **ENTRYPOINT**, konteynerin ana çalıştırılabilir sürecini (sabit ana programını) belirler.  
+> - **CMD**, ENTRYPOINT'e aktarılacak varsayılan parametreleri tanımlar veya tek başına kullanıldığında varsayılan başlangıç komutunu oluşturur.  
+> Örneğin ENTRYPOINT `["ping", "-c", "2"]` ve CMD `["google.com"]` olarak tanımlandığında; kullanıcı konteyneri çalıştırırken parametre belirtmezse `ping -c 2 google.com` çalışır. Kullanıcı argüman olarak `yahoo.com` geçerse CMD ezilir ve `ping -c 2 yahoo.com` çalıştırılır.
 
 Docker'da en çok karıştırılan iki direktif arasındaki fark şudur:
-* **`CMD` (Varsayılan Komut):** Konteyner çalışırken ne yapılacağını söyler. Ancak kullanıcı `docker run` komutunun sonuna herhangi bir şey yazarsa, **CMD tamamen çöpe atılır** ve kullanıcının yazdığı yeni komut çalışır.
+* **`CMD` (Varsayılan Komut):** Konteyner çalışırken çalıştırılacak varsayılan komut veya parametredir. Kullanıcı `docker run` komutunun sonuna herhangi bir argüman yazarsa, **CMD tamamen ezilir** ve kullanıcının belirttiği komut çalışır.
 * **`ENTRYPOINT` (Sabit Ana Program):** Konteyneri tek bir amaca hizmet eden bağımsız bir CLI aracına (örneğin `ping`, `python`, `node`) dönüştürür. Kullanıcı `docker run` sonuna ne yazarsa yazsın, ana komut **asla değişmez**, yazılanlar ana komutun arkasına **parametre** olarak eklenir.
 
 ---

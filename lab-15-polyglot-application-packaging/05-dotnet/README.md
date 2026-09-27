@@ -20,7 +20,7 @@ Modern kurumsal ortamlarda C# ve ASP.NET Core yaygın bir omurgadır.
 
 ## 2. Klasik Linux (Ubuntu) Üzerinde Manuel Derleme ve Çalıştırma
 
-Öğrencinin Dockerfile direktiflerini kurgulayabilmesi için referans Linux akışı:
+Dockerfile direktiflerini kurgulamak için referans Linux akışı:
 
 ```bash
 # 1. Ubuntu'ya .NET 8 SDK kurulması
