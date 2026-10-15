@@ -7,6 +7,9 @@ Gerçekçi bir kurumsal mikroservis mimarisi olan **NovaShop** (Nginx Gateway ->
 - Docker Engine ve Docker Compose v2 kurulu olmalıdır.
 - Host üzerinde **19001** portu boşta olmalıdır.
 
+> [!IMPORTANT]
+> **Port 19001 Çakışma Uyarısı:** Eğer daha önce LAB-07 veya LAB-08 (3-tier) başlattıysanız, port 19001 kullanımda olabilir. Çakışma yaşamamak için başlamadan önce ilgili lab dizininde `docker compose down -v` çalıştırarak önceki servisleri durdurun.
+
 ---
 
 ## 🚀 Adım Adım Uygulama
@@ -85,6 +88,18 @@ curl http://localhost:19001/api/products
 
 ## ✅ Doğrulama (Verification)
 - `curl -s http://localhost:19001/api/products | grep "products"` komutunun JSON ürün listesini eksiksiz döndürdüğünü görün.
+
+---
+
+## 🎮 İnteraktif Docker Arıza Simülatörü
+
+Gerçek hayat Docker ve konteyner arızalarında daha fazla teşhis pratiği yapmak ve senaryoları izole edilmiş ortamlarda çözmek için kök dizindeki interaktif simülatör menüsünü kullanabilirsiniz:
+
+```bash
+cd ~/docker-labs/troubleshooting-simulator
+./troubleshoot-menu.sh
+```
+Bu menü aracılığıyla ağ kopması, DNS çözümleme hataları, disk dolması ve bellek sınırları (OOM) gibi senaryoları simüle edip çözebilirsiniz.
 
 ---
 

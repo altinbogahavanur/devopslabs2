@@ -7,13 +7,23 @@ Ana makineye veya sunucuya Java, Maven veya yerel Sonar Scanner kurma zahmetine 
 - Docker Engine çalışır durumda olmalıdır.
 - Platform SonarQube servisi **Port 19000** üzerinde (`http://127.0.0.1:19000/sonar`) aktif olmalıdır.
 
+> [!TIP]
+> **Eğer ortamınızda çalışan bir SonarQube yoksa**, aşağıdaki komutla hemen başlatabilirsiniz:
+> ```bash
+> docker run -d --name sonarqube-standalone \
+>   -p 19000:9000 \
+>   -e SONAR_WEB_CONTEXT=/sonar \
+>   sonarqube:community
+> ```
+> *(İlk açılışta servisin hazır hale gelmesi 1-2 dakika sürebilir: `docker logs -f sonarqube-standalone` ile logları takip edebilirsiniz).*
+
 ---
 
 ## 🚀 Adım Adım Uygulama
 
 ### 1. SonarQube Arayüzüne Giriş ve Token Üretme
 1. Tarayıcınızdan `http://<SUNUCU-IP>:19000/sonar` (veya yerelde `http://localhost:19000/sonar`) adresine gidin.
-2. Giriş yapın (Varsayılan: `admin / admin`).
+2. Giriş yapın (Varsayılan: `admin / admin` - ilk girişte şifre değiştirmeniz istenirse güncelleyin).
 3. Sağ üstteki profil simgesinden **My Account → Security** sekmesine gidin.
 4. **Generate Token** diyerek `cli-scanner` adında bir User Token oluşturun ve kopyalayın.
 
@@ -38,9 +48,14 @@ cat src/app.js
 Hiçbir şey kurmadan, yerel kod dizinini (`/usr/src`) resmi Sonar Scanner imajına bağlayarak taramayı başlatın:
 
 ```bash
-SONAR_TOKEN="<1_ADIMDA_ALDIĞINIZ_TOKEN>"
+export SONAR_TOKEN="<1_ADIMDA_ALDIĞINIZ_TOKEN>"
 
-# Docker ile tarayıcı konteynerini çalıştırın:
+# Kolay ve otomatik çalıştırma için hazır script (Ubuntu & macOS uyumlu):
+./scan.sh
+```
+
+*Alternatif olarak doğrudan Docker komutu ile çalıştırmak isterseniz (Ubuntu / Linux):*
+```bash
 docker run --rm \
   --network host \
   -v "$(pwd):/usr/src" \
@@ -48,8 +63,6 @@ docker run --rm \
   -Dsonar.host.url="http://127.0.0.1:19000/sonar" \
   -Dsonar.token="${SONAR_TOKEN}"
 ```
-
-*(Alternatif olarak `./scan.sh` betiğini de kullanabilirsiniz).*
 
 ---
 

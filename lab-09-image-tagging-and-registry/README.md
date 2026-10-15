@@ -17,8 +17,8 @@ Docker imajlarını ürün ve versiyon standartlarına uygun etiketlemek (`docke
 
 | Repository Türü | Docker Hub Depo Adı | Örnek Tam İmaj Adı | Erişim Kuralı |
 | :--- | :--- | :--- | :--- |
-| **Public (Açık)** | `devops-app-pub` | `hbayraktar/devops-app-pub:nginx-1.0` | Herkes çekebilir (`docker logout` olsa bile). |
-| **Private (Gizli)** | `devops-app` | `hbayraktar/devops-app:nginx-1.0` | Sadece `docker login` yapmış yetkili hesap çekebilir. |
+| **Public (Açık)** | `devops-app-pub` | `<DOCKERHUB_USERNAME>/devops-app-pub:nginx-1.0` | Herkes çekebilir (`docker logout` olsa bile). |
+| **Private (Gizli)** | `devops-app` | `<DOCKERHUB_USERNAME>/devops-app:nginx-1.0` | Sadece `docker login` yapmış yetkili hesap çekebilir. |
 
 ![Yerel Docker imajını public ve private registry depolarına etiketleme, gönderme ve doğrulama akışı](images/image-tagging-flow.png)
 
@@ -63,9 +63,8 @@ docker images | grep devops-app
 Terminalde kullanıcı adınızı tanımlayarak oturum açın:
 
 ```bash
-# Kullanıcı adınızı değişkene atayın (Kendi kullanıcı adınızı yazın):
+# Kullanıcı adınızı değişkene atayın (Kendi Docker Hub kullanıcı adınızı yazın):
 DOCKERHUB_USERNAME="<DOCKERHUB_KULLANICI_ADINIZ>"
-# (Örnek: DOCKERHUB_USERNAME="hbayraktar")
 
 # Docker Hub'a oturum açın (Şifrenizi veya Personal Access Token'ınızı girin):
 docker login --username "${DOCKERHUB_USERNAME}"
@@ -159,7 +158,7 @@ docker pull "${DOCKERHUB_USERNAME}/devops-app:nginx-1.0"
 
 🛑 **BEKLENEN GÜVENLİK ENGELİ:**
 ```text
-Error response from daemon: pull access denied for hbayraktar/devops-app, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+Error response from daemon: pull access denied for <DOCKERHUB_USERNAME>/devops-app, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
 ```
 *(Gözlem: Repository gizli olduğu için Docker Hub anonim indirmeye izin vermedi).*
 

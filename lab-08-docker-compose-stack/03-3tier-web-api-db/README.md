@@ -25,7 +25,7 @@ Kurumsal prodüksiyon seviyesinde **3-Tier (Üç Katmanlı) Güvenli Mikroservis
 ## Ön Koşullar
 
 - Docker Engine 24+ ve Docker Compose V2 (`docker compose version`).
-- Host üzerinde `19001` portunun boşta olması.
+- Host üzerinde `19001` portunun boşta olması (Eğer LAB-07 veya LAB-14 çalışıyorsa, çakışmayı önlemek için önce `docker compose down -v` ile durdurun).
 - `curl` ve `jq` araçlarının kurulu olması.
 
 ---

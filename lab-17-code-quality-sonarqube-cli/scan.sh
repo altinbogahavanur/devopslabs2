@@ -4,6 +4,15 @@ set -e
 SONAR_HOST="${SONAR_HOST:-http://127.0.0.1:19000/sonar}"
 SONAR_TOKEN="${SONAR_TOKEN:-}"
 
+# OS Kontrolü (Linux/Ubuntu için native host network, macOS için host.docker.internal)
+if [ "$(uname)" = "Darwin" ]; then
+  NETWORK_ARGS="--add-host=host.docker.internal:host-gateway"
+  SONAR_CONTAINER_HOST=$(echo "$SONAR_HOST" | sed -E 's/127\.0\.0\.1|localhost/host.docker.internal/')
+else
+  NETWORK_ARGS="--network host"
+  SONAR_CONTAINER_HOST="$SONAR_HOST"
+fi
+
 echo "=========================================================="
 echo "SONARQUBE DOCKER CLI ILE STATIK KOD TARAMASI (SAST)"
 echo "=========================================================="
@@ -16,10 +25,10 @@ fi
 
 echo -e "\nDocker Scanner Konteyneri Calistiriliyor..."
 docker run --rm \
-  --network host \
+  ${NETWORK_ARGS} \
   -v "$(pwd):/usr/src" \
   sonarsource/sonar-scanner-cli:latest \
-  -Dsonar.host.url="${SONAR_HOST}" \
+  -Dsonar.host.url="${SONAR_CONTAINER_HOST}" \
   -Dsonar.token="${SONAR_TOKEN}"
 
 echo -e "\n=========================================================="

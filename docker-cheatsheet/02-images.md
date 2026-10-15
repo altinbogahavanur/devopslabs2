@@ -76,7 +76,7 @@ docker inspect -f 'Entrypoint: {{.Config.Entrypoint}}, Cmd: {{.Config.Cmd}}' my-
 
 ### İmajı Docker Hub İçin Etiketleme
 ```bash
-docker tag my-app:1.0 hbayraktar/devops-app-pub:nginx-1.0
+docker tag my-app:1.0 <KULLANICI_ADI>/devops-app-pub:nginx-1.0
 ```
 * **Format:** `<KULLANICI_ADI>/<REPO_ADI>:<ETİKET>`
 
@@ -89,7 +89,7 @@ docker tag my-app:1.0 127.0.0.1:18444/devops-public/my-app:1.0
 ### İmajı Registry'ye Yükleme (`push`)
 ```bash
 # Docker Hub'a gönderme:
-docker push hbayraktar/devops-app-pub:nginx-1.0
+docker push <KULLANICI_ADI>/devops-app-pub:nginx-1.0
 
 # Harbor'a gönderme:
 docker push 127.0.0.1:18444/devops-public/my-app:1.0

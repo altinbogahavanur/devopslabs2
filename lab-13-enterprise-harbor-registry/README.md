@@ -30,7 +30,7 @@ Kurumsal ortamlarda konteyner depolama standardı olan **Harbor Enterprise OCI R
 > **Neden Web için Domain, CLI Push için Lokal Port (18444)?**  
 > Cloudflare ücretsiz/standart proxy katmanında **maksimum HTTP request body boyutu 100 MB** ile sınırlıdır. Docker katmanları (`layer`) 150 MB veya 500 MB boyutlarına ulaştığında Cloudflare `413 Request Entity Too Large` hatası verir.  
 > **Kurumsal Çözüm:**  
-> - 🌐 **Web Arayüzü Erişimi (Tarayıcı):** `https://student101-harbor.devopsatolyesi.com/` (veya `https://studentXX-harbor.devopsatolyesi.com/` ya da `http://<SUNUCU-IP>:18444`). Cloudflare Wildcard SSL sertifikası ve Nginx ters proxy arkasından güvenle kullanılır.  
+> - 🌐 **Web Arayüzü Erişimi (Tarayıcı):** `http://harbor.devopsatolyesi.com:18444` (veya `http://127.0.0.1:18444` ya da sunucu domaini `https://<SUNUCU-DOMAIN>/`). Cloudflare Wildcard SSL sertifikası ve Nginx ters proxy arkasından güvenle kullanılır.  
 > - 🐳 **Docker CLI Push / Pull Erişimi (Terminal):** Sunucu içindeki yerel port olan `127.0.0.1:18444` üzerinden yürütülür. Böylece hiçbir proxy/boyut kısıtına takılmadan devasa imajlar dahi doğrudan depoya aktarılır.
 
 ---
@@ -56,7 +56,7 @@ fi
 sudo mkdir -p /etc/docker
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
-  "insecure-registries": ["harbor.devopsatolyesi.com:18444", "student100-harbor.devopsatolyesi.com:18444", "student101-harbor.devopsatolyesi.com:18444", "127.0.0.1:18444", "localhost:18444"]
+  "insecure-registries": ["harbor.devopsatolyesi.com:18444", "127.0.0.1:18444", "localhost:18444"]
 }
 EOF
 
@@ -95,11 +95,22 @@ docker ps --filter "name=harbor" --format "table {{.Names}}\t{{.Status}}\t{{.Por
 ```
 *Trivy servisinin (`trivy-adapter`) listede çalıştığını teyit edin.*
 
+#### Seçenek C: Düşük Kaynaklı Ortamlar İçin Hafif OCI Registry (docker-compose.yml)
+Eğer sisteminizde Harbor ve Trivy çalıştırmak için yeterli RAM/kaynak yoksa (Harbor en az 4-8 GB RAM gerektirir), bu dizindeki hafif `docker-compose.yml` dosyasını kullanarak ~50 MB RAM tüketen resmi bir Docker Registry ve Web Arayüzü başlatabilirsiniz:
+
+```bash
+cd ~/docker-labs/lab-13-enterprise-harbor-registry
+docker compose up -d
+```
+- **Web UI:** `http://localhost:8085`
+- **Registry Port:** `5000` (`localhost:5000` veya `127.0.0.1:5000`)
+*(Not: Bu hafif alternatif modda push/pull komutlarında port olarak `18444` yerine `5000` kullanılır).*
+
 ---
 
 ### Adım 3: Harbor Web Arayüzüne Giriş ve Projeleri Açma
 
-1. Tarayıcınızdan **`https://student101-harbor.devopsatolyesi.com/`** (veya `https://studentXX-harbor.devopsatolyesi.com/` ya da yerel test için `http://<SUNUCU-IP>:18444`) adresine gidin.
+1. Tarayıcınızdan **`http://harbor.devopsatolyesi.com:18444`** (veya yerel test için `http://127.0.0.1:18444`) adresine gidin.
 2. Giriş yapın:
    - **Kullanıcı:** `admin`
    - **Parola:** `Harbor12345`
@@ -237,7 +248,7 @@ Harbor imaj SHA256 parmak izi değiştiği anda işlemi bloke eder ve sürüm b�
 
 ## ✅ Doğrulama (Verification)
 - `curl -s http://127.0.0.1:18444/api/v2.0/systeminfo` komutunun sağlıklı yanıt verdiğini gördünüz.
-- Tarayıcı üzerinden `https://student100-harbor.devopsatolyesi.com/` adresinden Harbor portalına ulaştınız.
+- Tarayıcı üzerinden `http://harbor.devopsatolyesi.com:18444` (veya `http://127.0.0.1:18444`) adresinden Harbor portalına ulaştınız.
 - `127.0.0.1:18444` üzerinden imaj push ve pull işlemlerini başarıyla tamamladınız.
 - Private projeye şifresiz erişimin engellendiğini ve Tag Immutability kuralının çalıştığını test ettiniz.
 - Trivy motorunun aktif olarak CVE zafiyet taraması yaptığını doğruladınız.

@@ -61,7 +61,7 @@ echo "===> /etc/docker/daemon.json güncelleniyor..."
 sudo mkdir -p /etc/docker
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
-  "insecure-registries": ["${HARBOR_DOMAIN}:${HARBOR_PORT}", "student100-harbor.devopsatolyesi.com:18444", "student101-harbor.devopsatolyesi.com:18444", "127.0.0.1:${HARBOR_PORT}", "localhost:${HARBOR_PORT}"]
+  "insecure-registries": ["${HARBOR_DOMAIN}:${HARBOR_PORT}", "127.0.0.1:${HARBOR_PORT}", "localhost:${HARBOR_PORT}"]
 }
 EOF
 sudo systemctl reload docker 2>/dev/null || true
@@ -79,7 +79,7 @@ fi
 
 echo "======================================================================"
 echo "✅ Harbor ve Trivy Başarıyla Kuruldu ve Çalışıyor!"
-echo "🌐 Web UI (Tarayıcı)   : https://student100-harbor.devopsatolyesi.com/ veya http://127.0.0.1:${HARBOR_PORT}"
+echo "🌐 Web UI (Tarayıcı)   : http://${HARBOR_DOMAIN}:${HARBOR_PORT} veya http://127.0.0.1:${HARBOR_PORT}"
 echo "🐳 Docker CLI (Lokal)  : docker login 127.0.0.1:${HARBOR_PORT} -u admin -p ${HARBOR_PASSWORD}"
 echo "🛡️ Zafiyet Motoru      : Trivy (Aktif)"
 echo "👤 Kullanıcı Adı       : admin"
