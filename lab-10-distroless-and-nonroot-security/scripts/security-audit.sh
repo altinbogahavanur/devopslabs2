@@ -1,14 +1,22 @@
 #!/bin/bash
 set -e
 
-cd "$(dirname "$0")/.."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+LAB10_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 echo "=========================================================="
 echo "🛡️  KONTEYNER GÜVENLİK VE SERTLEŞTİRME TESTİ 🛡️"
 echo "=========================================================="
 
 echo -e "\n[1/4] Sertleştirilmiş Konteyner Başlatılıyor..."
-docker compose up -d --build || docker-compose up -d --build
+docker rm -f hardened-app 2>/dev/null || true
+docker build -f "${LAB10_DIR}/app/Dockerfile.hardened" -t sec-demo:hardened "${LAB10_DIR}/app" > /dev/null
+
+docker run -d --name hardened-app \
+  --read-only \
+  --tmpfs /tmp:rw,noexec,nosuid \
+  -p 8080:8080 \
+  sec-demo:hardened > /dev/null
 sleep 2
 
 echo -e "\n[2/4] Çalışan Kullanıcı (UID) Denetleniyor:"
@@ -33,3 +41,6 @@ echo -e "\n=========================================================="
 echo "🌐 API GÜVENLİK DURUMU:"
 curl -s http://localhost:8080/
 echo -e "\n=========================================================="
+
+# Temizlik
+docker rm -f hardened-app >/dev/null 2>&1 || true
