@@ -110,40 +110,27 @@ sudo ufw reload
 
 ---
 
-## 🗺️ Laboratuvar Kataloğu ve Çalışma Dizinleri
+## 🗺️ Lab Kataloğu
 
-Tüm laboratuvar geçişleri standart tam yol formatında hazırlanmıştır. İlgili modüle başlamak için doğrudan verilen geçiş komutunu çalıştırmanız yeterlidir:
-
-| Sıra | Laboratuvar Adı | Dizin / Geçiş Komutu | Açık Portlar | Kapsam ve Kazanımlar |
-|:---:|---|---|:---:|---|
-| **00** | [Linux Sistem Yönetimi & Teftiş](lab-00-linux/README.md) | `cd ~/docker-labs/lab-00-linux` | — | CPU, RAM, disk kapasitesi, Inode limitleri, kullanıcı ve yetki yönetimi, systemd servisleri, journalctl logları ve ağ arayüzü teftişi. |
-| **01** | [Konteyner Yaşam Döngüsü & CLI](lab-01-container-lifecycle-and-cli/README.md) | `cd ~/docker-labs/lab-01-container-lifecycle-and-cli` | `8080` | Konteyner yaşam döngüsü komutları: `run`, `stop`, `start`, `restart`, `pause`, `unpause`, `kill`, `rm`, `prune` ve disk analizi (`df`). |
-| **02** | [Canlı Hata Ayıklama & Log Yönetimi](lab-02-live-debugging-and-logging/README.md) | `cd ~/docker-labs/lab-02-live-debugging-and-logging` | `8081` | Canlı konteyner içine kabuk açma (`exec`), `docker cp` ile sıcak yama (hotfix), katman dosya farkları (`diff`), log filtreleme (`logs -t`) ve `inspect`. |
-| **03** | [Sıfırdan Dockerfile & İmaj Derleme](lab-03-dockerfile-from-scratch/README.md) | `cd ~/docker-labs/lab-03-dockerfile-from-scratch` | `3000, 3001` | Linux terminal adımlarının Dockerfile direktiflerine dönüşümü (`FROM`, `WORKDIR`, `COPY`, `ENV`, `EXPOSE`, `CMD` vs `ENTRYPOINT`). |
-| **04** | [Katman Önbellekleme & Multi-Stage](lab-04-layer-caching-and-multistage/README.md) | `cd ~/docker-labs/lab-04-layer-caching-and-multistage` | `8080` | Katman önbellekleme mekanizması (`CACHED`), `.dockerignore` kullanımı, Go ile çok aşamalı (Multi-Stage) derleme (850 MB -> 12 MB). |
-| **05** | [Konteyner Ağları & Dahili DNS](lab-05-networking-and-dns/README.md) | `cd ~/docker-labs/lab-05-networking-and-dns` | — | Varsayılan köprü (bridge) kısıtları, kullanıcı tanımlı özel köprü ağı, gömülü DNS (`127.0.0.11`) ile isimle çözümleme ve ağ izolasyonu. |
-| **06** | [Depolama: Bind Mount vs Volume](lab-06-storage-bind-mount-vs-volume/README.md) | `cd ~/docker-labs/lab-06-storage-bind-mount-vs-volume` | `8082` | Ephemeral veri kaybı deneyi, Bind Mount ile canlı kod senkronizasyonu (hot-reload), Named Volume ile veri kalıcılığı ve bellek içi `tmpfs`. |
-| **07** | [Docker Compose Hızlı Başlangıç](lab-07-docker-compose-quickstart/README.md) | `cd ~/docker-labs/lab-07-docker-compose-quickstart` | `19001` | WordPress ve MariaDB veritabanı yığınının `docker-compose.yaml` ve `.env` ile tek komutla (`docker compose up -d`) ayağa kaldırılması. |
-| **08** | [Docker Compose 3-Tier Mimari](lab-08-docker-compose-stack/README.md) | `cd ~/docker-labs/lab-08-docker-compose-stack/03-3tier-web-api-db` | `19001` | Frontend (Nginx), Backend (FastAPI), Database (Postgres) ve Cache (Redis) bileşenleri, izole iç/dış ağlar ve `service_healthy` bağımlılık zinciri. |
-| **09** | [İmaj Etiketleme & Registry (Hub)](lab-09-image-tagging-and-registry/README.md) | `cd ~/docker-labs/lab-09-image-tagging-and-registry` | `8085, 8086` | Semantik imaj etiketleme, Docker Hub Public (`push/pull`) vs Private depo güvenliği, yetkisiz erişim engelleme testi (`pull access denied`). |
-| **10** | [Konteyner Güvenliği: Non-Root & Distroless](lab-10-distroless-and-nonroot-security/README.md) | `cd ~/docker-labs/lab-10-distroless-and-nonroot-security/app` | `8080` | `USER nonroot` ile en az yetki ilkesi, Google Distroless ile kabuksuz sıfır saldırı yüzeyi ve Aqua Trivy ile CVE güvenlik açığı taraması. |
-| **11** | [Kaynak Kotaları (cgroups) & OOMKilled](lab-11-cgroups-resource-limits-and-oom/README.md) | `cd ~/docker-labs/lab-11-cgroups-resource-limits-and-oom` | — | Linux cgroups v2 kotaları (`--memory`, `--cpus`), bellek sızıntısı simülasyonu, Linux Kernel OOM-Killer tetiklenmesi ve `Exit Code 137` analizi. |
-| **12** | [Felaket Kurtarma: İmaj & Volume Yedekleme](lab-12-backup-restore-disaster-recovery/README.md) | `cd ~/docker-labs/lab-12-backup-restore-disaster-recovery` | — | Air-gapped ortamlar için `docker save`/`load`, Helper Container kalıbı ile Docker Named Volume verilerini `.tar.gz` olarak yedekleme ve geri yükleme. |
-| **13** | [Kurumsal OCI Registry: Harbor](lab-13-enterprise-harbor-registry/README.md) | `cd ~/docker-labs/lab-13-enterprise-harbor-registry` | `18444` | Harbor Enterprise OCI Registry kurulumu, yerel port (`127.0.0.1:18444`), Public/Private projeler, CI/CD Robot Account, Tag Immutability ve Trivy. |
-| **14** | [NovaShop Capstone & Sorun Giderme](lab-14-capstone-novashop-troubleshooting/README.md) | `cd ~/docker-labs/lab-14-capstone-novashop-troubleshooting` | `19001` | 3 gerçek hayat arıza senaryosu: Veritabanı bağlantı kopması, Gateway 502 Bad Gateway (Port uyuşmazlığı) ve bellek sızıntısı (OOM çökmesi). |
-| **15** | [Polyglot Uygulama Paketleme Atölyesi](lab-15-polyglot-application-packaging/README.md) | `cd ~/docker-labs/lab-15-polyglot-application-packaging` | `19001` | Host kirliliği olmadan izole paketleme: Python Flask, Node.js Express, Go Scratch, Java PetClinic, .NET API, PHP ve React SPA. |
-| **16** | [Kod Kalitesi & Güvenlik Taraması (SAST)](lab-16-code-quality-sonarqube-cli/README.md) | `cd ~/docker-labs/lab-16-code-quality-sonarqube-cli` | `19000` | Host'a Java kurmadan Docker üzerinden `sonar-scanner-cli` ile kaynak kod taraması, Code Smells tespiti ve SonarQube Quality Gate denetimi. |
-
----
-
-## 🕹️ Destekleyici Modüller ve Araçlar
-
-Laboratuvar serisini destekleyen pratik araçlar ve başvuru kaynakları:
-
-| Modül | Dizin / Geçiş Komutu | Açık Portlar | Açıklama |
-|---|---|:---:|---|
-| **DevOps Arcade & Tools** | `cd ~/docker-labs/devops-arcade-and-tools` | `19001 - 19008` | Tetris, IT-Tools, Excalidraw, 2048, FileBrowser, WhoAmI, Speedtest ve draw.io servislerini tek komutla veya tekil ayağa kaldırma. |
-| **Docker Cheatsheet** | `cd ~/docker-labs/docker-cheatsheet` | — | 7 kategoride derlenmiş modüler Docker komut başvuru kütüphanesi (Konteynerler, İmajlar, Depolama, Ağ, Compose, Temizlik ve Güvenlik). |
+| No | Lab | Port |
+|:---:|---|:---:|
+| **00** | [Linux Sistem Yönetimi & Teftiş](lab-00-linux/README.md) | — |
+| **01** | [Konteyner Yaşam Döngüsü & CLI](lab-01-container-lifecycle-and-cli/README.md) | `8080` |
+| **02** | [Canlı Hata Ayıklama & Log Yönetimi](lab-02-live-debugging-and-logging/README.md) | `8081` |
+| **03** | [Sıfırdan Dockerfile & İmaj Derleme](lab-03-dockerfile-from-scratch/README.md) | `3000, 3001` |
+| **04** | [Katman Önbellekleme & Multi-Stage](lab-04-layer-caching-and-multistage/README.md) | `8080` |
+| **05** | [Konteyner Ağları & Dahili DNS](lab-05-networking-and-dns/README.md) | — |
+| **06** | [Depolama: Bind Mount vs Volume](lab-06-storage-bind-mount-vs-volume/README.md) | `8082` |
+| **07** | [Docker Compose Hızlı Başlangıç](lab-07-docker-compose-quickstart/README.md) | `19001` |
+| **08** | [Docker Compose 3-Tier Mimari](lab-08-docker-compose-stack/README.md) | `19001` |
+| **09** | [İmaj Etiketleme & Registry](lab-09-image-tagging-and-registry/README.md) | `8085, 8086` |
+| **10** | [Konteyner Güvenliği: Non-Root & Distroless](lab-10-distroless-and-nonroot-security/README.md) | `8080` |
+| **11** | [Kaynak Kotaları (cgroups) & OOMKilled](lab-11-cgroups-resource-limits-and-oom/README.md) | — |
+| **12** | [Felaket Kurtarma: İmaj & Volume Yedekleme](lab-12-backup-restore-disaster-recovery/README.md) | — |
+| **13** | [Kurumsal OCI Registry: Harbor](lab-13-enterprise-harbor-registry/README.md) | `18444` |
+| **14** | [NovaShop Capstone & Sorun Giderme](lab-14-capstone-novashop-troubleshooting/README.md) | `19001` |
+| **15** | [Polyglot Uygulama Paketleme Atölyesi](lab-15-polyglot-application-packaging/README.md) | `19001` |
+| **16** | [Kod Kalitesi & Güvenlik Taraması (SAST)](lab-16-code-quality-sonarqube-cli/README.md) | `19000` |
 
 ---
 
