@@ -1,6 +1,5 @@
-# Kasitli olarak eski ve CVE acigi bulunan paket surumleri
+# Kasitli olarak eski ve bilinen kritik CVE zafiyetleri barindiran paketler
 requests==2.19.1
-urllib3==1.24.1
 flask==1.0.2
 Werkzeug==0.14.1
 Jinja2==2.10
