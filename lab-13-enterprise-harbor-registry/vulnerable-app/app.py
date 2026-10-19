@@ -7,7 +7,7 @@ def index():
     return jsonify({
         "service": "vulnerable-app",
         "status": "running",
-        "description": "Harbor Trivy zafiyet taramasi ve Security Gate testi icin ornek uygulama"
+        "description": "Harbor Trivy zafiyet taramasi testi icin ornek uygulama"
     })
 
 if __name__ == '__main__':
