@@ -82,11 +82,11 @@ Eğitim veya üretim sunucusunda laboratuvarların sorunsuz çalışması ve web
 | **HTTPS Web (Nginx Proxy)** | `443` | TCP | `https://<SUNUCU-IP>/` | SSL sonlandırma ve güvenli web trafiği |
 | **Harbor OCI Registry** | `18444` | TCP | `http://<SUNUCU-IP>:18444` | Doğrudan Docker CLI (`login/push/pull`) ve Harbor Core erişimi |
 | **SonarQube Dashboard** | `19000` | TCP | `http://<SUNUCU-IP>:19000/sonar` | Statik kod analizi (SAST) ve Kalite Kapısı paneli |
-| **App1 Slotu (Ana Stackler)** | `19001` | TCP | `http://<SUNUCU-IP>:19001` veya `/app1` | WordPress (Lab-07), 3-Tier Stack (Lab-08), NovaShop (Lab-14), Polyglot App (Lab-15) |
+| **App1 Slotu (Ana Stackler)** | `19001` | TCP | `http://<SUNUCU-IP>:19001` veya `/app1` | WordPress (Lab-07), 3-Tier Stack (Lab-08), Polyglot App (Lab-14) |
 | **App2 - App8 Slotları (Arcade & Araçlar)** | `19002 - 19008` | TCP | `http://<SUNUCU-IP>:<PORT>` | IT-Tools (19002), Excalidraw (19003), 2048 (19004), FileBrowser (19005), WhoAmI (19006), Speedtest (19007), draw.io (19008) |
 | **Temel CLI & Test Portları** | `8080 - 8086` | TCP | `http://<SUNUCU-IP>:<PORT>` | Lab-01 (8080), Lab-02 (8081), Lab-04 (8080), Lab-06 (8082), Lab-09 (8085-8086), Lab-10 (8080) test konteynerleri |
 | **Node.js Uygulama Portları** | `3000, 3001` | TCP | `http://<SUNUCU-IP>:<PORT>` | Lab-03 Dockerfile ve ortam değişkeni testleri |
-| **Python / Fundamentals API Portu** | `8000` | TCP | `http://<SUNUCU-IP>:8000` | Lab-08 Fundamentals ve Lab-15 Python test konteyneri |
+| **Python / Fundamentals API Portu** | `8000` | TCP | `http://<SUNUCU-IP>:8000` | Lab-08 Fundamentals ve Lab-14 Python test konteyneri |
 
 ### 2. Ubuntu UFW Güvenlik Duvarı Açma Komutları
 
@@ -128,9 +128,8 @@ sudo ufw reload
 | **11** | [Kaynak Kotaları (cgroups) & OOMKilled](lab-11-cgroups-resource-limits-and-oom/README.md) | — |
 | **12** | [Felaket Kurtarma: İmaj & Volume Yedekleme](lab-12-backup-restore-disaster-recovery/README.md) | — |
 | **13** | [Kurumsal OCI Registry: Harbor](lab-13-enterprise-harbor-registry/README.md) | `18444` |
-| **14** | [NovaShop Capstone & Sorun Giderme](lab-14-capstone-novashop-troubleshooting/README.md) | `19001` |
-| **15** | [Polyglot Uygulama Paketleme Atölyesi](lab-15-polyglot-application-packaging/README.md) | `19001` |
-| **16** | [Kod Kalitesi & Güvenlik Taraması (SAST)](lab-16-code-quality-sonarqube-cli/README.md) | `19000` |
+| **14** | [Polyglot Uygulama Paketleme Atölyesi](lab-14-polyglot-application-packaging/README.md) | `19001` |
+| **15** | [Kod Kalitesi & Güvenlik Taraması (SAST)](lab-15-code-quality-sonarqube-cli/README.md) | `19000` |
 
 ---
 

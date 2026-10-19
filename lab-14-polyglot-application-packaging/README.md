@@ -1,4 +1,4 @@
-# LAB-15: Polyglot Uygulama Paketleme Atölyesi (7 Farklı Yazılım Dili)
+# LAB-14: Polyglot Uygulama Paketleme Atölyesi (7 Farklı Yazılım Dili)
 
 ## 🎯 Labın Amacı
 Farklı programlama dillerindeki uygulamaların **normal bir Linux sunucusunda elle nasıl kurulup çalıştırıldığını** ve bu geleneksel Linux adımlarının **Dockerfile direktiflerine satır satır nasıl uyarlandığını** kavramak; 7 popüler dili ana makineye tek bir kütüphane bile kurmadan izole şekilde paketlemek.
@@ -52,7 +52,7 @@ CMD ["python", "app.py"]
 #### 💻 Uygulama Adımları:
 ```bash
 # 1. Adım: Python dizinine geçin:
-cd ~/docker-labs/lab-15-polyglot-application-packaging/02-python
+cd ~/docker-labs/lab-14-polyglot-application-packaging/02-python
 
 # 2. Adım: İmajı derleyin:
 docker build -t app-python:1.0 .
@@ -96,7 +96,7 @@ CMD ["node", "server.js"]
 #### 💻 Uygulama Adımları:
 ```bash
 # 1. Adım: Node.js dizinine geçin:
-cd ~/docker-labs/lab-15-polyglot-application-packaging/01-nodejs
+cd ~/docker-labs/lab-14-polyglot-application-packaging/01-nodejs
 
 # 2. Adım: İmajı derleyin:
 docker build -t app-node:1.0 .
@@ -141,7 +141,7 @@ ENTRYPOINT ["/server"]
 #### 💻 Uygulama Adımları:
 ```bash
 # 1. Adım: Go dizinine geçin:
-cd ~/docker-labs/lab-15-polyglot-application-packaging/03-golang
+cd ~/docker-labs/lab-14-polyglot-application-packaging/03-golang
 
 # 2. Adım: İmajı derleyin (800 MB'lık Go SDK yerine 8 MB'lık imaj üretilir):
 docker build -t app-go:1.0 .
@@ -191,7 +191,7 @@ CMD ["nginx", "-g", "daemon off;"]
 #### 💻 Uygulama Adımları:
 ```bash
 # 1. Adım: React frontend dizinine geçin:
-cd ~/docker-labs/lab-15-polyglot-application-packaging/07-frontend-react
+cd ~/docker-labs/lab-14-polyglot-application-packaging/07-frontend-react
 
 # 2. Adım: Multi-Stage imajı derleyin:
 docker build -t app-react:1.0 .
@@ -247,7 +247,7 @@ ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS org.springframework.boot.loader.launch.
 #### 💻 Uygulama Adımları:
 ```bash
 # 1. Adım: Java dizinine geçin:
-cd ~/docker-labs/lab-15-polyglot-application-packaging/04-java-petclinic
+cd ~/docker-labs/lab-14-polyglot-application-packaging/04-java-petclinic
 
 # 2. Adım: Multi-stage imajı derleyin:
 docker build -t app-java:1.0 .
@@ -300,7 +300,7 @@ ENTRYPOINT ["dotnet", "DevOpsApi.dll"]
 #### 💻 Uygulama Adımları:
 ```bash
 # 1. Adım: .NET dizinine geçin:
-cd ~/docker-labs/lab-15-polyglot-application-packaging/05-dotnet
+cd ~/docker-labs/lab-14-polyglot-application-packaging/05-dotnet
 
 # 2. Adım: Multi-stage imajı derleyin:
 docker build -t app-dotnet:1.0 .
@@ -346,7 +346,7 @@ CMD ["php", "-S", "0.0.0.0:8000", "-t", "public/"]
 #### 💻 Uygulama Adımları:
 ```bash
 # 1. Adım: PHP dizinine geçin:
-cd ~/docker-labs/lab-15-polyglot-application-packaging/06-php
+cd ~/docker-labs/lab-14-polyglot-application-packaging/06-php
 
 # 2. Adım: İmajı derleyin:
 docker build -t app-php:1.0 .

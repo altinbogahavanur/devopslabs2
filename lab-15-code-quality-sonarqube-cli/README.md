@@ -1,4 +1,4 @@
-# LAB-16: Docker ile SonarQube Kod Kalitesi ve Güvenlik Taraması (SAST)
+# LAB-15: Docker ile SonarQube Kod Kalitesi ve Güvenlik Taraması (SAST)
 
 ## 🎯 Labın Amacı
 Ana makineye veya sunucuya Java, Maven veya yerel Sonar Scanner kurma zahmetine girmeden; doğrudan Docker üzerindeki resmi `sonarsource/sonar-scanner-cli` konteyneri ile kaynak kodları **Port 19000 SonarQube** sunucusuna taratmak, zafiyetleri (Vulnerabilities), kod kokularını (Code Smells) ve Kalite Kapısını (Quality Gate) incelemek.
@@ -33,7 +33,7 @@ Ana makineye veya sunucuya Java, Maven veya yerel Sonar Scanner kurma zahmetine 
 Lab dizinindeki örnek JavaScript kodunu ve SonarQube ayarlarını inceleyin:
 
 ```bash
-cd ~/docker-labs/lab-16-code-quality-sonarqube-cli
+cd ~/docker-labs/lab-15-code-quality-sonarqube-cli
 
 # Konfigürasyon dosyasını görüntüleyin:
 cat sonar-project.properties

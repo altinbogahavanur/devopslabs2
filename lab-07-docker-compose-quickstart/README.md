@@ -9,7 +9,7 @@ Tek tek uzun `docker run` komutları yazmak yerine; bir web uygulaması (WordPre
 - **Terminalden Doğrulama:** `curl http://localhost:19001`
 
 > [!NOTE]
-> **Port 19001 Paylaşımı:** Bu port `lab-07`, `lab-08/03-3tier` ve `lab-14` labları tarafından ortak App1 slotu olarak kullanılır. Başka bir laba geçmeden önce bu dizinde `docker compose down -v` komutuyla servisleri durdurmanız önerilir.
+> **Port 19001 Paylaşımı:** Bu port `lab-07`, `lab-08/03-3tier` ve `lab-14` (Polyglot) labları tarafından ortak App1 slotu olarak kullanılır. Başka bir laba geçmeden önce bu dizinde `docker compose down -v` komutuyla servisleri durdurmanız önerilir.
 
 ---
 
