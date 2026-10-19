@@ -139,8 +139,9 @@ docker compose up -d
 
 ```bash
 # Robot token ile giriş (Önerilen CI/CD yöntemi):
-ROBOT_USER="robot$ci-builder"
-ROBOT_SECRET="<HARBOR_TARAFINDAN_VERILEN_TOKEN>"
+# ⚠️ DİKKAT: Shell'in (Bash/Zsh) '$' işaretini değişken sanıp yutmaması için TEK TIRNAK ('...') kullanın:
+ROBOT_USER='robot$ci-builder'
+ROBOT_SECRET='<HARBOR_TARAFINDAN_VERILEN_TOKEN>'
 echo "${ROBOT_SECRET}" | docker login 127.0.0.1:18444 -u "${ROBOT_USER}" --password-stdin
 
 # Veya doğrudan admin hesabı ile giriş:
@@ -225,24 +226,52 @@ Harbor imaj SHA256 parmak izi değiştiği anda işlemi bloke eder ve sürüm b�
 
 ---
 
-### Adım 9: Harbor Entegre Trivy Güvenlik Taraması
+### Adım 9: Harbor Entegre Trivy Güvenlik Taraması & Security Gate Deneyi
 
 1. **Trivy Sağlık Durumunu Kontrol Etme:**
    - Harbor Web UI'da sol menüden **Administration → Interrogation Services** sekmesine gidin.
    - **Vulnerability** başlığı altında tarayıcının **Trivy** olduğunu ve durumunun **Healthy** olduğunu doğrulayın.
 
-2. **Manuel Güvenlik Taraması:**
-   - **Projects → devops-public → Repositories → demo-app** yolunu izleyin.
-   - `1.0.0` etiketinin sağındaki üç nokta **Actions (...) → Scan** butonuna tıklayın.
-   - Birkaç saniye sonra tarama tamamlanır ve bulunan zafiyet sayısı (Critical, High, Medium, Low) grafiksel rozet olarak görüntülenir. Rozete tıklayarak CVE listesini ve düzeltilmiş sürümleri (`Fixed in`) inceleyebilirsiniz.
+2. **Otomatik Tarama ve Güvenlik Kapısını (Security Gate) Açma:**
+   - **Projects → devops-private → Configuration** sekmesine gidin.
+   - **"Automatically scan images on push"** kutusunu işaretleyin (Push anında otomatik tarama).
+   - **"Prevent vulnerable images from running"** kutusunu işaretleyin ve eşik değerini **`High`** (veya `Critical`) olarak belirleyip **Save** butonuna tıklayın.
 
-3. **Otomatik Tarama (Scan on Push):**
-   - Projenin **Configuration** sekmesinden **"Automatically scan images on push"** kutusunu işaretleyip kaydedin.
-   - Bundan sonra projeye her yeni imaj push edildiğinde Trivy otomatik olarak devreye girecektir.
+3. **Kasıtlı Zafiyetli İmajı Derleme ve Harbor'a Yükleme:**
+   Lab dizinindeki `vulnerable-app` uygulamasını (eski Python tabanı ve bilinen kritik CVE zafiyetleri içeren `urllib3`, `requests`, `werkzeug` paketleri) derleyip private depoya gönderin:
 
-4. **Zafiyetli İmaj Engelleme (Prevent Vulnerable Images):**
-   - **Configuration** sekmesinden **"Prevent vulnerable images from running"** ayarını `High` veya `Critical` seviyesine getirin.
-   - Böylece güvenlik açığı bulunan güvensiz imajların kura veya Kubernetes ortamlarına çekilmesi Harbor seviyesinde engellenir.
+   ```bash
+   # 1. Zafiyetli uygulama dizinine geçin:
+   cd ~/docker-labs/lab-13-enterprise-harbor-registry/vulnerable-app
+
+   # 2. İmajı derleyin:
+   docker build -t 127.0.0.1:18444/devops-private/vulnerable-app:1.0.0 .
+
+   # 3. Harbor'a push edin:
+   docker push 127.0.0.1:18444/devops-private/vulnerable-app:1.0.0
+   ```
+
+4. **Trivy Raporunu İnceleme:**
+   - Harbor arayüzünde **Projects → devops-private → Repositories → vulnerable-app** sayfasına gidin.
+   - `1.0.0` etiketinin karşısında Trivy'nin otomatik tarama başlattığını ve birkaç saniye içinde **CRITICAL** ve **HIGH** zafiyet rozetlerinin belirdiğini görün.
+   - Rozete tıklayarak CVE kodlarını (`CVE-2019-11324`, `CVE-2018-18074` vb.) ve hangi paketlerde zafiyet olduğunu inceleyin.
+
+5. **🛑 Güvenlik Kapısının (Security Gate) Çalıştığını Kanıtlama:**
+   Harbor, bünyesinde kritik zafiyet barındıran bu imajın canlı ortamlara veya Kubernetes kümelerine çekilmesini (`docker pull`) **otomatik olarak engeller**:
+
+   ```bash
+   # 1. Yereldeki imajı silin:
+   docker rmi 127.0.0.1:18444/devops-private/vulnerable-app:1.0.0 2>/dev/null || true
+
+   # 2. Harbor'dan tekrar çekmeyi (pull) deneyin:
+   docker pull 127.0.0.1:18444/devops-private/vulnerable-app:1.0.0
+   ```
+
+   **🛑 Beklenen Harbor Güvenlik Engeli:**
+   ```text
+   Error response from daemon: pull access denied for 127.0.0.1:18444/devops-private/vulnerable-app, repository does not exist or may require 'docker login': unknown: current image with 'CRITICAL' vulnerability cannot be pulled
+   ```
+   *Tebrikler! Harbor'ın sadece pasif bir depo olmadığını, zafiyetli kodun prodüksiyona girmesini engelleyen bir **DevSecOps Güvenlik Kapısı (Quality Gate)** olduğunu kanıtladınız.*
 
 ---
 
@@ -251,12 +280,12 @@ Harbor imaj SHA256 parmak izi değiştiği anda işlemi bloke eder ve sürüm b�
 - Tarayıcı üzerinden `http://harbor.devopsatolyesi.com:18444` (veya `http://127.0.0.1:18444`) adresinden Harbor portalına ulaştınız.
 - `127.0.0.1:18444` üzerinden imaj push ve pull işlemlerini başarıyla tamamladınız.
 - Private projeye şifresiz erişimin engellendiğini ve Tag Immutability kuralının çalıştığını test ettiniz.
-- Trivy motorunun aktif olarak CVE zafiyet taraması yaptığını doğruladınız.
+- Trivy motorunun aktif olarak CVE zafiyet taraması yaptığını ve güvenlik kapısının (Security Gate) zafiyetli imajı başarıyla engellediğini doğruladınız.
 
 ---
 
 ## 🧹 Temizlik
 ```bash
 docker logout 127.0.0.1:18444 2>/dev/null || true
-docker rmi 127.0.0.1:18444/devops-public/demo-app:1.0.0 127.0.0.1:18444/devops-private/demo-app:1.0.0 2>/dev/null || true
+docker rmi 127.0.0.1:18444/devops-public/demo-app:1.0.0 127.0.0.1:18444/devops-private/demo-app:1.0.0 127.0.0.1:18444/devops-private/vulnerable-app:1.0.0 2>/dev/null || true
 ```
