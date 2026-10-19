@@ -226,16 +226,15 @@ Harbor imaj SHA256 parmak izi değiştiği anda işlemi bloke eder ve sürüm b�
 
 ---
 
-### Adım 9: Harbor Entegre Trivy Güvenlik Taraması & Security Gate Deneyi
+### Adım 9: Harbor Entegre Trivy Güvenlik Taraması
 
 1. **Trivy Sağlık Durumunu Kontrol Etme:**
    - Harbor Web UI'da sol menüden **Administration → Interrogation Services** sekmesine gidin.
    - **Vulnerability** başlığı altında tarayıcının **Trivy** olduğunu ve durumunun **Healthy** olduğunu doğrulayın.
 
-2. **Otomatik Tarama ve Güvenlik Kapısını (Security Gate) Açma:**
+2. **Otomatik Taramayı (Scan on Push) Açma:**
    - **Projects → devops-private → Configuration** sekmesine gidin.
-   - **"Automatically scan images on push"** kutusunu işaretleyin (Push anında otomatik tarama).
-   - **"Prevent vulnerable images from running"** kutusunu işaretleyin ve eşik değerini **`High`** (veya `Critical`) olarak belirleyip **Save** butonuna tıklayın.
+   - **"Automatically scan images on push"** kutusunu işaretleyip **Save** butonuna tıklayın. Böylece her yeni imaj yüklendiğinde Trivy otomatik olarak zafiyet taramasını başlatacaktır.
 
 3. **Kasıtlı Zafiyetli İmajı Derleme ve Harbor'a Yükleme:**
    Lab dizinindeki `vulnerable-app` uygulamasını (eski Python tabanı ve bilinen kritik CVE zafiyetleri içeren `urllib3`, `requests`, `werkzeug` paketleri) derleyip private depoya gönderin:
@@ -251,27 +250,10 @@ Harbor imaj SHA256 parmak izi değiştiği anda işlemi bloke eder ve sürüm b�
    docker push 127.0.0.1:18444/devops-private/vulnerable-app:1.0.0
    ```
 
-4. **Trivy Raporunu İnceleme:**
-   - Harbor arayüzünde **Projects → devops-private → Repositories → vulnerable-app** sayfasına gidin.
-   - `1.0.0` etiketinin karşısında Trivy'nin otomatik tarama başlattığını ve birkaç saniye içinde **CRITICAL** ve **HIGH** zafiyet rozetlerinin belirdiğini görün.
-   - Rozete tıklayarak CVE kodlarını (`CVE-2019-11324`, `CVE-2018-18074` vb.) ve hangi paketlerde zafiyet olduğunu inceleyin.
-
-5. **🛑 Güvenlik Kapısının (Security Gate) Çalıştığını Kanıtlama:**
-   Harbor, bünyesinde kritik zafiyet barındıran bu imajın canlı ortamlara veya Kubernetes kümelerine çekilmesini (`docker pull`) **otomatik olarak engeller**:
-
-   ```bash
-   # 1. Yereldeki imajı silin:
-   docker rmi 127.0.0.1:18444/devops-private/vulnerable-app:1.0.0 2>/dev/null || true
-
-   # 2. Harbor'dan tekrar çekmeyi (pull) deneyin:
-   docker pull 127.0.0.1:18444/devops-private/vulnerable-app:1.0.0
-   ```
-
-   **🛑 Beklenen Harbor Güvenlik Engeli:**
-   ```text
-   Error response from daemon: pull access denied for 127.0.0.1:18444/devops-private/vulnerable-app, repository does not exist or may require 'docker login': unknown: current image with 'CRITICAL' vulnerability cannot be pulled
-   ```
-   *Tebrikler! Harbor'ın sadece pasif bir depo olmadığını, zafiyetli kodun prodüksiyona girmesini engelleyen bir **DevSecOps Güvenlik Kapısı (Quality Gate)** olduğunu kanıtladınız.*
+4. **Trivy Zafiyet Raporunu ve CVE'leri İnceleme:**
+   - Harbor Web UI'da **Projects → devops-private → Repositories → vulnerable-app** sayfasına gidin.
+   - `1.0.0` etiketinin karşısında Trivy'nin otomatik tarama başlattığını ve birkaç saniye içinde **CRITICAL** ve **HIGH** zafiyet rozetlerinin belirdiğini görün *(Eğer otomatik başlamadıysa en sağdaki üç nokta **Actions (...) → Scan** butonuna tıklayabilirsiniz)*.
+   - Renkli rozete tıklayarak CVE kodlarını (`CVE-2019-11324`, `CVE-2018-18074` vb.), zafiyet şiddetini ve hangi paketlerde açık olduğunu detaylıca inceleyin.
 
 ---
 
@@ -280,7 +262,7 @@ Harbor imaj SHA256 parmak izi değiştiği anda işlemi bloke eder ve sürüm b�
 - Tarayıcı üzerinden `http://harbor.devopsatolyesi.com:18444` (veya `http://127.0.0.1:18444`) adresinden Harbor portalına ulaştınız.
 - `127.0.0.1:18444` üzerinden imaj push ve pull işlemlerini başarıyla tamamladınız.
 - Private projeye şifresiz erişimin engellendiğini ve Tag Immutability kuralının çalıştığını test ettiniz.
-- Trivy motorunun aktif olarak CVE zafiyet taraması yaptığını ve güvenlik kapısının (Security Gate) zafiyetli imajı başarıyla engellediğini doğruladınız.
+- Trivy motorunun aktif olarak CVE zafiyet taraması yaptığını ve zafiyetli imajdaki açıkları (`vulnerable-app`) başarıyla raporladığını doğruladınız.
 
 ---
 
