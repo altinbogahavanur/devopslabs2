@@ -1,4 +1,4 @@
-# 🐳 Docker ve Konteyner Teknolojileri Laboratuvarları
+# 🐳 Docker ve Konteyner Teknolojileri Labları
 
 Bu depo, temel Linux sistem yönetiminden kurumsal mikroservis mimarilerine, çok dilli (polyglot) uygulama paketlemeden kod kalitesi/güvenlik taramasına (SAST) ve OCI registry yönetimine kadar modern konteyner teknolojilerini uçtan uca uygulamak üzere hazırlanmış standart laboratuvar serisidir.
 
