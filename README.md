@@ -1,6 +1,6 @@
 # 🐳 Docker ve Konteyner Teknolojileri Laboratuvarları
 
-Bu depo, temel Linux sistem yönetiminden kurumsal mikroservis mimarilerine, çok dilli (polyglot) uygulama paketlemeden CI/CD pipeline entegrasyonuna ve OCI registry yönetimine kadar modern konteyner teknolojilerini uçtan uca uygulamak üzere hazırlanmış standart laboratuvar serisidir.
+Bu depo, temel Linux sistem yönetiminden kurumsal mikroservis mimarilerine, çok dilli (polyglot) uygulama paketlemeden kod kalitesi/güvenlik taramasına (SAST) ve OCI registry yönetimine kadar modern konteyner teknolojilerini uçtan uca uygulamak üzere hazırlanmış standart laboratuvar serisidir.
 
 ---
 
@@ -132,19 +132,17 @@ Tüm laboratuvar geçişleri standart tam yol formatında hazırlanmıştır. İ
 | **13** | [Kurumsal OCI Registry: Harbor](lab-13-enterprise-harbor-registry/README.md) | `cd ~/docker-labs/lab-13-enterprise-harbor-registry` | `18444` | Harbor Enterprise OCI Registry kurulumu, yerel port (`127.0.0.1:18444`), Public/Private projeler, CI/CD Robot Account, Tag Immutability ve Trivy. |
 | **14** | [NovaShop Capstone & Sorun Giderme](lab-14-capstone-novashop-troubleshooting/README.md) | `cd ~/docker-labs/lab-14-capstone-novashop-troubleshooting` | `19001` | 3 gerçek hayat arıza senaryosu: Veritabanı bağlantı kopması, Gateway 502 Bad Gateway (Port uyuşmazlığı) ve bellek sızıntısı (OOM çökmesi). |
 | **15** | [Polyglot Uygulama Paketleme Atölyesi](lab-15-polyglot-application-packaging/README.md) | `cd ~/docker-labs/lab-15-polyglot-application-packaging` | `19001` | Host kirliliği olmadan izole paketleme: Python Flask, Node.js Express, Go Scratch, Java PetClinic, .NET API, PHP ve React SPA. |
-| **16** | [CI/CD Konteyner Pipeline'ları](lab-16-cicd-container-pipelines/README.md) | `cd ~/docker-labs/lab-16-cicd-container-pipelines` | — | GitHub Actions (Docker Buildx, Docker Hub, GHA Cache) ve GitLab CI (Docker-in-Docker `dind`, GitLab Container Registry) pipeline mimarileri. |
-| **17** | [Kod Kalitesi & Güvenlik Taraması (SAST)](lab-17-code-quality-sonarqube-cli/README.md) | `cd ~/docker-labs/lab-17-code-quality-sonarqube-cli` | `19000` | Host'a Java kurmadan Docker üzerinden `sonar-scanner-cli` ile kaynak kod taraması, Code Smells tespiti ve SonarQube Quality Gate denetimi. |
+| **16** | [Kod Kalitesi & Güvenlik Taraması (SAST)](lab-16-code-quality-sonarqube-cli/README.md) | `cd ~/docker-labs/lab-16-code-quality-sonarqube-cli` | `19000` | Host'a Java kurmadan Docker üzerinden `sonar-scanner-cli` ile kaynak kod taraması, Code Smells tespiti ve SonarQube Quality Gate denetimi. |
 
 ---
 
 ## 🕹️ Destekleyici Modüller ve Araçlar
 
-Laboratuvar serisini destekleyen pratik araçlar ve simülatörler:
+Laboratuvar serisini destekleyen pratik araçlar ve başvuru kaynakları:
 
 | Modül | Dizin / Geçiş Komutu | Açık Portlar | Açıklama |
 |---|---|:---:|---|
 | **DevOps Arcade & Tools** | `cd ~/docker-labs/devops-arcade-and-tools` | `19001 - 19008` | Tetris, IT-Tools, Excalidraw, 2048, FileBrowser, WhoAmI, Speedtest ve draw.io servislerini tek komutla veya tekil ayağa kaldırma. |
-| **Troubleshooting Simulator** | `cd ~/docker-labs/troubleshooting-simulator` | Dinamik (`80, 8080`) | 5 interaktif arıza senaryosu: Port çakışması, PID 1 kapanması, OOMKilled, köprü DNS hatası ve disk izin sorunlarını terminal menüsünden çözme (`./troubleshoot-menu.sh`). |
 | **Docker Cheatsheet** | `cd ~/docker-labs/docker-cheatsheet` | — | 7 kategoride derlenmiş modüler Docker komut başvuru kütüphanesi (Konteynerler, İmajlar, Depolama, Ağ, Compose, Temizlik ve Güvenlik). |
 
 ---

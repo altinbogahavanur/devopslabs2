@@ -91,18 +91,6 @@ curl http://localhost:19001/api/products
 
 ---
 
-## 🎮 İnteraktif Docker Arıza Simülatörü
-
-Gerçek hayat Docker ve konteyner arızalarında daha fazla teşhis pratiği yapmak ve senaryoları izole edilmiş ortamlarda çözmek için kök dizindeki interaktif simülatör menüsünü kullanabilirsiniz:
-
-```bash
-cd ~/docker-labs/troubleshooting-simulator
-./troubleshoot-menu.sh
-```
-Bu menü aracılığıyla ağ kopması, DNS çözümleme hataları, disk dolması ve bellek sınırları (OOM) gibi senaryoları simüle edip çözebilirsiniz.
-
----
-
 ## 🧹 Temizlik
 ```bash
 docker compose down -v 2>/dev/null || true
